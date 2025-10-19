@@ -1,0 +1,60 @@
+name: Deploy to FTP
+
+# [CUSTOMIZE] This workflow automatically deploys to FTP when you push to main
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:    # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./
+        server-dir: /[PROJECT-NAME]/    # [CUSTOMIZE] Change this to your directory!
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/.DS_Store
+          **/Thumbs.db
+          **/.env*
+          **/SETUP.md
+          **/.claude/**
+          **/README.md
+          **/LICENSE
+
+# ==========================================
+# SETUP INSTRUCTIONS:
+# ==========================================
+#
+# 1. Add GitHub Secrets (required):
+#    Go to: Settings → Secrets and variables → Actions
+#    Add these three secrets:
+#    - FTP_HOST: Your FTP server (e.g., ftp.yourdomain.com)
+#    - FTP_USERNAME: Your FTP username
+#    - FTP_PASSWORD: Your FTP password
+#
+# 2. Customize server-dir (line 23):
+#    Change /[PROJECT-NAME]/ to your actual directory
+#    Examples:
+#    - /public_html/myproject/
+#    - /www/myproject/
+#    - /myproject.com/
+#
+# 3. Test deployment:
+#    - Push to main branch
+#    - Check Actions tab for deployment status
+#    - Verify files uploaded correctly to FTP
+#
+# ==========================================

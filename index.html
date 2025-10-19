@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- [CUSTOMIZE] Update these meta tags -->
+    <title>Project Name - Template</title>
+    <meta name="description" content="Modern web project template with modular CSS and theme support">
+    <meta name="author" content="Your Name">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+
+    <!-- [CUSTOMIZE] Google Fonts - Replace with your chosen font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" aria-label="Toggle theme">
+        <span class="icon-moon">🌙</span>
+        <span class="icon-sun">☀️</span>
+    </button>
+
+    <!-- Hero Section -->
+    <section style="min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center;">
+        <div class="container">
+            <!-- [CUSTOMIZE] Update headings -->
+            <h1 class="mb-6">Welcome to Your Project</h1>
+            <p class="text-lg mb-8 text-secondary">A modern template with modular CSS, responsive grid, and theme support</p>
+
+            <div class="flex items-center justify-center gap-4">
+                <button class="btn btn-primary">Get Started</button>
+                <button class="btn btn-secondary">Learn More</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Component Showcase -->
+    <section class="container" style="padding-top: 80px; padding-bottom: 80px;">
+        <h2 class="text-center mb-12">Component Library</h2>
+
+        <!-- Grid Example -->
+        <div class="mb-16">
+            <h3 class="mb-6">Grid System (12-Column)</h3>
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div class="card"><strong>Column 1</strong><br>3-column grid on desktop</div>
+                <div class="card"><strong>Column 2</strong><br>Stacks on mobile</div>
+                <div class="card"><strong>Column 3</strong><br>Responsive by default</div>
+            </div>
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-8 card"><strong>col-span-8</strong><br>8 columns wide</div>
+                <div class="col-span-4 card"><strong>col-span-4</strong><br>4 columns wide</div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="mb-16">
+            <h3 class="mb-6">Buttons</h3>
+            <div class="flex flex-wrap gap-4">
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-secondary">Secondary Button</button>
+                <button class="btn btn-outline">Outline Button</button>
+                <button class="btn btn-primary btn-sm">Small Button</button>
+                <button class="btn btn-primary btn-lg">Large Button</button>
+            </div>
+        </div>
+
+        <!-- Cards -->
+        <div class="mb-16">
+            <h3 class="mb-6">Cards</h3>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="card">
+                    <h4 class="card-title">Standard Card</h4>
+                    <p class="card-description">A basic card with shadow and hover effect. Uses solid background color.</p>
+                </div>
+                <div class="glass-card">
+                    <h4 class="card-title">Glass Card</h4>
+                    <p class="card-description">Glassmorphism effect with backdrop blur. Modern and elegant.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forms -->
+        <div class="mb-16">
+            <h3 class="mb-6">Forms</h3>
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <div class="form-group">
+                        <label class="form-label">Text Input</label>
+                        <input type="text" class="form-input" placeholder="Enter text...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Select</label>
+                        <select class="form-select">
+                            <option>Option 1</option>
+                            <option>Option 2</option>
+                            <option>Option 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label class="form-label">Textarea</label>
+                        <textarea class="form-textarea" placeholder="Enter message..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges & Alerts -->
+        <div class="mb-16">
+            <h3 class="mb-6">Badges & Alerts</h3>
+
+            <div class="mb-6">
+                <span class="badge">Primary Badge</span>
+                <span class="badge badge-secondary">Secondary Badge</span>
+            </div>
+
+            <div class="alert alert-info mb-4">
+                <strong>Info:</strong> This is an informational alert message.
+            </div>
+            <div class="alert alert-success mb-4">
+                <strong>Success:</strong> Operation completed successfully!
+            </div>
+            <div class="alert alert-warning mb-4">
+                <strong>Warning:</strong> Please review this before proceeding.
+            </div>
+            <div class="alert alert-error">
+                <strong>Error:</strong> Something went wrong. Please try again.
+            </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="mb-16">
+            <h3 class="mb-6">Typography Scale</h3>
+            <h1>Heading 1 (h1 / text-5xl)</h1>
+            <h2>Heading 2 (h2 / text-4xl)</h2>
+            <h3>Heading 3 (h3 / text-3xl)</h3>
+            <h4>Heading 4 (h4 / text-2xl)</h4>
+            <h5>Heading 5 (h5 / text-xl)</h5>
+            <h6>Heading 6 (h6 / text-lg)</h6>
+            <p class="text-base">Body text (p / text-base) - This is the default paragraph text size at 16px with a line-height of 1.7 for optimal readability.</p>
+            <p class="text-sm">Small text (text-sm) - Useful for captions and secondary information.</p>
+        </div>
+
+        <!-- Utility Classes -->
+        <div class="mb-16">
+            <h3 class="mb-6">Utility Classes</h3>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="card hover-lift cursor-pointer">
+                    <strong>Hover Lift</strong><br>
+                    <span class="text-sm text-secondary">.hover-lift</span>
+                </div>
+                <div class="card hover-scale cursor-pointer">
+                    <strong>Hover Scale</strong><br>
+                    <span class="text-sm text-secondary">.hover-scale</span>
+                </div>
+                <div class="card hover-fade cursor-pointer">
+                    <strong>Hover Fade</strong><br>
+                    <span class="text-sm text-secondary">.hover-fade</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Swatches -->
+        <div class="mb-16">
+            <h3 class="mb-6">Color System</h3>
+            <div class="grid grid-cols-5 gap-4 mb-6">
+                <div style="background: var(--color-primary); height: 80px; border-radius: var(--radius-md);"></div>
+                <div style="background: var(--color-secondary); height: 80px; border-radius: var(--radius-md);"></div>
+                <div style="background: var(--color-tertiary); height: 80px; border-radius: var(--radius-md);"></div>
+                <div style="background: var(--color-accent-cool); height: 80px; border-radius: var(--radius-md);"></div>
+                <div style="background: var(--color-accent-warm); height: 80px; border-radius: var(--radius-md);"></div>
+            </div>
+            <p class="text-sm text-secondary text-center">Primary • Secondary • Tertiary • Accent Cool • Accent Warm</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="padding: 40px 0; text-align: center; background: var(--bg-secondary);">
+        <div class="container">
+            <p class="text-sm text-secondary">
+                <!-- [CUSTOMIZE] Update footer text -->
+                Built with ❤️ using GitHub Template Repo 2025
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

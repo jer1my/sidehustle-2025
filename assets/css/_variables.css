@@ -1,0 +1,162 @@
+/* ==========================================
+   CSS Custom Properties (Variables)
+   [CUSTOMIZE] Update colors, fonts, and spacing here
+   ========================================== */
+:root {
+  /* ===================
+     PRIMARY CUSTOMIZATION POINTS
+     =================== */
+
+  /* [CUSTOMIZE] Brand Colors */
+  --color-primary: #0f0f0f;        /* Main brand color */
+  --color-secondary: #525252;       /* Secondary brand color */
+  --color-tertiary: #737373;        /* Tertiary brand color */
+
+  /* [CUSTOMIZE] Accent Colors (Temperature-based theming) */
+  --color-accent-cool: #15B5FF;     /* Light mode accent (cool blue) */
+  --color-accent-warm: #ea580c;     /* Dark mode accent (warm orange) */
+  --color-accent: var(--color-accent-cool);
+
+  /* [CUSTOMIZE] Typography */
+  --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-mono: 'SF Mono', Monaco, Consolas, monospace;
+
+  /* [CUSTOMIZE] Container Width */
+  --container-max-width: 1200px;    /* Max content width on large screens */
+
+
+  /* ===================
+     DESIGN SYSTEM TOKENS
+     (Usually don't need to change these)
+     =================== */
+
+  /* Neutral Color Scale */
+  --color-white: #ffffff;
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+
+  /* Text Colors (Light Mode) */
+  --text-primary: #1a1a1a;
+  --text-secondary: #525252;
+  --text-tertiary: #737373;
+  --text-inverse: #ffffff;
+
+  /* Background Colors (Light Mode) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-overlay-light: rgba(255, 255, 255, 0.1);
+  --bg-overlay-dark: rgba(26, 26, 26, 0.8);
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Font Sizes - Responsive Scale */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 32px;
+  --font-size-4xl: 48px;
+  --font-size-5xl: 56px;
+
+  /* Spacing Scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Layout */
+  --container-padding-desktop: 40px;
+  --container-padding-mobile: 24px;
+  --nav-height: 80px;
+  --scroll-offset: 48px;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 50px;
+
+  /* Shadows */
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.2);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --transition-cubic: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Backdrop Blur (for glassmorphism effects) */
+  --blur-sm: blur(8px);
+  --blur-md: blur(12px);
+  --blur-lg: blur(20px);
+  --blur-xl: blur(40px);
+
+  /* Z-Index Scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-tooltip: 600;
+  --z-toast: 700;
+}
+
+/* ===================
+   DARK THEME
+   =================== */
+[data-theme="dark"] {
+  --color-accent: var(--color-accent-warm);
+
+  --text-primary: #e0e0e0;
+  --text-secondary: #a3a3a3;
+  --text-tertiary: #737373;
+
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #171717;
+  --bg-overlay-light: rgba(255, 255, 255, 0.05);
+  --bg-overlay-dark: rgba(0, 0, 0, 0.8);
+
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.6);
+}
+
+/* ===================
+   MOBILE RESPONSIVE
+   =================== */
+@media (max-width: 768px) {
+  :root {
+    /* Adjust font sizes for mobile */
+    --font-size-4xl: 36px;
+    --font-size-5xl: 44px;
+  }
+}

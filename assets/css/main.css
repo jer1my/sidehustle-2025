@@ -1,0 +1,32 @@
+/* ==========================================
+   Main Stylesheet - Modular Architecture
+   [CUSTOMIZE] Import order matters - don't rearrange
+   ========================================== */
+
+/**
+ * Import Order:
+ * 1. Variables - CSS custom properties (colors, fonts, spacing)
+ * 2. Base - Reset and foundational styles
+ * 3. Typography - Text styles and utilities
+ * 4. Grid - Grid system and layout utilities
+ * 5. Components - Reusable UI components
+ * 6. Theme - Light/dark mode styles
+ * 7. Utilities - Helper classes (must be last for specificity)
+ */
+
+/* Foundation Layer */
+@import '_variables.css';
+@import '_base.css';
+
+/* Typography & Layout */
+@import '_typography.css';
+@import '_grid.css';
+
+/* Component Library */
+@import '_components.css';
+
+/* Theme System */
+@import '_theme.css';
+
+/* Utilities & Overrides (must be last) */
+@import '_utilities.css';
