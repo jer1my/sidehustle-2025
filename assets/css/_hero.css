@@ -36,6 +36,31 @@
     opacity: 0;
     transform: translateY(30px);
     animation: fadeInUp 0.8s ease-out 0.2s forwards;
+    position: relative;
+    display: inline-block;
+}
+
+.coming-soon-badge {
+    position: absolute;
+    top: 0;
+    right: -120px;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    font-family: var(--font-family-primary);
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Dark mode: dark text on gold background */
+body[data-theme="dark"] .coming-soon-badge {
+    color: #1a1a1a;
 }
 
 .hero-subtitle {
@@ -120,5 +145,23 @@
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .coming-soon-badge {
+        position: static;
+        display: block;
+        margin: 16px auto 0;
+        font-size: 12px;
+        padding: 3px 10px;
+        width: fit-content;
+    }
+
+    .hero-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
