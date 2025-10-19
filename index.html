@@ -3,197 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Side Hustle - Art & Photography by Jerimy Brown</title>
 
-    <!-- [CUSTOMIZE] Update these meta tags -->
-    <title>Project Name - Template</title>
-    <meta name="description" content="Modern web project template with modular CSS and theme support">
-    <meta name="author" content="Your Name">
+    <!-- Meta Tags -->
+    <meta name="description" content="Discover unique art and photography prints from Jerimy Brown's Side Hustle collection.">
+    <meta name="author" content="Jerimy Brown">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Side Hustle - Art & Photography">
+    <meta property="og:description" content="Discover unique art and photography prints from Jerimy Brown's Side Hustle collection.">
 
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-    <!-- [CUSTOMIZE] Google Fonts - Replace with your chosen font -->
+    <!-- Google Fonts: Montserrat + Playfair Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=1760914359">
+
+    <!-- Critical inline styles to prevent flash -->
+    <style>
+        .nav {
+            background: rgba(250, 250, 250, 0.1) !important;
+        }
+        body[data-theme="dark"] .nav {
+            background: rgba(23, 23, 23, 0.1) !important;
+        }
+    </style>
+
+    <noscript>
+        <style>
+            body {
+                opacity: 1 !important;
+            }
+        </style>
+    </noscript>
 </head>
 <body>
-    <!-- Theme Toggle Button -->
-    <button class="theme-toggle" aria-label="Toggle theme">
-        <span class="icon-moon">🌙</span>
-        <span class="icon-sun">☀️</span>
+    <script>
+        // Apply theme immediately to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-container">
+                    <div class="logo-svg"></div>
+                    <span class="logo-text">Side Hustle</span>
+                </div>
+            </a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#" class="active"><span class="link-text">Home</span></a></li>
+                    <li><a href="#products"><span class="link-text">Shop</span></a></li>
+                    <li><a href="#about"><span class="link-text">About</span></a></li>
+                    <li><a href="#contact"><span class="link-text">Contact</span></a></li>
+                </ul>
+                <button class="nav-theme-toggle" onclick="toggleTheme()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.98038 2.73135C9.79117 2.67374 9.59078 2.67397 9.40415 2.72944C7.79045 3.18158 6.32264 4.04719 5.14599 5.24078C3.96517 6.4386 3.11882 7.92491 2.69124 9.55165C2.26365 11.1784 2.26977 12.8888 2.70898 14.5124C3.14819 16.136 4.00515 17.6163 5.19451 18.8056C6.38386 19.995 7.86409 20.8519 9.48773 21.2911C11.1114 21.7303 12.8218 21.7364 14.4485 21.3088C16.0752 20.8812 17.5615 20.0348 18.7593 18.854C19.9525 17.6778 20.8179 16.2106 21.2702 14.5976C21.324 14.4177 21.3265 14.2247 21.275 14.041C21.1538 13.6089 20.7597 13.3102 20.311 13.3106C20.2099 13.3107 20.1116 13.326 20.0186 13.3546C18.7246 13.7093 17.3598 13.7164 16.0619 13.3751C14.7554 13.0314 13.5636 12.347 12.6083 11.3918C11.6531 10.4365 10.9686 9.24468 10.625 7.93818C10.2834 6.63949 10.2908 5.27379 10.6461 3.9791C10.6732 3.89024 10.6881 3.79655 10.6893 3.70018C10.6947 3.25564 10.4057 2.86084 9.98038 2.73135ZM6.57028 6.64485C7.11058 6.09677 7.72838 5.63598 8.40126 5.27566C8.32141 6.33717 8.41781 7.40898 8.69079 8.44689C9.12451 10.096 9.98839 11.6003 11.1941 12.806C12.3998 14.0117 13.9041 14.8756 15.5532 15.3093C16.5911 15.5822 17.6629 15.6786 18.7244 15.5988C18.3641 16.2717 17.9033 16.8894 17.3553 17.4297C16.4063 18.3652 15.2288 19.0357 13.9401 19.3745C12.6513 19.7133 11.2963 19.7084 10.01 19.3605C8.72365 19.0125 7.55096 18.3336 6.60871 17.3914C5.66647 16.4492 4.98755 15.2765 4.63959 13.9902C4.29163 12.7039 4.28679 11.3488 4.62553 10.0601C4.96428 8.77132 5.63479 7.59381 6.57028 6.64485Z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
     </button>
 
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+        <div class="mobile-menu-content">
+            <nav class="mobile-nav">
+                <a href="#"><span class="mobile-link-text">Home</span></a>
+                <a href="#products"><span class="mobile-link-text">Shop</span></a>
+                <a href="#about"><span class="mobile-link-text">About</span></a>
+                <a href="#contact"><span class="mobile-link-text">Contact</span></a>
+            </nav>
+            <button class="mobile-theme-toggle" onclick="toggleTheme()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.98038 2.73135C9.79117 2.67374 9.59078 2.67397 9.40415 2.72944C7.79045 3.18158 6.32264 4.04719 5.14599 5.24078C3.96517 6.4386 3.11882 7.92491 2.69124 9.55165C2.26365 11.1784 2.26977 12.8888 2.70898 14.5124C3.14819 16.136 4.00515 17.6163 5.19451 18.8056C6.38386 19.995 7.86409 20.8519 9.48773 21.2911C11.1114 21.7303 12.8218 21.7364 14.4485 21.3088C16.0752 20.8812 17.5615 20.0348 18.7593 18.854C19.9525 17.6778 20.8179 16.2106 21.2702 14.5976C21.324 14.4177 21.3265 14.2247 21.275 14.041C21.1538 13.6089 20.7597 13.3102 20.311 13.3106C20.2099 13.3107 20.1116 13.326 20.0186 13.3546C18.7246 13.7093 17.3598 13.7164 16.0619 13.3751C14.7554 13.0314 13.5636 12.347 12.6083 11.3918C11.6531 10.4365 10.9686 9.24468 10.625 7.93818C10.2834 6.63949 10.2908 5.27379 10.6461 3.9791C10.6732 3.89024 10.6881 3.79655 10.6893 3.70018C10.6947 3.25564 10.4057 2.86084 9.98038 2.73135ZM6.57028 6.64485C7.11058 6.09677 7.72838 5.63598 8.40126 5.27566C8.32141 6.33717 8.41781 7.40898 8.69079 8.44689C9.12451 10.096 9.98839 11.6003 11.1941 12.806C12.3998 14.0117 13.9041 14.8756 15.5532 15.3093C16.5911 15.5822 17.6629 15.6786 18.7244 15.5988C18.3641 16.2717 17.9033 16.8894 17.3553 17.4297C16.4063 18.3652 15.2288 19.0357 13.9401 19.3745C12.6513 19.7133 11.2963 19.7084 10.01 19.3605C8.72365 19.0125 7.55096 18.3336 6.60871 17.3914C5.66647 16.4492 4.98755 15.2765 4.63959 13.9902C4.29163 12.7039 4.28679 11.3488 4.62553 10.0601C4.96428 8.77132 5.63479 7.59381 6.57028 6.64485Z" fill="currentColor"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <!-- Hero Section -->
-    <section style="min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center;">
-        <div class="container">
-            <!-- [CUSTOMIZE] Update headings -->
-            <h1 class="mb-6">Welcome to Your Project</h1>
-            <p class="text-lg mb-8 text-secondary">A modern template with modular CSS, responsive grid, and theme support</p>
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Side Hustle (Coming Soon)</h1>
+            <h2 class="hero-subtitle">Unique Digital and Traditional<br class="mobile-break"> Art & Photography</h2>
+        </div>
 
-            <div class="flex items-center justify-center gap-4">
-                <button class="btn btn-primary">Get Started</button>
-                <button class="btn btn-secondary">Learn More</button>
+        <!-- Scroll Arrow -->
+        <a href="#products" class="btn-arrow btn-arrow-lg scroll-arrow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g class="arrow-group">
+                    <path d="M12 6L12 18M8 14L12 18L16 14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+            </svg>
+        </a>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="section products" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 0;">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center;">Shop the Collection</h2>
+            <p class="section-subtitle" style="text-align: center; max-width: 600px; margin: 0 auto 64px; color: var(--text-secondary); font-size: var(--font-size-lg);">Limited edition prints, original works, and digital downloads. Each piece is numbered and comes with a certificate of authenticity.</p>
+
+            <!-- Products Grid (will be populated by JavaScript) -->
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be dynamically inserted here -->
             </div>
         </div>
     </section>
 
-    <!-- Component Showcase -->
-    <section class="container" style="padding-top: 80px; padding-bottom: 80px;">
-        <h2 class="text-center mb-12">Component Library</h2>
-
-        <!-- Grid Example -->
-        <div class="mb-16">
-            <h3 class="mb-6">Grid System (12-Column)</h3>
-            <div class="grid grid-cols-3 gap-4 mb-4">
-                <div class="card"><strong>Column 1</strong><br>3-column grid on desktop</div>
-                <div class="card"><strong>Column 2</strong><br>Stacks on mobile</div>
-                <div class="card"><strong>Column 3</strong><br>Responsive by default</div>
-            </div>
-            <div class="grid grid-cols-12 gap-4">
-                <div class="col-span-8 card"><strong>col-span-8</strong><br>8 columns wide</div>
-                <div class="col-span-4 card"><strong>col-span-4</strong><br>4 columns wide</div>
-            </div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="mb-16">
-            <h3 class="mb-6">Buttons</h3>
-            <div class="flex flex-wrap gap-4">
-                <button class="btn btn-primary">Primary Button</button>
-                <button class="btn btn-secondary">Secondary Button</button>
-                <button class="btn btn-outline">Outline Button</button>
-                <button class="btn btn-primary btn-sm">Small Button</button>
-                <button class="btn btn-primary btn-lg">Large Button</button>
-            </div>
-        </div>
-
-        <!-- Cards -->
-        <div class="mb-16">
-            <h3 class="mb-6">Cards</h3>
-            <div class="grid grid-cols-2 gap-6">
-                <div class="card">
-                    <h4 class="card-title">Standard Card</h4>
-                    <p class="card-description">A basic card with shadow and hover effect. Uses solid background color.</p>
+    <!-- About Section -->
+    <section id="about" class="section about" style="padding: 120px 0; background: var(--bg-secondary);">
+        <div class="container">
+            <div class="about-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+                <div class="about-text">
+                    <h2 class="section-title">The Story</h2>
+                    <p style="margin-bottom: 24px; color: var(--text-secondary); line-height: 1.8;">For as long as I can remember, this need to create has seeped out of me. Art has always been something I made for the love of it—pieces donated to charities, gifts for friends and family, designs created for others. I've spent countless hours bringing visions to life, but never my own.</p>
+                    <p style="margin-bottom: 24px; color: var(--text-secondary); line-height: 1.8;">This storefront represents something I've never tried before: turning my lifelong passion into something that could maybe sustain itself, so I can share more of it.</p>
+                    <p style="margin-bottom: 24px; color: var(--text-secondary); line-height: 1.8;">In a world that can feel heavy sometimes, art has the power to spark thought, joy, inspiration, and spread a little light. If my work can bring even a moment of beauty or positivity into someone's space, then I'm doing exactly what I'm meant to do.</p>
+                    <p style="margin-bottom: 24px; color: var(--text-secondary); line-height: 1.8;">Every piece you see here comes from that place—a genuine desire to connect and share something with the world, instead of just taking from it.</p>
                 </div>
-                <div class="glass-card">
-                    <h4 class="card-title">Glass Card</h4>
-                    <p class="card-description">Glassmorphism effect with backdrop blur. Modern and elegant.</p>
-                </div>
-            </div>
-        </div>
 
-        <!-- Forms -->
-        <div class="mb-16">
-            <h3 class="mb-6">Forms</h3>
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <div class="form-group">
-                        <label class="form-label">Text Input</label>
-                        <input type="text" class="form-input" placeholder="Enter text...">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Select</label>
-                        <select class="form-select">
-                            <option>Option 1</option>
-                            <option>Option 2</option>
-                            <option>Option 3</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <div class="form-group">
-                        <label class="form-label">Textarea</label>
-                        <textarea class="form-textarea" placeholder="Enter message..."></textarea>
+                <div class="about-visual">
+                    <!-- About Carousel (optional - can be added later) -->
+                    <div class="about-carousel">
+                        <div class="carousel-container">
+                            <div class="carousel-track" data-position="0" id="aboutCarouselTrack">
+                                <!-- Carousel cards will be dynamically inserted here -->
+                            </div>
+                        </div>
+                        <div class="carousel-indicators" id="aboutCarouselIndicators">
+                            <!-- Indicators will be dynamically inserted here -->
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Badges & Alerts -->
-        <div class="mb-16">
-            <h3 class="mb-6">Badges & Alerts</h3>
-
-            <div class="mb-6">
-                <span class="badge">Primary Badge</span>
-                <span class="badge badge-secondary">Secondary Badge</span>
-            </div>
-
-            <div class="alert alert-info mb-4">
-                <strong>Info:</strong> This is an informational alert message.
-            </div>
-            <div class="alert alert-success mb-4">
-                <strong>Success:</strong> Operation completed successfully!
-            </div>
-            <div class="alert alert-warning mb-4">
-                <strong>Warning:</strong> Please review this before proceeding.
-            </div>
-            <div class="alert alert-error">
-                <strong>Error:</strong> Something went wrong. Please try again.
-            </div>
-        </div>
-
-        <!-- Typography -->
-        <div class="mb-16">
-            <h3 class="mb-6">Typography Scale</h3>
-            <h1>Heading 1 (h1 / text-5xl)</h1>
-            <h2>Heading 2 (h2 / text-4xl)</h2>
-            <h3>Heading 3 (h3 / text-3xl)</h3>
-            <h4>Heading 4 (h4 / text-2xl)</h4>
-            <h5>Heading 5 (h5 / text-xl)</h5>
-            <h6>Heading 6 (h6 / text-lg)</h6>
-            <p class="text-base">Body text (p / text-base) - This is the default paragraph text size at 16px with a line-height of 1.7 for optimal readability.</p>
-            <p class="text-sm">Small text (text-sm) - Useful for captions and secondary information.</p>
-        </div>
-
-        <!-- Utility Classes -->
-        <div class="mb-16">
-            <h3 class="mb-6">Utility Classes</h3>
-            <div class="grid grid-cols-3 gap-4">
-                <div class="card hover-lift cursor-pointer">
-                    <strong>Hover Lift</strong><br>
-                    <span class="text-sm text-secondary">.hover-lift</span>
-                </div>
-                <div class="card hover-scale cursor-pointer">
-                    <strong>Hover Scale</strong><br>
-                    <span class="text-sm text-secondary">.hover-scale</span>
-                </div>
-                <div class="card hover-fade cursor-pointer">
-                    <strong>Hover Fade</strong><br>
-                    <span class="text-sm text-secondary">.hover-fade</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Color Swatches -->
-        <div class="mb-16">
-            <h3 class="mb-6">Color System</h3>
-            <div class="grid grid-cols-5 gap-4 mb-6">
-                <div style="background: var(--color-primary); height: 80px; border-radius: var(--radius-md);"></div>
-                <div style="background: var(--color-secondary); height: 80px; border-radius: var(--radius-md);"></div>
-                <div style="background: var(--color-tertiary); height: 80px; border-radius: var(--radius-md);"></div>
-                <div style="background: var(--color-accent-cool); height: 80px; border-radius: var(--radius-md);"></div>
-                <div style="background: var(--color-accent-warm); height: 80px; border-radius: var(--radius-md);"></div>
-            </div>
-            <p class="text-sm text-secondary text-center">Primary • Secondary • Tertiary • Accent Cool • Accent Warm</p>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer style="padding: 40px 0; text-align: center; background: var(--bg-secondary);">
+    <!-- Contact Section -->
+    <section id="contact" class="section contact" style="padding: 120px 0;">
         <div class="container">
-            <p class="text-sm text-secondary">
-                <!-- [CUSTOMIZE] Update footer text -->
-                Built with ❤️ using GitHub Template Repo 2025
-            </p>
+            <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+                <h2 class="section-title" style="text-align: center;">Let's Work Together</h2>
+                <p style="font-size: var(--font-size-lg); color: var(--text-secondary); margin-bottom: 48px; line-height: 1.8;">
+                    I'm always open to custom commissions, collaborations, and special requests. Whether you're looking for a unique piece for your space or want to discuss licensing for commercial use, I'd love to hear from you.
+                </p>
+
+                <h3 style="font-size: var(--font-size-2xl); margin-bottom: 32px; font-weight: var(--font-weight-semibold);">What I Offer</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 64px; margin-bottom: 64px; text-align: left;">
+                    <div>
+                        <h4 style="font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); margin-bottom: 12px;">Custom Commissions</h4>
+                        <p style="font-size: var(--font-size-base); color: var(--text-secondary); line-height: 1.6;">Original works tailored to your vision and space</p>
+                    </div>
+                    <div>
+                        <h4 style="font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); margin-bottom: 12px;">Bulk Orders</h4>
+                        <p style="font-size: var(--font-size-base); color: var(--text-secondary); line-height: 1.6;">Special pricing for businesses and designers</p>
+                    </div>
+                    <div>
+                        <h4 style="font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); margin-bottom: 12px;">Licensing</h4>
+                        <p style="font-size: var(--font-size-base); color: var(--text-secondary); line-height: 1.6;">Commercial use rights for publications and brands</p>
+                    </div>
+                </div>
+
+                <div class="contact-buttons" style="display: flex; gap: 16px; justify-content: center;">
+                    <a href="mailto:hello@sidehustle.com" class="btn-accent button">Email Me</a>
+                    <a href="https://instagram.com" target="_blank" class="btn-secondary button">Follow on Instagram</a>
+                </div>
+            </div>
         </div>
-    </footer>
+    </section>
+
+    <!-- Back to Top Button -->
+    <button class="btn-arrow btn-arrow-md back-to-top" id="backToTop" onclick="scrollToTop()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 18L12 6M8 10L12 6L16 10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
 
     <!-- Scripts -->
-    <script src="assets/js/theme.js"></script>
+    <!-- Core modules -->
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/data-loader.js"></script>
+    <script src="assets/js/core/theme-system.js"></script>
+
+    <!-- Utilities -->
+    <script src="assets/js/utils/helpers.js"></script>
+    <script src="assets/js/utils/animations.js"></script>
+    <script src="assets/js/utils/image-preloader.js"></script>
+
+    <!-- Components -->
+    <script src="assets/js/components/navigation.js"></script>
+    <script src="assets/js/components/mobile-menu.js"></script>
+    <script src="assets/js/components/logo-animation.js"></script>
+    <script src="assets/js/components/carousel-base.js"></script>
+    <script src="assets/js/components/carousel-about.js"></script>
+
+    <!-- Particle system (hero background) -->
+    <script src="assets/js/particle-system.js"></script>
+
+    <!-- Main initialization -->
     <script src="assets/js/main.js"></script>
 </body>
 </html>

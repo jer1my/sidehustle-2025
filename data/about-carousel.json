@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Creative Process",
+    "description": "Every piece starts with inspiration from nature and urban landscapes",
+    "image": "assets/images/about/process.jpg",
+    "imageLight": "assets/images/about/process-light.jpg",
+    "imageDark": "assets/images/about/process-dark.jpg"
+  },
+  {
+    "title": "Attention to Detail",
+    "description": "Carefully composed shots that capture the perfect moment",
+    "image": "assets/images/about/detail.jpg",
+    "imageLight": "assets/images/about/detail-light.jpg",
+    "imageDark": "assets/images/about/detail-dark.jpg"
+  },
+  {
+    "title": "Quality Prints",
+    "description": "Museum-quality prints on premium materials",
+    "image": "assets/images/about/prints.jpg",
+    "imageLight": "assets/images/about/prints-light.jpg",
+    "imageDark": "assets/images/about/prints-dark.jpg"
+  },
+  {
+    "title": "Your Space",
+    "description": "Art that transforms and elevates any environment",
+    "image": "assets/images/about/space.jpg",
+    "imageLight": "assets/images/about/space-light.jpg",
+    "imageDark": "assets/images/about/space-dark.jpg"
+  }
+]

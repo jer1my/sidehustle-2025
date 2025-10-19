@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Golden Hour Landscape",
+    "description": "A breathtaking capture of nature's perfect lighting during golden hour",
+    "category": "Photography",
+    "price": "$45",
+    "image": "assets/images/products/golden-hour.jpg",
+    "imageLight": "assets/images/products/golden-hour-light.jpg",
+    "imageDark": "assets/images/products/golden-hour-dark.jpg",
+    "featured": true
+  },
+  {
+    "title": "Abstract Colors",
+    "description": "Bold, vibrant abstract art that energizes any space",
+    "category": "Digital Art",
+    "price": "$35",
+    "image": "assets/images/products/abstract-colors.jpg",
+    "imageLight": "assets/images/products/abstract-colors-light.jpg",
+    "imageDark": "assets/images/products/abstract-colors-dark.jpg",
+    "featured": true
+  },
+  {
+    "title": "Urban Geometry",
+    "description": "Modern architectural photography highlighting geometric patterns",
+    "category": "Photography",
+    "price": "$40",
+    "image": "assets/images/products/urban-geometry.jpg"
+  },
+  {
+    "title": "Serene Waters",
+    "description": "Calming seascape that brings tranquility to your space",
+    "category": "Photography",
+    "price": "$50",
+    "image": "assets/images/products/serene-waters.jpg"
+  },
+  {
+    "title": "Minimal Flora",
+    "description": "Delicate botanical study in minimalist style",
+    "category": "Photography",
+    "price": "$38",
+    "image": "assets/images/products/minimal-flora.jpg"
+  },
+  {
+    "title": "Digital Dreams",
+    "description": "Surreal digital composition blending reality and imagination",
+    "category": "Digital Art",
+    "price": "$42",
+    "image": "assets/images/products/digital-dreams.jpg"
+  }
+]

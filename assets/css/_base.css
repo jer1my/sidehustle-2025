@@ -28,22 +28,22 @@ body {
 
 /* Text Selection */
 ::selection {
-    background: rgba(21, 181, 255, 0.3);
+    background: rgba(5, 150, 105, 0.3);
     color: var(--color-accent-cool);
 }
 
 ::-moz-selection {
-    background: rgba(21, 181, 255, 0.3);
+    background: rgba(5, 150, 105, 0.3);
     color: var(--color-accent-cool);
 }
 
 [data-theme="dark"] ::selection {
-    background: rgba(234, 88, 12, 0.3);
+    background: rgba(184, 134, 11, 0.3);
     color: var(--color-accent-warm);
 }
 
 [data-theme="dark"] ::-moz-selection {
-    background: rgba(234, 88, 12, 0.3);
+    background: rgba(184, 134, 11, 0.3);
     color: var(--color-accent-warm);
 }
 

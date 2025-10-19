@@ -21,7 +21,7 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./
-        server-dir: /[PROJECT-NAME]/    # [CUSTOMIZE] Change this to your directory!
+        server-dir: /sidehustle.llc/
         exclude: |
           **/.git*
           **/.git*/**
