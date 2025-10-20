@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* Changed from hidden to see gallery */
 }
 
 .hero-bg {
@@ -18,17 +18,43 @@
     z-index: -1;
 }
 
+/* Horizontal scrolling container */
+.hero-horizontal-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.hero-scroll-track {
+    display: flex;
+    align-items: center;
+    gap: 80px; /* Fixed spacing between frames */
+    padding: 0 10vw;
+    width: max-content;
+    transform: translateX(0);
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+}
+
 .hero-content {
-    max-width: var(--container-max-width);
-    margin: 0 auto;
-    padding: 0 var(--container-padding-desktop);
-    text-align: center;
+    flex-shrink: 0;
+    text-align: right; /* Right-align to sit next to gallery cards */
     z-index: 10;
     position: relative;
+    min-width: 400px;
+    height: 55vh; /* Match gallery card height */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Top align with gallery cards */
 }
 
 .hero-title {
-    font-size: var(--font-size-hero);
+    font-size: clamp(48px, 8vw, 120px); /* Responsive scaling */
     font-weight: 300;
     letter-spacing: -0.02em;
     margin-bottom: 8px;
@@ -37,13 +63,13 @@
     transform: translateY(30px);
     animation: fadeInUp 0.8s ease-out 0.2s forwards;
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column-reverse; /* Stack badge above title */
+    align-items: flex-end; /* Right-align both */
+    gap: 8px; /* Space between badge and title */
 }
 
 .coming-soon-badge {
-    position: absolute;
-    top: 0;
-    right: -120px;
     font-size: 14px;
     font-weight: 600;
     font-style: normal;
@@ -79,7 +105,8 @@ body[data-theme="dark"] .coming-soon-badge {
 
 .hero-description {
     font-size: 18px;
-    max-width: 600px;
+    min-width: 400px;
+    max-width: 500px;
     margin: 0 auto 48px;
     opacity: 0;
     transform: translateY(30px);
@@ -147,29 +174,45 @@ body[data-theme="dark"] .coming-soon-badge {
     pointer-events: auto;
 }
 
+/* Gallery Frames */
+.gallery-frame {
+    flex-shrink: 0;
+    height: 55vh; /* Viewport height-based */
+    width: calc(55vh * 0.75); /* 3:4 portrait ratio (width = height * 0.75) */
+    background: rgba(60, 60, 60, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Dark mode gallery frames */
+body[data-theme="dark"] .gallery-frame {
+    background: rgba(80, 80, 80, 0.3);
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
-    .coming-soon-badge {
-        position: static;
-        display: block;
-        margin: 0 auto 16px;
-        font-size: 12px;
-        padding: 3px 10px;
-        width: fit-content;
-    }
-
-    .hero-title {
-        display: flex;
-        flex-direction: column-reverse;
-        align-items: center;
-    }
-
     .hero-subtitle .mobile-break {
         display: block;
     }
 
     .hero-subtitle .desktop-only {
         display: none;
+    }
+
+    /* Gallery adjustments for mobile */
+    .hero-scroll-track {
+        gap: 40px; /* Fixed spacing (reduced from desktop 80px) */
+        padding: 0 5vw;
+    }
+
+    .hero-content {
+        min-width: 300px;
+        height: 50vh; /* Match mobile gallery card height */
+    }
+
+    .gallery-frame {
+        height: 50vh; /* Viewport height-based (slightly shorter than desktop) */
+        width: calc(50vh * 0.75); /* 3:4 portrait ratio maintained */
     }
 }
 

@@ -56,8 +56,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // Handle hash navigation after everything is loaded and rendered
-    if (window.location.hash) {
-        // Wait for layout to fully settle
+    // Skip on index.html with hero - gallery scroll script handles it
+    const hasHero = document.getElementById('hero');
+    if (window.location.hash && !hasHero) {
+        // Only run on pages WITHOUT hero/gallery (e.g., style-guide, other pages)
         setTimeout(() => {
             const target = document.querySelector(window.location.hash);
             if (target) {

@@ -1,56 +1,83 @@
 /**
- * Navigation & Scrolling System
+ * Index Page Navigation (Gallery-Aware)
  *
- * Main navigation, scrolling, active states, sticky nav
+ * Navigation specifically for index.html with hero gallery
+ * Handles gallery-aware same-page navigation
  *
- * Dependencies: None
- * Exports: Navigation and scrolling functions
+ * Dependencies: hero-gallery-scroll.js (gallery functions)
+ * Used on: index.html ONLY
  */
 
 // ==========================================
 
-// Smooth scroll to sections with hash navigation
+// Gallery-aware navigation for index page
 function initSmoothScrolling() {
     // Handle all anchor links that start with #
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
+            // Skip if this is the scroll arrow button (handled by hero-gallery-scroll.js)
+            if (this.classList.contains('scroll-arrow') || this.classList.contains('btn-arrow')) {
+                return;
+            }
 
-            // If it's just # (home link), scroll to top
+            const href = this.getAttribute('href');
+            const galleryProgress = window.galleryScrollProgress || 0;
+
+            // HOME / LOGO - REVERSE GALLERY then scroll to top
             if (href === '#') {
                 e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+
+                if (galleryProgress > 0 && window.resetGallery) {
+                    // Step 1: Scroll hero to top of viewport first (so gallery reverse is visible)
+                    const hero = document.getElementById('hero');
+                    hero.scrollIntoView({ behavior: 'smooth' });
+
+                    // Step 2: Wait for scroll, then reverse gallery
+                    setTimeout(() => {
+                        window.resetGallery(() => {
+                            // Step 3: After gallery reverses, scroll to actual top
+                            window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth'
+                            });
+                        });
+                    }, 600);
+                } else {
+                    // Gallery already at start, just scroll to top
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }
+
                 // Update URL hash
                 history.pushState(null, null, ' ');
 
-                // Update active state immediately
+                // Update active state
                 setTimeout(() => {
                     updateNavigationActiveStates('#');
                 }, 100);
                 return;
             }
 
-            // For section links
-            const targetId = href.substring(1);
-            const targetSection = document.getElementById(targetId);
+            // SECTION LINKS (Shop/About/Contact) - FORWARD GALLERY then scroll to section
+            const targetSection = document.getElementById(href.substring(1));
 
             if (targetSection) {
                 e.preventDefault();
-                const targetPosition = targetSection.offsetTop - 76;
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-                // Update URL hash after scroll starts
-                history.pushState(null, null, href);
 
-                // Update active state after scroll completes
-                setTimeout(() => {
-                    updateNavigationActiveStates(href);
-                }, 500);
+                if (window.scrollGalleryForward) {
+                    // Forward through gallery (like down arrow), then scroll to section
+                    window.scrollGalleryForward(targetSection);
+
+                    // Update URL hash
+                    history.pushState(null, null, href);
+
+                    // Update active state after animation
+                    setTimeout(() => {
+                        updateNavigationActiveStates(href);
+                    }, 500);
+                }
 
                 // Close mobile menu if open
                 const mobileMenu = document.getElementById('mobileMenuOverlay');
@@ -65,6 +92,22 @@ function initSmoothScrolling() {
             }
         });
     });
+}
+
+// Helper function to navigate to a section
+function navigateToSection(targetSection, href) {
+    const targetPosition = targetSection.offsetTop - 76;
+    window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+    });
+    // Update URL hash after scroll starts
+    history.pushState(null, null, href);
+
+    // Update active state after scroll completes
+    setTimeout(() => {
+        updateNavigationActiveStates(href);
+    }, 500);
 }
 
 function scrollToProjects() {

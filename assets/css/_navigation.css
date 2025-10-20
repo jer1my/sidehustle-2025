@@ -78,24 +78,23 @@
     z-index: 2;
 }
 
-/* Dark mode logo - equal specificity to accent color rule */
-body[data-theme="dark"] .logo.accent-color .logo-svg,
-body[data-theme="dark"] .logo:not(.accent-color) .logo-svg {
-    background-image: url('../icons/logo-sh-dark-mode.svg');
-}
-
 .logo.accent-color {
     color: var(--color-accent);
 }
 
-/* Accent color logo variants - Emerald #059669 */
+/* Light mode accent logo - Emerald #059669 */
 .logo.accent-color .logo-svg {
-    background-image: url('../icons/logo-sh-light-accent.svg');
+    background-image: url('../icons/logo-sh-light-acccent.svg');
 }
 
-/* Dark mode accent color logo - Gold #B8860B - override the light rule above */
+/* Dark mode regular logo */
+body[data-theme="dark"] .logo-svg {
+    background-image: url('../icons/logo-sh-dark-mode.svg');
+}
+
+/* Dark mode accent logo - Gold #B8860B */
 body[data-theme="dark"] .logo.accent-color .logo-svg {
-    background-image: url('../icons/logo-sh-dark-accent.svg') !important;
+    background-image: url('../icons/logo-sh-dark-accent.svg');
 }
 
 .logo-text {
