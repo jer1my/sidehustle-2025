@@ -56,15 +56,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // Handle hash navigation after everything is loaded and rendered
-    // Skip on index.html with hero - gallery scroll script handles it
-    const hasHero = document.getElementById('hero');
-    if (window.location.hash && !hasHero) {
-        // Only run on pages WITHOUT hero/gallery (e.g., style-guide, other pages)
+    // With scroll-driven animation, this works naturally on all pages
+    if (window.location.hash) {
         setTimeout(() => {
             const target = document.querySelector(window.location.hash);
             if (target) {
                 target.scrollIntoView({ behavior: 'instant', block: 'start' });
             }
-        }, 300); // Longer delay ensures all content above is laid out
+        }, 300); // Delay ensures all content above is laid out
     }
 });
