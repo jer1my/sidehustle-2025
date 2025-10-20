@@ -152,7 +152,7 @@ body[data-theme="dark"] .coming-soon-badge {
     .coming-soon-badge {
         position: static;
         display: block;
-        margin: 16px auto 0;
+        margin: 0 auto 16px;
         font-size: 12px;
         padding: 3px 10px;
         width: fit-content;
@@ -160,8 +160,16 @@ body[data-theme="dark"] .coming-soon-badge {
 
     .hero-title {
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: center;
+    }
+
+    .hero-subtitle .mobile-break {
+        display: block;
+    }
+
+    .hero-subtitle .desktop-only {
+        display: none;
     }
 }
 
