@@ -39,6 +39,7 @@
 }
 
 .section-title {
+    font-family: var(--font-family-display);
     font-size: 48px;
     font-weight: 300;
     text-align: center;
@@ -560,6 +561,7 @@ body[data-theme="dark"] .logo-dark {
 }
 
 .title {
+    font-family: var(--font-family-display);
     font-size: clamp(48px, 8vw, 96px);
     font-weight: 300;
     margin-bottom: 8px;
@@ -810,14 +812,17 @@ body[data-theme="dark"] .logo-dark {
 }
 
 .h1-sample {
+    font-family: var(--font-family-display);
     font-size: clamp(32px, 5vw, 48px);
-    font-weight: 300;
+    font-weight: 400;
+    font-style: italic;
     letter-spacing: -0.02em;
 }
 
 .h2-sample {
+    font-family: var(--font-family-display);
     font-size: clamp(24px, 4vw, 32px);
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: -0.01em;
 }
 
@@ -828,6 +833,7 @@ body[data-theme="dark"] .logo-dark {
 
 .body-sample {
     font-size: 16px;
+    font-weight: 500;
     line-height: 1.7;
     max-width: 50%;
     padding-right: 16px;
@@ -835,6 +841,7 @@ body[data-theme="dark"] .logo-dark {
 
 .small-sample {
     font-size: 14px;
+    font-weight: 500;
     color: #525252;
 }
 

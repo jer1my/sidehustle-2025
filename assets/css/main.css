@@ -33,6 +33,9 @@
 /* Page Sections */
 @import '_sections.css';
 
+/* Style Guide Controls */
+@import '_style-guide.css';
+
 /* Theme System */
 @import '_theme.css';
 

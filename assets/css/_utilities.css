@@ -292,62 +292,54 @@ body[data-theme="dark"] .nav {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    width: var(--grid-toggle-width);
-    height: var(--grid-toggle-height);
-    background: var(--grid-toggle-bg-inactive);
+    width: 80px;
+    height: 32px;
+    background: rgba(212, 212, 212, 0.3);
     border: none;
-    border-radius: calc(var(--grid-toggle-height) / 2);
+    border-radius: 16px;
     cursor: pointer;
     transition: all var(--transition-base);
     backdrop-filter: var(--blur-sm);
     -webkit-backdrop-filter: var(--blur-sm);
-    padding: var(--grid-toggle-pill-offset) var(--space-2);
+    padding: 4px 8px;
     font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--grid-toggle-text-color);
+    font-weight: 600;
+    color: var(--text-secondary);
 }
 
 .grid-toggle:hover {
-    background: var(--grid-toggle-bg-hover);
+    opacity: 0.8;
 }
 
 /* Moving circle that covers the current state */
 .grid-toggle::before {
     content: '';
     position: absolute;
-    top: var(--grid-toggle-pill-offset);
-    left: var(--grid-toggle-pill-offset);
-    width: var(--grid-toggle-pill-size);
-    height: var(--grid-toggle-pill-size);
-    background: var(--grid-toggle-pill-bg);
-    border-radius: calc(var(--grid-toggle-pill-size) / 2);
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    background: #1a1a1a;
+    border-radius: 12px;
     transition: transform var(--transition-base);
     z-index: 1;
 }
 
 .grid-toggle.active {
-    background: var(--grid-toggle-bg-active);
+    background: var(--color-accent);
 }
 
 .grid-toggle.active:hover {
-    background: var(--grid-toggle-bg-active-hover);
+    opacity: 0.8;
 }
 
 .grid-toggle.active::before {
-    transform: translateX(var(--grid-toggle-translate));
+    transform: translateX(48px);
     background: white; /* White dot in light mode when active */
 }
 
 .grid-toggle.active .grid-text-off {
     color: white; /* White text in light mode when active */
-}
-
-.grid-toggle.active:hover::before {
-    background: #1a1a1a; /* Dark dot on hover in light mode */
-}
-
-.grid-toggle.active:hover .grid-text-off {
-    color: #1a1a1a; /* Dark text on hover in light mode */
 }
 
 /* Grid Toggle Text - positioned inside the pill */
@@ -384,14 +376,6 @@ body[data-theme="dark"] .nav {
 
 [data-theme="dark"] .grid-toggle.active .grid-text-off {
     color: #1a1a1a; /* Dark text in dark mode when active */
-}
-
-[data-theme="dark"] .grid-toggle.active:hover::before {
-    background: #fafafa; /* Light dot on hover in dark mode */
-}
-
-[data-theme="dark"] .grid-toggle.active:hover .grid-text-off {
-    color: #fafafa; /* Light text on hover in dark mode */
 }
 
 /* Mobile responsive */
