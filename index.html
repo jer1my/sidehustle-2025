@@ -60,42 +60,44 @@
     <div id="nav-placeholder"></div>
     <script src="assets/js/components/navigation-component.js"></script>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-bg"></div>
+    <!-- Hero Scroll Container (Tall container for scroll-driven animation) -->
+    <div class="hero-scroll-container">
+        <section class="hero" id="hero">
+            <div class="hero-bg"></div>
 
-        <!-- Horizontal Scrolling Track (Title + Gallery) -->
-        <div class="hero-horizontal-container">
-            <div class="hero-scroll-track">
-                <!-- Hero Content (Title/Subtitle) -->
-                <div class="hero-content">
-                    <h1 class="hero-title">
-                        Side Hustle
-                        <span class="coming-soon-badge">Coming Soon</span>
-                    </h1>
-                    <h2 class="hero-subtitle">~Art & Photography~</h2>
-                    <p class="hero-description">I work across digital art, traditional mediums, and photography. Some pieces incorporate AI-generated elements as part of the creative process. All AI-assisted work is clearly labeled, if that matters to you.</p>
+            <!-- Horizontal Scrolling Track (Title + Gallery) -->
+            <div class="hero-horizontal-container">
+                <div class="hero-scroll-track">
+                    <!-- Hero Content (Title/Subtitle) -->
+                    <div class="hero-content">
+                        <h1 class="hero-title">
+                            Side Hustle
+                            <span class="coming-soon-badge">Coming Soon</span>
+                        </h1>
+                        <h2 class="hero-subtitle">~Art & Photography~</h2>
+                        <p class="hero-description">I work across digital art, traditional mediums, and photography. Some pieces incorporate AI-generated elements as part of the creative process. All AI-assisted work is clearly labeled, if that matters to you.</p>
+                    </div>
+
+                    <!-- Gallery Frames -->
+                    <div class="gallery-frame"></div>
+                    <div class="gallery-frame"></div>
+                    <div class="gallery-frame"></div>
+                    <div class="gallery-frame"></div>
+                    <div class="gallery-frame"></div>
+                    <div class="gallery-frame"></div>
                 </div>
-
-                <!-- Gallery Frames -->
-                <div class="gallery-frame"></div>
-                <div class="gallery-frame"></div>
-                <div class="gallery-frame"></div>
-                <div class="gallery-frame"></div>
-                <div class="gallery-frame"></div>
-                <div class="gallery-frame"></div>
             </div>
-        </div>
 
-        <!-- Scroll Arrow -->
-        <a href="#products" class="btn-arrow btn-arrow-lg scroll-arrow">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g class="arrow-group">
-                    <path d="M12 6L12 18M8 14L12 18L16 14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </g>
-            </svg>
-        </a>
-    </section>
+            <!-- Scroll Arrow -->
+            <a href="#products" class="btn-arrow btn-arrow-lg scroll-arrow">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g class="arrow-group">
+                        <path d="M12 6L12 18M8 14L12 18L16 14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+                </svg>
+            </a>
+        </section>
+    </div>
 
     <!-- Products Section -->
     <section id="products" class="section products min-h-screen flex-center section-py">
@@ -173,7 +175,7 @@
     </section>
 
     <!-- Back to Top Button -->
-    <button class="btn-arrow btn-arrow-md back-to-top" id="backToTop" onclick="scrollToTop()">
+    <button class="btn-arrow btn-arrow-md btn-arrow-filled back-to-top" id="backToTop" onclick="scrollToTop()">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 18L12 6M8 10L12 6L16 10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>

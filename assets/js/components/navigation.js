@@ -1,55 +1,29 @@
 /**
- * Index Page Navigation (Gallery-Aware)
+ * Navigation & Scrolling System
  *
- * Navigation specifically for index.html with hero gallery
- * Handles gallery-aware same-page navigation
+ * Main navigation, scrolling, active states
+ * Simplified for scroll-driven animation (no gallery state management)
  *
- * Dependencies: hero-gallery-scroll.js (gallery functions)
- * Used on: index.html ONLY
+ * Dependencies: None
+ * Exports: Navigation and scrolling functions
  */
 
 // ==========================================
 
-// Gallery-aware navigation for index page
+// Smooth scroll to sections with hash navigation
 function initSmoothScrolling() {
     // Handle all anchor links that start with #
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            // Skip if this is the scroll arrow button (handled by hero-gallery-scroll.js)
-            if (this.classList.contains('scroll-arrow') || this.classList.contains('btn-arrow')) {
-                return;
-            }
-
             const href = this.getAttribute('href');
-            const galleryProgress = window.galleryScrollProgress || 0;
 
-            // HOME / LOGO - REVERSE GALLERY then scroll to top
+            // If it's just # (home link), scroll to top
             if (href === '#') {
                 e.preventDefault();
-
-                if (galleryProgress > 0 && window.resetGallery) {
-                    // Step 1: Scroll hero to top of viewport first (so gallery reverse is visible)
-                    const hero = document.getElementById('hero');
-                    hero.scrollIntoView({ behavior: 'smooth' });
-
-                    // Step 2: Wait for scroll, then reverse gallery
-                    setTimeout(() => {
-                        window.resetGallery(() => {
-                            // Step 3: After gallery reverses, scroll to actual top
-                            window.scrollTo({
-                                top: 0,
-                                behavior: 'smooth'
-                            });
-                        });
-                    }, 600);
-                } else {
-                    // Gallery already at start, just scroll to top
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                }
-
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
                 // Update URL hash
                 history.pushState(null, null, ' ');
 
@@ -60,24 +34,20 @@ function initSmoothScrolling() {
                 return;
             }
 
-            // SECTION LINKS (Shop/About/Contact) - FORWARD GALLERY then scroll to section
+            // For section links
             const targetSection = document.getElementById(href.substring(1));
 
             if (targetSection) {
                 e.preventDefault();
+                targetSection.scrollIntoView({ behavior: 'smooth' });
 
-                if (window.scrollGalleryForward) {
-                    // Forward through gallery (like down arrow), then scroll to section
-                    window.scrollGalleryForward(targetSection);
+                // Update URL hash
+                history.pushState(null, null, href);
 
-                    // Update URL hash
-                    history.pushState(null, null, href);
-
-                    // Update active state after animation
-                    setTimeout(() => {
-                        updateNavigationActiveStates(href);
-                    }, 500);
-                }
+                // Update active state after scroll completes
+                setTimeout(() => {
+                    updateNavigationActiveStates(href);
+                }, 500);
 
                 // Close mobile menu if open
                 const mobileMenu = document.getElementById('mobileMenuOverlay');
@@ -94,41 +64,17 @@ function initSmoothScrolling() {
     });
 }
 
-// Helper function to navigate to a section
-function navigateToSection(targetSection, href) {
-    const targetPosition = targetSection.offsetTop - 76;
-    window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-    });
-    // Update URL hash after scroll starts
-    history.pushState(null, null, href);
-
-    // Update active state after scroll completes
-    setTimeout(() => {
-        updateNavigationActiveStates(href);
-    }, 500);
-}
-
 function scrollToProjects() {
     const projectsSection = document.getElementById('projects');
     if (projectsSection) {
-        const targetPosition = projectsSection.offsetTop - 76;
-        window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-        });
+        projectsSection.scrollIntoView({ behavior: 'smooth' });
     }
 }
 
 function scrollToProducts() {
     const productsSection = document.getElementById('products');
     if (productsSection) {
-        const targetPosition = productsSection.offsetTop - 76;
-        window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-        });
+        productsSection.scrollIntoView({ behavior: 'smooth' });
 
         // Update active state after scroll completes
         setTimeout(() => {
@@ -140,11 +86,7 @@ function scrollToProducts() {
 function scrollToAbout() {
     const aboutSection = document.getElementById('about');
     if (aboutSection) {
-        const targetPosition = aboutSection.offsetTop - 76;
-        window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-        });
+        aboutSection.scrollIntoView({ behavior: 'smooth' });
 
         // Update active state after scroll completes
         setTimeout(() => {
@@ -156,11 +98,7 @@ function scrollToAbout() {
 function scrollToContact() {
     const contactSection = document.getElementById('contact');
     if (contactSection) {
-        const targetPosition = contactSection.offsetTop - 76;
-        window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-        });
+        contactSection.scrollIntoView({ behavior: 'smooth' });
 
         // Update active state after scroll completes
         setTimeout(() => {
@@ -381,4 +319,3 @@ function initBackToTop() {
     // Initial check
     toggleBackToTop();
 }
-

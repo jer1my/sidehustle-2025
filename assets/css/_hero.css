@@ -1,11 +1,18 @@
-/* Hero Section */
+/* Hero Scroll Container - Tall container for scroll-driven animation */
+.hero-scroll-container {
+    height: 300vh; /* 3x viewport height = scroll distance for gallery */
+    position: relative;
+}
+
+/* Hero Section - Sticky positioning */
 .hero {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    overflow: visible; /* Changed from hidden to see gallery */
+    position: sticky;
+    top: 0;
+    overflow: hidden;
 }
 
 .hero-bg {
