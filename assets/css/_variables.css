@@ -95,7 +95,7 @@
   /* Layout */
   --container-padding-desktop: 40px;
   --container-padding-mobile: 24px;
-  --logo-text-offset: 20px; /* Centered in desktop gutter */
+  --logo-text-offset: 24px; /* Centered in desktop gutter */
   --nav-height: 80px;
   --scroll-offset: 48px;
 

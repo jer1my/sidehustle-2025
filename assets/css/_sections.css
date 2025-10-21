@@ -577,6 +577,7 @@ body[data-theme="dark"] .logo-dark {
 
 .section {
     margin-bottom: 80px;
+    position: relative;
 }
 
 /* User Controls Section */

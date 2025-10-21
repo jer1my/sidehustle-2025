@@ -34,12 +34,19 @@
     top: 0;
     left: 0;
     right: 0;
-    background: var(--bg-overlay-light);
-    backdrop-filter: var(--blur-lg);
-    -webkit-backdrop-filter: var(--blur-lg);
-    z-index: 1200;
-    padding: var(--space-5) 0;
-    transition: background var(--transition-base), backdrop-filter var(--transition-base);
+    background: linear-gradient(to bottom, rgba(250, 250, 250, 1) 0%, rgba(250, 250, 250, 1) 60%, rgba(250, 250, 250, 0) 100%);
+    /* backdrop-filter: var(--blur-lg); */
+    /* -webkit-backdrop-filter: var(--blur-lg); */
+    z-index: 99999;
+    min-height: 120px;
+    padding: var(--space-5) 0 0 0;
+    transition: background var(--transition-base);
+    isolation: isolate;
+}
+
+/* Dark mode navigation gradient */
+body[data-theme="dark"] .nav {
+    background: linear-gradient(to bottom, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 1) 60%, rgba(23, 23, 23, 0) 100%);
 }
 
 .nav-container {
