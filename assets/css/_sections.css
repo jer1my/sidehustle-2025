@@ -59,12 +59,10 @@
 }
 
 .project-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(250, 250, 250, 1);
     border-radius: 20px;
     padding: 40px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(26, 26, 26, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0;
     transform: translateY(30px);
@@ -78,8 +76,17 @@
 }
 
 .project-card:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(240, 240, 240, 1);
     transform: translateY(-8px);
+}
+
+body[data-theme="dark"] .project-card {
+    background: rgba(23, 23, 23, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body[data-theme="dark"] .project-card:hover {
+    background: rgba(30, 30, 30, 1);
 }
 
 .project-image {
@@ -174,8 +181,6 @@
     overflow: hidden;
     min-height: 400px;
     background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     border: none;
     box-shadow: none;
 }
@@ -241,9 +246,7 @@
     left: 0;
     right: 0;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.6);
     z-index: -1;
 }
 
@@ -413,7 +416,6 @@ body:not([data-theme="dark"]) .project-card-featured .project-link-text::after {
     background: var(--color-accent);
     opacity: 0.1;
     border-radius: 20px;
-    backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -539,19 +541,26 @@ body[data-theme="dark"] .logo-dark {
 
 .contact-button {
     padding: 16px 32px;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
+    background: rgba(250, 250, 250, 1);
+    border: 1px solid rgba(26, 26, 26, 0.1);
     border-radius: 50px;
     color: inherit;
     text-decoration: none;
     font-weight: 500;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 }
 
 .contact-button:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(240, 240, 240, 1);
+}
+
+body[data-theme="dark"] .contact-button {
+    background: rgba(23, 23, 23, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body[data-theme="dark"] .contact-button:hover {
+    background: rgba(30, 30, 30, 1);
 }
 
 /* Style Guide Specific */
