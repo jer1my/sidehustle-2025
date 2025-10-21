@@ -20,17 +20,24 @@ function initSmoothScrolling() {
             // If it's just # (home link), scroll to top
             if (href === '#') {
                 e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+
+                // Use custom smooth scroll for controlled speed (2000ms)
+                if (typeof smoothScrollTo === 'function') {
+                    smoothScrollTo(0, 2000);
+                } else {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }
+
                 // Update URL hash
                 history.pushState(null, null, ' ');
 
-                // Update active state
+                // Update active state (longer timeout for 2s scroll)
                 setTimeout(() => {
                     updateNavigationActiveStates('#');
-                }, 100);
+                }, 2100);
                 return;
             }
 
@@ -39,15 +46,23 @@ function initSmoothScrolling() {
 
             if (targetSection) {
                 e.preventDefault();
-                targetSection.scrollIntoView({ behavior: 'smooth' });
+
+                const targetPosition = targetSection.offsetTop - 48;
+
+                // Use custom smooth scroll for controlled speed (2000ms)
+                if (typeof smoothScrollTo === 'function') {
+                    smoothScrollTo(targetPosition, 2000);
+                } else {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
 
                 // Update URL hash
                 history.pushState(null, null, href);
 
-                // Update active state after scroll completes
+                // Update active state after scroll completes (longer timeout for 2s scroll)
                 setTimeout(() => {
                     updateNavigationActiveStates(href);
-                }, 500);
+                }, 2100);
 
                 // Close mobile menu if open
                 const mobileMenu = document.getElementById('mobileMenuOverlay');
@@ -108,10 +123,15 @@ function scrollToContact() {
 }
 
 function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
+    // Use custom smooth scroll for controlled speed (2000ms)
+    if (typeof smoothScrollTo === 'function') {
+        smoothScrollTo(0, 2000);
+    } else {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
 }
 
 function toggleBackToTop() {
