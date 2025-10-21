@@ -59,6 +59,37 @@ function initSmoothScrolling() {
     });
 }
 
+// Custom Smooth Scroll Function
+// ==========================================
+// Provides slower, controlled scrolling with custom duration
+// Used for down arrow to handle long 1500vh scroll distance
+
+function smoothScrollTo(targetY, duration = 2000) {
+    const startY = window.scrollY;
+    const distance = targetY - startY;
+    const startTime = performance.now();
+
+    // Easing function: easeInOutCubic for smooth acceleration/deceleration
+    function easeInOutCubic(t) {
+        return t < 0.5
+            ? 4 * t * t * t
+            : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function scroll(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easing = easeInOutCubic(progress);
+
+        window.scrollTo(0, startY + distance * easing);
+
+        if (progress < 1) {
+            requestAnimationFrame(scroll);
+        }
+    }
+
+    requestAnimationFrame(scroll);
+}
 
 // Page Transitions
 // ==========================================

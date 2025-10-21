@@ -73,14 +73,21 @@
         scrollArrow.addEventListener('click', function(e) {
             e.preventDefault();
 
-            // Scroll to products section
+            // Scroll to products section with custom smooth scroll (2s duration)
             const productsSection = document.querySelector('#products');
             if (productsSection) {
                 const targetPosition = productsSection.offsetTop - 48;
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+
+                // Use custom smooth scroll for controlled speed (2000ms)
+                if (typeof smoothScrollTo === 'function') {
+                    smoothScrollTo(targetPosition, 2000);
+                } else {
+                    // Fallback to native smooth scroll
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
             }
         });
     }
