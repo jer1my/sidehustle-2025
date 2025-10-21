@@ -67,40 +67,20 @@
     updateGalleryPosition();
     window.addEventListener('load', updateGalleryPosition);
 
-    // Handle scroll arrow two-tap behavior
-    // First tap: Scroll to end of gallery
-    // Second tap: Scroll to products section
+    // Handle scroll arrow - scroll to products section
     const scrollArrow = document.querySelector('.scroll-arrow');
     if (scrollArrow) {
         scrollArrow.addEventListener('click', function(e) {
             e.preventDefault();
 
-            const scrollContainerTop = scrollContainer.offsetTop;
-            const scrollContainerHeight = scrollContainer.offsetHeight;
-            const currentScroll = window.scrollY;
-
-            // Calculate the end position of the gallery
-            const galleryEndPosition = scrollContainerTop + scrollContainerHeight - window.innerHeight;
-
-            // Check if we're already at the end of the gallery (within 50px threshold)
-            const isAtGalleryEnd = currentScroll >= galleryEndPosition - 50;
-
-            if (!isAtGalleryEnd) {
-                // First tap: Scroll to end of gallery
+            // Scroll to products section
+            const productsSection = document.querySelector('#products');
+            if (productsSection) {
+                const targetPosition = productsSection.offsetTop - 48;
                 window.scrollTo({
-                    top: galleryEndPosition,
+                    top: targetPosition,
                     behavior: 'smooth'
                 });
-            } else {
-                // Second tap: Scroll to products section
-                const productsSection = document.querySelector('#products');
-                if (productsSection) {
-                    const targetPosition = productsSection.offsetTop - 48;
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
             }
         });
     }
