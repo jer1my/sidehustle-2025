@@ -1,6 +1,6 @@
 /* Hero Scroll Container - Tall container for scroll-driven animation */
 .hero-scroll-container {
-    height: 300vh; /* 3x viewport height = scroll distance for gallery */
+    height: 1500vh; /* 15x viewport height = scroll distance for 0.2x speed gallery */
     position: relative;
 }
 
@@ -67,7 +67,7 @@
     line-height: 0.9;
     opacity: 0;
     transform: translateY(30px);
-    animation: fadeInUp 0.8s ease-out 0.2s forwards;
+    animation: fadeInUp 0.6s ease-out 0.15s forwards;
     position: relative;
     display: inline-flex;
     flex-direction: column-reverse; /* Stack badge above title */
@@ -102,7 +102,7 @@ body[data-theme="dark"] .coming-soon-badge {
     margin-bottom: 48px;
     opacity: 0;
     transform: translateY(30px);
-    animation: fadeInUp 0.8s ease-out 0.4s forwards;
+    animation: fadeInUp 0.6s ease-out 0.3s forwards;
 }
 
 .hero-subtitle .mobile-break {
@@ -115,7 +115,7 @@ body[data-theme="dark"] .coming-soon-badge {
     margin: 0 0 48px auto;
     opacity: 0;
     transform: translateY(30px);
-    animation: fadeInUp 0.8s ease-out 0.6s forwards;
+    animation: fadeInUp 0.6s ease-out 0.45s forwards;
 }
 
 .scroll-arrow {
@@ -127,12 +127,12 @@ body[data-theme="dark"] .coming-soon-badge {
 
     /* Animation */
     opacity: 0;
-    animation: fadeInUpCentered 0.8s ease-out 0.8s forwards;
+    animation: fadeInUpCentered 0.6s ease-out 0.6s forwards;
 }
 
 .scroll-arrow svg .arrow-group {
     transform: translateY(-40px);
-    animation: arrowSlideDown 0.8s ease-out 1.4s forwards, arrowBounce 2s infinite 2.4s;
+    animation: arrowSlideDown 0.6s ease-out 1.05s forwards, arrowBounce 2s infinite 1.8s;
 }
 
 /* Back to Top Button */
