@@ -15,6 +15,9 @@
 
     console.log('Hero gallery scroll-driven animation initialized');
 
+    // Horizontal scroll speed is controlled by container height in CSS
+    // Container height: 1500vh = 0.2x speed (5x slower than original 300vh)
+
     // Calculate how far we need to scroll the track horizontally
     function getTrackScrollWidth() {
         const trackWidth = scrollTrack.scrollWidth;
@@ -39,6 +42,7 @@
         const progress = Math.max(0, Math.min(1, (currentScroll - scrollStart) / scrollDistance));
 
         // Apply horizontal translation based on progress
+        // Speed is controlled by container height (1500vh for slow scroll)
         const maxScroll = getTrackScrollWidth();
         const translateX = -(progress * maxScroll);
         scrollTrack.style.transform = `translateX(${translateX}px)`;
