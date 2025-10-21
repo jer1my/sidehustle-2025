@@ -33,6 +33,11 @@ function initScrollAnimations() {
 function initSmoothScrolling() {
     // Smooth scroll for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(link => {
+        // Skip scroll arrow - it has custom behavior
+        if (link.classList.contains('scroll-arrow')) {
+            return;
+        }
+
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
 

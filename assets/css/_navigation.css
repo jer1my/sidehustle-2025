@@ -297,7 +297,7 @@ body.work-page .logo:hover .logo-letter {
     position: fixed;
     top: 20px;
     right: 24px;
-    z-index: 1300;
+    z-index: 100002;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -336,16 +336,19 @@ body.work-page .logo:hover .logo-letter {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(250, 250, 250, 0.95);
-    /* backdrop-filter: var(--blur-lg); */
-    /* -webkit-backdrop-filter: var(--blur-lg); */
-    z-index: 1250;
+    background: rgba(250, 250, 250, 1);
+    z-index: 100001;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
     transition: all var(--transition-base);
+}
+
+/* Dark mode mobile menu */
+body[data-theme="dark"] .mobile-menu-overlay {
+    background: rgba(23, 23, 23, 1);
 }
 
 .mobile-menu-overlay.active {
@@ -525,6 +528,16 @@ body.work-page .logo:hover .logo-letter {
 
 /* Mobile menu adjustments */
 @media (max-width: 768px) {
+    /* Hide desktop navigation */
+    .nav-right {
+        display: none;
+    }
+
+    /* Show mobile menu toggle button */
+    .nav-mobile-toggle {
+        display: flex;
+    }
+
     /* Shift mobile menu content higher to account for Chrome mobile footer */
     .mobile-menu-overlay {
         padding-bottom: 120px;

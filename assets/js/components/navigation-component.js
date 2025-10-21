@@ -53,7 +53,7 @@ function generateNavigation(currentPage = 'index') {
 
     // Generate mobile nav links
     const mobileLinks = links.map(link =>
-        `<a href="${link.href}"${isStyleGuide && link.href.startsWith('#') ? ' onclick="toggleMobileMenu(event)"' : ''}><span class="mobile-link-text">${link.text}</span></a>`
+        `<a href="${link.href}"${link.href.startsWith('#') || link.href.includes('.html#') ? ' onclick="toggleMobileMenu(event)"' : ''}><span class="mobile-link-text">${link.text}</span></a>`
     ).join('\n                ');
 
     // Theme toggle SVG
