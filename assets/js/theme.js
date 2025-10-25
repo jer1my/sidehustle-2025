@@ -21,7 +21,7 @@ class ThemeManager {
     }
 
     setTheme(theme, save = true) {
-        document.documentElement.setAttribute('data-theme', theme);
+        document.body.setAttribute('data-theme', theme);
 
         if (save) {
             localStorage.setItem(this.themeKey, theme);
@@ -29,13 +29,13 @@ class ThemeManager {
     }
 
     toggle() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const currentTheme = document.body.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         this.setTheme(newTheme);
     }
 
     getTheme() {
-        return document.documentElement.getAttribute('data-theme') || 'light';
+        return document.body.getAttribute('data-theme') || 'light';
     }
 }
 

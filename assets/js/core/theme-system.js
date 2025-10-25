@@ -106,6 +106,9 @@ function initTheme() {
 function toggleTheme() {
     const body = document.body;
 
+    // Disable ALL transitions during theme change to prevent flash
+    body.classList.add('disable-transitions');
+
     // Get all theme toggle buttons
     const navToggle = document.querySelector('nav .nav-theme-toggle');
     const styleGuideToggle = document.querySelector('#styleGuideThemeToggle');
@@ -127,4 +130,9 @@ function toggleTheme() {
 
     // Update theme responsive images
     updateThemeResponsiveImages();
+
+    // Re-enable transitions after a brief delay
+    setTimeout(() => {
+        body.classList.remove('disable-transitions');
+    }, 50);
 }
