@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="assets/css/main.css?v=1761016304">
+    <link rel="stylesheet" href="assets/css/main.css?v=1761419625">
     <style>
         /* Critical inline styles to prevent navigation flash on first load */
         .nav {
@@ -60,7 +60,10 @@
         </header>
 
         <section class="section">
-            <h2 class="section-title">User Controls</h2>
+            <h2 class="section-title" id="userControlsTitle" style="margin-bottom: 12px;">User Controls</h2>
+            <div style="margin-bottom: 120px; display: flex; justify-content: center;">
+                <input type="range" id="titleWaveSlider" min="0" max="100" value="0" class="particle-slider" style="width: 500px;">
+            </div>
             <div class="user-controls-description-grid">
                 <div class="user-controls-description">
                     <p class="mb-4">Switch between light and dark themes or reveal the underlying grid structure to see the layout system in action.</p>
@@ -772,6 +775,34 @@
                 if (gridOpacityValue) gridOpacityValue.textContent = value;
                 updateGridOpacity(value);
                 localStorage.setItem('gridOpacity', value);
+            });
+        }
+    </script>
+
+    <!-- Text Wave Effect Component -->
+    <script src="assets/js/components/text-wave-effect.js?v=1761016304"></script>
+
+    <script>
+        // Text Wave Effect Component Initialization
+        const userControlsTitle = document.getElementById('userControlsTitle');
+        const titleWaveSlider = document.getElementById('titleWaveSlider');
+
+        if (userControlsTitle && titleWaveSlider) {
+            // Initialize the text wave effect component
+            const titleWaveEffect = new TextWaveEffect('#userControlsTitle', {
+                weightRange: [200, 800],
+                scaleRange: [0.95, 1.7],
+                spacingRange: [0.01, 0.20],
+                waveWidth: 11,
+                deadZonePercent: 20,
+                transitionDuration: 0.1,
+                transitionEasing: 'linear',
+                transformOrigin: '50% 87%'
+            });
+
+            // Connect slider to wave effect
+            titleWaveSlider.addEventListener('input', function() {
+                titleWaveEffect.setValue(this.value);
             });
         }
     </script>
