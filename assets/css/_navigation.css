@@ -47,7 +47,6 @@ body[data-theme="dark"] .theme-toggle:hover {
     z-index: 99999;
     min-height: 120px;
     padding: var(--space-5) 0 0 0;
-    transition: background var(--transition-base);
     isolation: isolate;
 }
 

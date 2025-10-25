@@ -147,13 +147,10 @@
     box-shadow: 0 12px 40px rgba(255, 255, 255, 0.15);
 }
 
-[data-theme="dark"] .nav {
-    background: rgba(23, 23, 23, 0.1);
-}
-
-/* Prevent nav flash by setting initial dark theme values on body */
-body[data-theme="dark"] .nav {
-    background: rgba(23, 23, 23, 0.1) !important;
+/* Disable ALL transitions during theme change to prevent flash */
+body.disable-transitions,
+body.disable-transitions * {
+    transition: none !important;
 }
 
 [data-theme="dark"] .mobile-menu-overlay {
