@@ -10,27 +10,27 @@ const NAV_CONFIG = {
         { text: 'Shop', href: '#products', id: 'products' },
         { text: 'About', href: '#about', id: 'about' },
         { text: 'Contact', href: '#contact', id: 'contact' },
-        { text: 'Style', href: 'style-guide.html', id: 'style' }
+        { text: 'Lab', href: 'lab.html', id: 'lab' }
     ]
 };
 
 /**
  * Generate navigation HTML
- * @param {string} currentPage - Current page identifier ('index' or 'style-guide')
+ * @param {string} currentPage - Current page identifier ('index' or 'lab')
  * @returns {object} Navigation HTML components
  */
 function generateNavigation(currentPage = 'index') {
-    const isStyleGuide = currentPage === 'style-guide';
-    const logoHref = isStyleGuide ? 'index.html' : '#';
+    const isLab = currentPage === 'lab';
+    const logoHref = isLab ? 'index.html' : '#';
 
     // Adjust links based on current page
     const links = NAV_CONFIG.links.map(link => {
         let href = link.href;
         let isActive = false;
 
-        if (isStyleGuide) {
-            // On style guide page
-            if (link.id === 'style') {
+        if (isLab) {
+            // On lab page
+            if (link.id === 'lab') {
                 isActive = true;
             } else if (link.href.startsWith('#')) {
                 // Point hash links back to index.html
@@ -108,8 +108,8 @@ function generateNavigation(currentPage = 'index') {
  */
 function initNavigation() {
     // Determine current page
-    const isStyleGuide = window.location.pathname.includes('style-guide');
-    const currentPage = isStyleGuide ? 'style-guide' : 'index';
+    const isLab = window.location.pathname.includes('lab');
+    const currentPage = isLab ? 'lab' : 'index';
 
     // Generate navigation HTML
     const navHTML = generateNavigation(currentPage);

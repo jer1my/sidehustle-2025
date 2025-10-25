@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Style Guide - Side Hustle</title>
+    <title>The Lab - Side Hustle</title>
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://sidehustle.llc/style-guide.html">
-    <meta property="og:title" content="Style Guide - Side Hustle">
+    <meta property="og:url" content="https://sidehustle.llc/lab.html">
+    <meta property="og:title" content="The Lab - Side Hustle">
     <meta property="og:description" content="The framework behind Side Hustle - a design system for art and photography.">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://sidehustle.llc/style-guide.html">
-    <meta property="twitter:title" content="Style Guide - Side Hustle">
+    <meta property="twitter:url" content="https://sidehustle.llc/lab.html">
+    <meta property="twitter:title" content="The Lab - Side Hustle">
     <meta property="twitter:description" content="The framework behind Side Hustle - a design system for art and photography.">
 
     <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -35,7 +35,7 @@
         }
     </style>
 </head>
-<body class="page-style-guide">
+<body class="page-lab">
     <script>
         // Apply theme immediately to prevent flash
         (function() {
@@ -54,7 +54,7 @@
 
     <div class="container">
         <header class="header">
-            <h1 class="title">Style Guide</h1>
+            <h1 class="hero-title">The Lab</h1>
             <h2 class="hero-subtitle">The framework behind Side Hustle</h2>
             <p class="description">A refined design system for art and photography where every element serves a clear purpose—keeping focus on the creative work.</p>
         </header>
@@ -101,50 +101,188 @@
         <section class="section">
             <h2 class="section-title">Typography</h2>
 
-            <div class="font-info">
-                <h3 class="text-lg font-weight-500 mb-4">Font Families</h3>
-                <div class="font-description-grid">
-                    <div class="font-description-left">
+            <!-- Two Column Layout -->
+            <div class="grid-2col gap-64">
+                <!-- LEFT COLUMN -->
+                <div>
+                    <!-- Font Families -->
+                    <div class="mb-12">
+                        <h3 class="mb-6">Font Families</h3>
                         <p class="mb-4"><strong>Montserrat</strong> serves as the primary typeface, offering clean, modern readability for body text and UI elements.</p>
-                        <p class="mb-4"><strong>Playfair Display</strong> brings an elegant, sophisticated touch to headings, perfect for an art and photography storefront.</p>
+                        <p class="mb-6"><strong>Playfair Display</strong> brings an elegant, sophisticated touch to headings, perfect for an art and photography storefront.</p>
+                        <p class="mb-6 text-secondary">This font pairing creates a refined hierarchy: Montserrat's geometric clarity provides structure and approachability, while Playfair Display's high-contrast serifs add artistic elegance and visual distinction.</p>
+                        <p><a href="https://fonts.google.com/specimen/Montserrat" target="_blank" class="font-link">View Montserrat on Google Fonts →</a></p>
+                        <p><a href="https://fonts.google.com/specimen/Playfair+Display" target="_blank" class="font-link">View Playfair Display on Google Fonts →</a></p>
                     </div>
-                    <div class="font-description-right">
-                        <p class="mb-4">This font pairing creates a refined hierarchy: Montserrat's geometric clarity provides structure and approachability, while Playfair Display's high-contrast serifs add artistic elegance and visual distinction.</p>
-                    </div>
-                </div>
-                <div class="font-link-row">
-                    <p><a href="https://fonts.google.com/specimen/Montserrat" target="_blank" class="font-link">View Montserrat on Google Fonts →</a></p>
-                    <p><a href="https://fonts.google.com/specimen/Playfair+Display" target="_blank" class="font-link">View Playfair Display on Google Fonts →</a></p>
-                </div>
-            </div>
 
-            <div class="type-samples-grid">
+                    <!-- Hero Typography Visual Example -->
+                    <div class="mb-12">
+                        <h3 class="mb-6">Hero Typography</h3>
+                        <div class="type-sample">
+                            <div class="type-label">Visual Example</div>
+                            <div style="text-align: left;">
+                                <h1 style="font-size: 64px; margin-bottom: 8px;">Side Hustle</h1>
+                                <h2 class="hero-subtitle" style="font-size: 24px; margin-bottom: 0; opacity: 1; transform: none;">~Art & Photography~</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Title Rules -->
+                    <div class="mb-12">
+                        <h3 class="mb-6">Hero Title Specifications</h3>
+                        <p class="mb-4 text-sm"><strong>Usage:</strong> Primary hero heading on the home page.</p>
+                        <ul class="text-sm" style="list-style: disc; margin-left: 24px; color: var(--text-secondary);">
+                            <li>Font: Playfair Display Italic</li>
+                            <li>Size: clamp(48px, 8vw, 120px) - responsive</li>
+                            <li>Weight: 300 (Light)</li>
+                            <li>Letter spacing: -0.02em</li>
+                            <li>Line height: 0.9</li>
+                            <li>Class: <code>.hero-title</code></li>
+                        </ul>
+                    </div>
+
+                    <!-- Hero Subtitle Rules -->
+                    <div class="mb-12">
+                        <h3 class="mb-6">Hero Subtitle Specifications</h3>
+                        <p class="mb-4 text-sm"><strong>Usage:</strong> Secondary text below hero title.</p>
+                        <ul class="text-sm" style="list-style: disc; margin-left: 24px; color: var(--text-secondary);">
+                            <li>Font: Playfair Display</li>
+                            <li>Size: clamp(18px, 2.5vw, 32px) - responsive</li>
+                            <li>Weight: 400 (Regular)</li>
+                            <li>Color: Secondary text</li>
+                            <li>Margin bottom: 48px</li>
+                            <li>Class: <code>.hero-subtitle</code></li>
+                        </ul>
+                    </div>
+
+                    <!-- Section Title & Subtitle Components -->
+                    <div class="mb-12">
+                        <h3 class="mb-6">Section Title & Subtitle</h3>
+
+                        <!-- Combined Visual Example -->
+                        <div class="type-sample mb-8">
+                            <div class="type-label">Visual Example</div>
+                            <div style="text-align: left;">
+                                <h2 class="section-title" style="margin-bottom: 4px; text-align: left;">Section Title</h2>
+                                <p class="section-subtitle" style="margin-bottom: 0; text-align: left;">This is an example subtitle providing context</p>
+                            </div>
+                        </div>
+
+                        <!-- Section Title Specifications -->
+                        <div class="mb-8">
+                            <h4 class="mb-4">Section Title</h4>
+                            <p class="mb-4 text-sm text-secondary"><strong>Usage:</strong> Main heading for each page section.</p>
+                            <ul class="text-sm" style="list-style: disc; margin-left: 24px; color: var(--text-secondary);">
+                                <li>Font: Playfair Display</li>
+                                <li>Size: 52px</li>
+                                <li>Weight: 300 (Light)</li>
+                                <li>Alignment: Center</li>
+                                <li>Letter spacing: -0.02em</li>
+                                <li>Margin bottom: 80px</li>
+                                <li>Class: <code>.section-title</code></li>
+                            </ul>
+                        </div>
+
+                        <!-- Section Subtitle Specifications -->
+                        <div>
+                            <h4 class="mb-4">Section Subtitle</h4>
+                            <p class="mb-4 text-sm text-secondary"><strong>Usage:</strong> Subtitles appear directly below section titles to provide additional context or messaging.</p>
+                            <ul class="text-sm" style="list-style: disc; margin-left: 24px; color: var(--text-secondary);">
+                                <li>Font: Montserrat</li>
+                                <li>Size: 20px (xl)</li>
+                                <li>Weight: 400 (Regular)</li>
+                                <li>Color: Primary text (theme-aware)</li>
+                                <li>Line height: 1.7</li>
+                                <li>Margin bottom: 48px (32px mobile, 4px top margin mobile)</li>
+                                <li>Class: <code>.section-subtitle</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
                 <div>
-                    <div class="type-sample">
-                        <div class="type-label">Heading 1 (Playfair Display Italic)</div>
-                        <div class="h1-sample">The quick brown fox</div>
+                    <!-- Type Label -->
+                    <div class="mb-12">
+                        <h3 class="mb-6">Type Label</h3>
+                        <div class="type-sample mb-4">
+                            <div class="type-label">Visual Example</div>
+                            <div class="type-label">Type Label</div>
+                        </div>
+                        <p class="mb-4 text-sm text-secondary"><strong>Usage:</strong> Small uppercase labels that appear above examples and components throughout the design system.</p>
+                        <ul class="text-sm" style="list-style: disc; margin-left: 24px; color: var(--text-secondary);">
+                            <li>Font: Montserrat</li>
+                            <li>Size: 14px</li>
+                            <li>Weight: 500 (Medium)</li>
+                            <li>Color: Secondary text</li>
+                            <li>Text transform: Uppercase</li>
+                            <li>Letter spacing: 0.05em</li>
+                            <li>Margin bottom: 8px</li>
+                            <li>Class: <code>.type-label</code></li>
+                        </ul>
                     </div>
 
-                    <div class="type-sample">
-                        <div class="type-label">Heading 2 (Playfair Display)</div>
-                        <div class="h2-sample">The quick brown fox</div>
+                    <!-- Headings -->
+                    <div class="mb-12">
+                        <h3 class="mb-6">Headings</h3>
+                        <div class="type-sample mb-6">
+                            <div class="type-label">Heading 1 (Playfair Display Italic)</div>
+                            <h1 style="margin-bottom: 0;">The quick brown fox</h1>
+                        </div>
+                        <div class="type-sample mb-6">
+                            <div class="type-label">Heading 2 (Playfair Display)</div>
+                            <h2 style="margin-bottom: 0;">The quick brown fox</h2>
+                        </div>
+                        <div class="type-sample mb-6">
+                            <div class="type-label">Heading 3 (Montserrat)</div>
+                            <h3 style="margin-bottom: 0;">The quick brown fox</h3>
+                        </div>
+                        <div class="type-sample mb-6">
+                            <div class="type-label">Heading 4 (Montserrat)</div>
+                            <h4 style="margin-bottom: 0;">The quick brown fox</h4>
+                        </div>
+                        <div class="type-sample mb-6">
+                            <div class="type-label">Heading 5 (Montserrat)</div>
+                            <h5 style="margin-bottom: 0;">The quick brown fox</h5>
+                        </div>
+                        <div class="type-sample">
+                            <div class="type-label">Heading 6 (Montserrat)</div>
+                            <h6 style="margin-bottom: 0;">The quick brown fox</h6>
+                        </div>
                     </div>
 
-                    <div class="type-sample">
-                        <div class="type-label">Heading 3 (Montserrat)</div>
-                        <div class="h3-sample">The quick brown fox</div>
+                    <!-- Body Text -->
+                    <div class="mb-12">
+                        <h3 class="mb-6">Body Text</h3>
+                        <div class="type-sample mb-6">
+                            <div class="type-label">Body Text (Montserrat)</div>
+                            <p style="margin-bottom: 0;">Great design is invisible. It creates an intuitive experience that feels natural and effortless. Every element should serve a purpose, contributing to a cohesive and meaningful journey.</p>
+                        </div>
+                        <div class="type-sample">
+                            <div class="type-label">Small Text</div>
+                            <p class="text-sm" style="margin-bottom: 0;">Supporting information and captions</p>
+                        </div>
                     </div>
-                </div>
 
-                <div>
-                    <div class="type-sample">
-                        <div class="type-label">Body Text (Montserrat)</div>
-                        <div class="body-sample">Great design is invisible. It creates an intuitive experience that feels natural and effortless. Every element should serve a purpose, contributing to a cohesive and meaningful journey.</div>
-                    </div>
-
-                    <div class="type-sample">
-                        <div class="type-label">Small Text</div>
-                        <div class="small-sample">Supporting information and captions</div>
+                    <!-- OpenType Features & Ligatures -->
+                    <div>
+                        <h3 class="mb-6">OpenType Features & Ligatures</h3>
+                        <div class="type-sample mb-0">
+                            <div class="type-label">Ligature Examples</div>
+                            <div style="margin-bottom: 16px;">
+                                <h1 style="margin-bottom: 8px;">Playfair: first, effective, distinct</h1>
+                                <h3 style="margin-bottom: 0;">Montserrat: office, fluffy, affinity</h3>
+                            </div>
+                            <p class="text-sm text-secondary" style="margin-bottom: 0;">Look closely at letter pairs like "fi" and "fl" to see ligatures in action. Playfair Display offers more extensive ligature support for elegant heading typography.</p>
+                            <br>
+                            <p class="mb-0 text-sm" style="margin-top: 0;"><strong>Enabled Features:</strong></p>
+                            <ul class="text-sm" style="list-style: disc; margin-left: 24px; color: var(--text-secondary);">
+                                <li>Common ligatures (fi, fl) - All text</li>
+                                <li>Discretionary ligatures (ct, st) - Playfair headings (h1, h2)</li>
+                                <li>Text rendering: optimizeLegibility</li>
+                                <li>CSS: font-variant-ligatures, font-feature-settings</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -154,7 +292,7 @@
             <h2 class="section-title">Colors</h2>
 
             <div class="mb-12">
-                <h3 class="text-lg font-weight-500 mb-6">Color Theory & Theming Strategy</h3>
+                <h3 class="mb-6">Color Theory & Theming Strategy</h3>
                 <div class="font-description-grid mb-6">
                     <div class="font-description-left">
                         <p class="mb-4">The accent color system uses temperature-based theming to optimize visual comfort and hierarchy across light and dark modes, grounded in color psychology and perceptual contrast principles.</p>
@@ -169,7 +307,7 @@
 
             <div class="color-section-grid mb-12">
                 <div class="color-section">
-                    <h3 class="text-lg font-weight-500 mb-6">Primary Colors</h3>
+                    <h3 class="mb-6">Primary Colors</h3>
                     <div class="color-grid">
                         <div class="color-swatch">
                             <div class="color-circle primary"></div>
@@ -190,7 +328,7 @@
                 </div>
 
                 <div class="color-section">
-                    <h3 class="text-lg font-weight-500 mb-6">Accent Colors</h3>
+                    <h3 class="mb-6">Accent Colors</h3>
                     <div class="color-grid">
                         <div class="color-swatch">
                             <div class="color-circle accent-warm"></div>
@@ -207,7 +345,7 @@
             </div>
 
             <div class="mb-12">
-                <h3 class="text-lg font-weight-500 mb-6">Neutral Scale</h3>
+                <h3 class="mb-6">Neutral Scale</h3>
                 <div class="color-grid">
                     <div class="color-swatch">
                         <div class="color-circle white"></div>
