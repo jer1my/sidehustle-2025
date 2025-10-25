@@ -33,8 +33,8 @@
 /* Page Sections */
 @import '_sections.css';
 
-/* Style Guide Controls */
-@import '_style-guide.css';
+/* Lab Page Controls */
+@import '_lab.css';
 
 /* Theme System */
 @import '_theme.css';
