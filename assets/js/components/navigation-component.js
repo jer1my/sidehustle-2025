@@ -6,7 +6,7 @@
 // Navigation configuration
 const NAV_CONFIG = {
     links: [
-        { text: 'Home', href: '#', id: 'home' },
+        { text: 'Home', href: 'index.html', id: 'home' },
         { text: 'Shop', href: '#products', id: 'products' },
         { text: 'About', href: '#about', id: 'about' },
         { text: 'Contact', href: '#contact', id: 'contact' },
@@ -16,12 +16,14 @@ const NAV_CONFIG = {
 
 /**
  * Generate navigation HTML
- * @param {string} currentPage - Current page identifier ('index' or 'lab')
+ * @param {string} currentPage - Current page identifier ('index', 'lab', 'art', or 'digital')
  * @returns {object} Navigation HTML components
  */
 function generateNavigation(currentPage = 'index') {
     const isLab = currentPage === 'lab';
-    const logoHref = isLab ? 'index.html' : '#';
+    const isArt = currentPage === 'art';
+    const isDigital = currentPage === 'digital';
+    const logoHref = 'index.html';
 
     // Adjust links based on current page
     const links = NAV_CONFIG.links.map(link => {
@@ -36,10 +38,17 @@ function generateNavigation(currentPage = 'index') {
                 // Point hash links back to index.html
                 href = `index.html${link.href}`;
             }
+        } else if (isArt || isDigital) {
+            // On art or digital pages
+            if (link.href.startsWith('#')) {
+                // Point hash links back to index.html
+                href = `index.html${link.href}`;
+            }
         } else {
             // On index page
             if (link.id === 'home') {
                 isActive = true;
+                href = '#'; // On index, home just scrolls to top
             }
         }
 
@@ -108,8 +117,16 @@ function generateNavigation(currentPage = 'index') {
  */
 function initNavigation() {
     // Determine current page
-    const isLab = window.location.pathname.includes('lab');
-    const currentPage = isLab ? 'lab' : 'index';
+    const pathname = window.location.pathname;
+    let currentPage = 'index';
+
+    if (pathname.includes('lab')) {
+        currentPage = 'lab';
+    } else if (pathname.includes('art')) {
+        currentPage = 'art';
+    } else if (pathname.includes('digital')) {
+        currentPage = 'digital';
+    }
 
     // Generate navigation HTML
     const navHTML = generateNavigation(currentPage);

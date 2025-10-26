@@ -1,6 +1,7 @@
 /**
  * Hero Gallery Scroll-Driven Animation
  * Uses native browser scroll to drive horizontal gallery movement
+ * Supports both left-to-right (art) and right-to-left (digital) scroll directions
  */
 
 (function() {
@@ -13,7 +14,10 @@
         return;
     }
 
-    console.log('Hero gallery scroll-driven animation initialized');
+    // Detect if on digital page (scroll direction reversed)
+    const isDigitalPage = window.location.pathname.includes('digital');
+
+    console.log('Hero gallery scroll-driven animation initialized', { isDigitalPage });
 
     // Horizontal scroll speed is controlled by container height in CSS
     // Container height: 1500vh = 0.2x speed (5x slower than original 300vh)
@@ -44,7 +48,18 @@
         // Apply horizontal translation based on progress
         // Speed is controlled by container height (1500vh for slow scroll)
         const maxScroll = getTrackScrollWidth();
-        const translateX = -(progress * maxScroll);
+
+        let translateX;
+        if (isDigitalPage) {
+            // Digital page: Start from right (negative offset), scroll right (towards 0)
+            // progress 0 = -maxScroll (start right), progress 1 = 0 (end left)
+            translateX = -(maxScroll - (progress * maxScroll));
+        } else {
+            // Art page: Start from left (0), scroll left (towards -maxScroll)
+            // progress 0 = 0 (start left), progress 1 = -maxScroll (end right)
+            translateX = -(progress * maxScroll);
+        }
+
         scrollTrack.style.transform = `translateX(${translateX}px)`;
     }
 

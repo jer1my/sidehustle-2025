@@ -23,15 +23,57 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="assets/css/main.css?v=1761421100">
+    <link rel="stylesheet" href="assets/css/main.css?v=1761441190">
 
     <!-- Critical inline styles to prevent flash -->
     <style>
+        /* No gradient on nav for landing page */
         .nav {
-            background: linear-gradient(to bottom, rgba(250, 250, 250, 1) 0%, rgba(250, 250, 250, 1) 60%, rgba(250, 250, 250, 0) 100%) !important;
+            background: transparent !important;
         }
-        body[data-theme="dark"] .nav {
-            background: linear-gradient(to bottom, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 1) 60%, rgba(23, 23, 23, 0) 100%) !important;
+
+        /* Minimal navigation - hide nav links */
+        .nav-links {
+            display: none !important;
+        }
+
+        /* Ensure hero section is visible */
+        .hero-scroll-container {
+            min-height: 100vh;
+        }
+
+        .hero {
+            min-height: 100vh;
+        }
+
+        /* Ensure body and html have proper dimensions */
+        html, body {
+            min-height: 100vh;
+            height: 100%;
+        }
+
+        /* Make sure navigation is visible */
+        .nav {
+            position: fixed !important;
+            z-index: 99999 !important;
+        }
+
+        /* Override body opacity - show immediately */
+        body {
+            opacity: 1 !important;
+        }
+
+        /* Logo accent color */
+        .logo {
+            color: var(--color-accent) !important;
+        }
+
+        .logo .logo-svg {
+            background-image: url('assets/icons/logo-sh-light-acccent.svg') !important;
+        }
+
+        body[data-theme="dark"] .logo .logo-svg {
+            background-image: url('assets/icons/logo-sh-dark-accent.svg') !important;
         }
     </style>
 
@@ -56,166 +98,395 @@
         })();
     </script>
 
-    <!-- Navigation Component Placeholder -->
+    <!-- Navigation Component Placeholder (Logo and Theme Switcher Only) -->
     <div id="nav-placeholder"></div>
     <script src="assets/js/components/navigation-component.js?v=1761009070"></script>
 
-    <!-- Hero Scroll Container (Tall container for scroll-driven animation) -->
-    <div class="hero-scroll-container">
-        <section class="hero" id="hero">
-            <div class="hero-bg"></div>
-
-            <!-- Horizontal Scrolling Track (Title + Gallery) -->
-            <div class="hero-horizontal-container">
-                <div class="hero-scroll-track">
-                    <!-- Hero Content (Title/Subtitle) -->
-                    <div class="hero-content">
-                        <h1 class="hero-title">
-                            Side Hustle
-                            <span class="coming-soon-badge">Coming Soon</span>
-                        </h1>
-                        <h2 class="hero-subtitle">~Art & Photography~</h2>
-                        <p class="hero-description">I work across digital art, traditional mediums, and photography. Some pieces incorporate AI-generated elements as part of the creative process. All AI-assisted work is clearly labeled, if that matters.</p>
-                    </div>
-
-                    <!-- Gallery Frames -->
-                    <div class="gallery-frame"></div>
-                    <div class="gallery-frame"></div>
-                    <div class="gallery-frame"></div>
-                    <div class="gallery-frame"></div>
-                    <div class="gallery-frame"></div>
-                    <div class="gallery-frame"></div>
-                </div>
+    <!-- Hero Section - Split Screen Landing Page -->
+    <section class="hero" id="hero" style="
+        min-height: 100vh;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    ">
+        <!-- Left Side -->
+        <a href="art.html" class="hero-split-side hero-split-left" style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        ">
+            <!-- Layer 3: Bottom - Complementary color (moves down) -->
+            <div class="hero-split-layer-bottom" style="
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                text-align: center;
+                transition: transform 0.15s ease;
+                transform: translateX(-50%) translateY(calc(-50% - 100px));
+                z-index: 1;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; visibility: hidden;">← Which Side? →</h2>
             </div>
-
-            <!-- Scroll Arrow -->
-            <a href="#products" class="btn-arrow btn-arrow-lg scroll-arrow">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g class="arrow-group">
-                        <path d="M12 6L12 18M8 14L12 18L16 14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </g>
-                </svg>
-            </a>
-        </section>
-    </div>
-
-    <!-- Products Section -->
-    <section id="products" class="section products min-h-screen flex-center section-py">
-        <div class="container">
-            <h2 class="section-title text-center mb-4">Still Setting Up Shop</h2>
-            <p class="section-subtitle text-center">More Coming Soon</p>
-            <div class="grid-2col gap-64 mb-16">
-                <div>
-                    <p class="mb-6 text-secondary leading-relaxed">Limited edition prints, original works, and digital downloads. Each piece is numbered and comes with a certificate of authenticity.</p>
-                    <p class="mb-6 text-secondary leading-relaxed">The home section above features a curated selection of my work, but I'm still getting everything organized and uploaded. If you've seen something of mine that isn't available here yet, please don't hesitate to reach out—I'd be happy to help.</p>
-                </div>
-                <div>
-                    <p class="mb-6 text-secondary leading-relaxed">As time permits, this shop will evolve into a full gallery experience where you'll be able to browse, search, sort, and filter through my complete collection to find exactly what speaks to you.</p>
-                    <a href="mailto:jerimy@comcast.net" class="btn-accent button">Get in Touch</a>
-                </div>
+            <!-- Layer 2: Middle - Accent color (moves up) -->
+            <div class="hero-split-layer-top" style="
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                text-align: center;
+                transition: transform 0.15s ease;
+                transform: translateX(-50%) translateY(calc(-50% - 100px));
+                z-index: 2;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; visibility: hidden;">← Which Side? →</h2>
             </div>
-
-            <!-- Products Grid (will be populated by JavaScript) -->
-            <div class="products-grid" id="productsGrid">
-                <!-- Products will be dynamically inserted here -->
+            <!-- Layer 1: Top - Normal color (no movement) -->
+            <div class="hero-split-layer-main" style="
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                text-align: center;
+                transform: translateX(-50%) translateY(calc(-50% - 100px));
+                z-index: 3;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; position: relative; display: inline-block;">
+                    <span class="subtitle-left-arrow" style="position: absolute; right: 100%; margin-right: 0.5em; transition: transform 0.15s ease;">←</span>
+                    Which Side?
+                    <span class="subtitle-right-arrow" style="position: absolute; left: 100%; margin-left: 0.5em; transition: transform 0.15s ease;">→</span>
+                </h2>
             </div>
+        </a>
+
+        <!-- Right Side -->
+        <a href="digital.html" class="hero-split-side hero-split-right" style="
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        ">
+            <!-- Layer 3: Bottom - Complementary color (moves down) -->
+            <div class="hero-split-layer-bottom" style="
+                position: absolute;
+                right: 100%;
+                top: 50%;
+                text-align: center;
+                transition: transform 0.15s ease;
+                transform: translateX(50%) translateY(calc(-50% - 100px));
+                z-index: 1;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; visibility: hidden;">← Which Side? →</h2>
+            </div>
+            <!-- Layer 2: Middle - Accent color (moves up) -->
+            <div class="hero-split-layer-top" style="
+                position: absolute;
+                right: 100%;
+                top: 50%;
+                text-align: center;
+                transition: transform 0.15s ease;
+                transform: translateX(50%) translateY(calc(-50% - 100px));
+                z-index: 2;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; visibility: hidden;">← Which Side? →</h2>
+            </div>
+            <!-- Layer 1: Top - Normal color (no movement) -->
+            <div class="hero-split-layer-main" style="
+                position: absolute;
+                right: 100%;
+                top: 50%;
+                text-align: center;
+                transform: translateX(50%) translateY(calc(-50% - 100px));
+                z-index: 3;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; position: relative; display: inline-block;">
+                    <span class="subtitle-left-arrow" style="position: absolute; right: 100%; margin-right: 0.5em; transition: transform 0.15s ease;">←</span>
+                    Which Side?
+                    <span class="subtitle-right-arrow" style="position: absolute; left: 100%; margin-left: 0.5em; transition: transform 0.15s ease;">→</span>
+                </h2>
+            </div>
+        </a>
+
+        <!-- Side Labels -->
+        <div class="hero-side-label hero-side-label-left" style="
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(calc(-50% - 45px)) translateX(-100%);
+            pointer-events: none;
+            z-index: 10;
+            transition: transform 0.15s ease, color 0.3s ease;
+        ">
+            <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap;">Art & Photography</h2>
         </div>
+
+        <div class="hero-side-label hero-side-label-right" style="
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(calc(-50% - 45px)) translateX(100%);
+            pointer-events: none;
+            z-index: 10;
+            transition: transform 0.15s ease, color 0.3s ease;
+        ">
+            <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap;">Digital</h2>
+        </div>
+
+        <!-- Styles -->
+        <style>
+            /* Prevent link dimming */
+            .hero-split-side {
+                opacity: 1 !important;
+            }
+
+            /* Layer colors - Light mode */
+            .hero-split-layer-top .hero-title {
+                color: #6ee7b7; /* Even Lighter Green - splits left */
+            }
+
+            .hero-split-layer-bottom .hero-title {
+                color: #fbbf24; /* Gold - splits right */
+            }
+
+            /* Layer colors - Dark mode */
+            body[data-theme="dark"] .hero-split-layer-top .hero-title {
+                color: #d97706; /* Darker Gold - splits left */
+            }
+
+            body[data-theme="dark"] .hero-split-layer-bottom .hero-title {
+                color: #047857; /* Even Darker Green - splits right */
+            }
+
+            /* Side label hover effect */
+            .hero-side-label h2 {
+                transition: color 0.3s ease;
+            }
+
+            .hero-split-left:hover ~ .hero-side-label-left h2 {
+                color: var(--color-accent);
+            }
+
+            .hero-split-right:hover ~ .hero-side-label-right h2 {
+                color: var(--color-accent);
+            }
+        </style>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="section about section-py bg-secondary">
-        <div class="container">
-            <h2 class="section-title text-center mb-16">The Story</h2>
-            <div class="about-text-columns grid-2col gap-64">
-                <div>
-                    <p class="mb-6 text-secondary leading-relaxed">For as long as I can remember, this need to create has seeped out of me. Art has always been something I made for the love of it, but usually pieces donated to charities, gifts for friends and family, or designs created for others.</p>
-                    <p class="mb-6 text-secondary leading-relaxed">This storefront represents something I've never tried before: turning my lifelong passion into something that could maybe sustain itself.</p>
-                </div>
-                <div>
-                    <p class="mb-6 text-secondary leading-relaxed">In a world that can feel heavy, art has the power to spark thought, joy, inspiration, and spread a little light. If my work can bring even a moment of beauty or positivity into someone's space, then I'm doing exactly what I'm meant to do.</p>
-                    <p class="mb-6 text-secondary leading-relaxed">Every piece you see here comes from that place... a genuine desire to connect and share something with the world, instead of just taking from it.</p>
-                </div>
-            </div>
-
-            <!-- About Carousel (optional - can be added later) -->
-            <div class="about-carousel mt-16">
-                <div class="carousel-container">
-                    <div class="carousel-track" data-position="0" id="aboutCarouselTrack">
-                        <!-- Carousel cards will be dynamically inserted here -->
-                    </div>
-                </div>
-                <div class="carousel-indicators" id="aboutCarouselIndicators">
-                    <!-- Indicators will be dynamically inserted here -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section contact section-py">
-        <div class="container">
-            <div class="max-w-md mx-auto text-center">
-                <h2 class="section-title text-center">Let's Create Something Together</h2>
-                <p class="text-lg text-secondary mb-12 leading-relaxed">
-                    I'm always open to custom commissions, collaborations, and special requests. Whether you're looking for a unique piece for your space or want to discuss licensing for commercial use, I'd love to hear from you.
-                </p>
-
-                <h3 class="text-2xl mb-8 font-weight-600">What I Offer</h3>
-                <div class="grid-3col gap-64 mb-16 text-left">
-                    <div>
-                        <h4 class="text-lg font-weight-600 mb-4">Custom Commissions</h4>
-                        <p class="text-base text-secondary leading-normal">Original works tailored to your vision and space</p>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-weight-600 mb-4">Bulk Orders</h4>
-                        <p class="text-base text-secondary leading-normal">Special pricing for businesses and designers</p>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-weight-600 mb-4">Licensing</h4>
-                        <p class="text-base text-secondary leading-normal">Commercial use rights for publications and brands</p>
-                    </div>
-                </div>
-
-                <div class="contact-buttons flex gap-16 justify-center">
-                    <a href="mailto:jerimy@comcast.net" class="btn-accent button">Email Me</a>
-                    <a href="https://www.instagram.com/jerimybrown/" target="_blank" class="btn-secondary button">Follow on Instagram</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Back to Top Button -->
-    <button class="btn-arrow btn-arrow-md btn-arrow-filled back-to-top" id="backToTop" onclick="scrollToTop()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 18L12 6M8 10L12 6L16 10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </button>
-
-    <!-- Scripts -->
-    <!-- Core modules -->
+    <!-- Core JavaScript -->
     <script src="assets/js/core/config.js"></script>
-    <script src="assets/js/core/data-loader.js"></script>
     <script src="assets/js/core/theme-system.js"></script>
-
-    <!-- Utilities -->
     <script src="assets/js/utils/helpers.js"></script>
-    <script src="assets/js/utils/animations.js?v=1761078245"></script>
-    <script src="assets/js/utils/image-preloader.js"></script>
-
-    <!-- Components -->
-    <script src="assets/js/components/navigation.js?v=1761079397"></script>
-    <script src="assets/js/components/mobile-menu.js"></script>
     <script src="assets/js/components/logo-animation.js"></script>
-    <script src="assets/js/components/carousel-base.js"></script>
-    <script src="assets/js/components/carousel-about.js"></script>
-
-    <!-- Particle system (hero background) -->
-    <script src="assets/js/particle-system.js"></script>
-
-    <!-- Hero gallery horizontal scroll -->
-    <script src="assets/js/hero-gallery-scroll.js?v=1761078245"></script>
-
-    <!-- Main initialization -->
     <script src="assets/js/main.js"></script>
+
+    <!-- RGB Split Hero Mouse Effect -->
+    <script>
+        (function() {
+            const heroSection = document.getElementById('hero');
+
+            // Get all layers for both sides
+            const leftLayerTop = document.querySelector('.hero-split-left .hero-split-layer-top');
+            const leftLayerBottom = document.querySelector('.hero-split-left .hero-split-layer-bottom');
+            const rightLayerTop = document.querySelector('.hero-split-right .hero-split-layer-top');
+            const rightLayerBottom = document.querySelector('.hero-split-right .hero-split-layer-bottom');
+
+            // Get arrow elements
+            const leftSideLeftArrow = document.querySelector('.hero-split-left .subtitle-left-arrow');
+            const leftSideRightArrow = document.querySelector('.hero-split-left .subtitle-right-arrow');
+            const rightSideLeftArrow = document.querySelector('.hero-split-right .subtitle-left-arrow');
+            const rightSideRightArrow = document.querySelector('.hero-split-right .subtitle-right-arrow');
+
+            // Get side labels
+            const leftSideLabel = document.querySelector('.hero-side-label-left');
+            const rightSideLabel = document.querySelector('.hero-side-label-right');
+
+            // Get split sides for hover
+            const leftSplitSide = document.querySelector('.hero-split-left');
+            const rightSplitSide = document.querySelector('.hero-split-right');
+
+            const maxSplit = 10; // Maximum pixels for RGB split (5-10px)
+            const maxBlur = 3; // Maximum blur in pixels
+            const maxArrowMove = 120; // Maximum pixels for arrow movement
+            const deadZone = 0.15; // 15% dead zone on each side of center (30% total)
+            let rafId = null;
+
+            function handleMouseMove(e) {
+                if (rafId) return; // Throttle with RAF
+
+                rafId = requestAnimationFrame(() => {
+                    const viewportWidth = window.innerWidth;
+                    const centerX = viewportWidth / 2;
+                    const mouseX = e.clientX;
+
+                    // Calculate distance from center (-1 to 1, negative = left, positive = right)
+                    const normalizedDistance = (mouseX - centerX) / centerX;
+
+                    // Dead zone in center - no split effect, no blur, reset arrow position but keep color
+                    if (Math.abs(normalizedDistance) < deadZone) {
+                        leftLayerTop.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                        leftLayerTop.style.filter = `blur(0px)`;
+                        leftLayerBottom.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                        leftLayerBottom.style.filter = `blur(0px)`;
+                        rightLayerTop.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                        rightLayerTop.style.filter = `blur(0px)`;
+                        rightLayerBottom.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                        rightLayerBottom.style.filter = `blur(0px)`;
+
+                        // Reset arrow position only
+                        leftSideLeftArrow.style.transform = `translateX(0)`;
+                        leftSideRightArrow.style.transform = `translateX(0)`;
+                        rightSideLeftArrow.style.transform = `translateX(0)`;
+                        rightSideRightArrow.style.transform = `translateX(0)`;
+
+                        // Arrow color based on side (no dead zone for color)
+                        if (normalizedDistance < 0) {
+                            // Mouse on left - left arrow gets accent
+                            leftSideLeftArrow.style.color = 'var(--color-accent)';
+                            leftSideRightArrow.style.color = '';
+                            rightSideLeftArrow.style.color = 'var(--color-accent)';
+                            rightSideRightArrow.style.color = '';
+                        } else {
+                            // Mouse on right - right arrow gets accent
+                            leftSideLeftArrow.style.color = '';
+                            leftSideRightArrow.style.color = 'var(--color-accent)';
+                            rightSideLeftArrow.style.color = '';
+                            rightSideRightArrow.style.color = 'var(--color-accent)';
+                        }
+                    }
+                    // Left side: RGB split when mouse is on left
+                    else if (normalizedDistance < 0) {
+                        const adjustedDistance = (Math.abs(normalizedDistance) - deadZone) / (1 - deadZone);
+                        const splitAmount = adjustedDistance * maxSplit;
+                        const blurAmount = adjustedDistance * maxBlur;
+
+                        // Arrow movement (no dead zone for arrows)
+                        const arrowDistance = Math.abs(normalizedDistance) * maxArrowMove;
+
+                        // Left side splits with blur (horizontal split)
+                        leftLayerTop.style.transform = `translateX(calc(-50% - ${splitAmount}px)) translateY(calc(-50% - 100px))`;
+                        leftLayerTop.style.filter = `blur(${blurAmount}px)`;
+                        leftLayerBottom.style.transform = `translateX(calc(-50% + ${splitAmount}px)) translateY(calc(-50% - 100px))`;
+                        leftLayerBottom.style.filter = `blur(${blurAmount}px)`;
+
+                        // Right side stays aligned, no blur
+                        rightLayerTop.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                        rightLayerTop.style.filter = `blur(0px)`;
+                        rightLayerBottom.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                        rightLayerBottom.style.filter = `blur(0px)`;
+
+                        // Move left arrow on both sides and color with accent
+                        leftSideLeftArrow.style.transform = `translateX(-${arrowDistance}px)`;
+                        leftSideLeftArrow.style.color = 'var(--color-accent)';
+                        leftSideRightArrow.style.transform = `translateX(0)`;
+                        leftSideRightArrow.style.color = '';
+                        rightSideLeftArrow.style.transform = `translateX(-${arrowDistance}px)`;
+                        rightSideLeftArrow.style.color = 'var(--color-accent)';
+                        rightSideRightArrow.style.transform = `translateX(0)`;
+                        rightSideRightArrow.style.color = '';
+                    }
+                    // Right side: RGB split when mouse is on right
+                    else {
+                        const adjustedDistance = (normalizedDistance - deadZone) / (1 - deadZone);
+                        const splitAmount = adjustedDistance * maxSplit;
+                        const blurAmount = adjustedDistance * maxBlur;
+
+                        // Arrow movement (no dead zone for arrows)
+                        const arrowDistance = normalizedDistance * maxArrowMove;
+
+                        // Left side stays aligned, no blur
+                        leftLayerTop.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                        leftLayerTop.style.filter = `blur(0px)`;
+                        leftLayerBottom.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                        leftLayerBottom.style.filter = `blur(0px)`;
+
+                        // Right side splits with blur (horizontal split)
+                        rightLayerTop.style.transform = `translateX(calc(50% - ${splitAmount}px)) translateY(calc(-50% - 100px))`;
+                        rightLayerTop.style.filter = `blur(${blurAmount}px)`;
+                        rightLayerBottom.style.transform = `translateX(calc(50% + ${splitAmount}px)) translateY(calc(-50% - 100px))`;
+                        rightLayerBottom.style.filter = `blur(${blurAmount}px)`;
+
+                        // Move right arrow on both sides and color with accent
+                        leftSideLeftArrow.style.transform = `translateX(0)`;
+                        leftSideLeftArrow.style.color = '';
+                        leftSideRightArrow.style.transform = `translateX(${arrowDistance}px)`;
+                        leftSideRightArrow.style.color = 'var(--color-accent)';
+                        rightSideLeftArrow.style.transform = `translateX(0)`;
+                        rightSideLeftArrow.style.color = '';
+                        rightSideRightArrow.style.transform = `translateX(${arrowDistance}px)`;
+                        rightSideRightArrow.style.color = 'var(--color-accent)';
+                    }
+
+                    rafId = null;
+                });
+            }
+
+            function handleMouseLeave() {
+                // Reset to aligned when mouse leaves
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                }
+                leftLayerTop.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                leftLayerTop.style.filter = `blur(0px)`;
+                leftLayerBottom.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                leftLayerBottom.style.filter = `blur(0px)`;
+                rightLayerTop.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                rightLayerTop.style.filter = `blur(0px)`;
+                rightLayerBottom.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                rightLayerBottom.style.filter = `blur(0px)`;
+
+                // Reset arrows
+                leftSideLeftArrow.style.transform = `translateX(0)`;
+                leftSideLeftArrow.style.color = '';
+                leftSideRightArrow.style.transform = `translateX(0)`;
+                leftSideRightArrow.style.color = '';
+                rightSideLeftArrow.style.transform = `translateX(0)`;
+                rightSideLeftArrow.style.color = '';
+                rightSideRightArrow.style.transform = `translateX(0)`;
+                rightSideRightArrow.style.color = '';
+            }
+
+            // Side label hover handlers
+            leftSplitSide.addEventListener('mouseenter', function() {
+                leftSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(24px)`;
+            });
+
+            leftSplitSide.addEventListener('mouseleave', function() {
+                leftSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(-100%)`;
+            });
+
+            rightSplitSide.addEventListener('mouseenter', function() {
+                rightSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(-24px)`;
+            });
+
+            rightSplitSide.addEventListener('mouseleave', function() {
+                rightSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(100%)`;
+            });
+
+            heroSection.addEventListener('mousemove', handleMouseMove);
+            heroSection.addEventListener('mouseleave', handleMouseLeave);
+        })();
+    </script>
 </body>
 </html>

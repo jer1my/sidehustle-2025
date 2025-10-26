@@ -23,7 +23,20 @@ function initLogoColorChange() {
     }
 
     function updateLogoColor() {
-        // Only apply accent color logic on the index page (pages with hero sections)
+        // Only apply accent color logic on the index page
+        // Check if we're on art.html or digital.html - don't use accent color
+        const currentPath = window.location.pathname;
+        const isArtOrDigital = currentPath.includes('art.html') || currentPath.includes('digital.html');
+
+        if (isArtOrDigital) {
+            // On art or digital pages, never use accent color
+            logo.classList.remove('accent-color');
+            if (homeLink) {
+                homeLink.classList.remove('accent-color');
+            }
+            return;
+        }
+
         // Check if there's a hero section on the page
         const heroSection = document.querySelector('.hero');
         if (!heroSection) {
