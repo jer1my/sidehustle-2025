@@ -23,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="assets/css/main.css?v=1761450102">
+    <link rel="stylesheet" href="assets/css/main.css?v=1761456835">
 
     <!-- Critical inline styles to prevent flash -->
     <style>
@@ -32,9 +32,23 @@
             background: transparent !important;
         }
 
-        /* Minimal navigation - hide nav links */
+        /* Minimal navigation - hide nav links and mobile menu */
         .nav-links {
             display: none !important;
+        }
+
+        .nav-mobile-toggle {
+            display: none !important;
+        }
+
+        /* Keep nav-right visible on mobile for theme toggle */
+        .nav-right {
+            display: flex !important;
+        }
+
+        /* Ensure theme toggle is visible */
+        .nav-theme-toggle {
+            display: flex !important;
         }
 
         /* Ensure hero section is visible */
@@ -168,6 +182,8 @@
                     <span class="subtitle-right-arrow" style="position: absolute; left: 100%; margin-left: 0.5em; transition: transform 0.15s ease;">→</span>
                 </h2>
             </div>
+            <!-- Mobile CTA Button -->
+            <button class="mobile-cta-button mobile-cta-left">Art & Photo</button>
         </a>
 
         <!-- Right Side -->
@@ -226,6 +242,8 @@
                     <span class="subtitle-right-arrow" style="position: absolute; left: 100%; margin-left: 0.5em; transition: transform 0.15s ease;">→</span>
                 </h2>
             </div>
+            <!-- Mobile CTA Button -->
+            <button class="mobile-cta-button mobile-cta-right">Digital Assets</button>
         </a>
 
         <!-- Side Labels -->
@@ -251,6 +269,44 @@
             transition: transform 0.15s ease, color 0.3s ease;
         ">
             <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap;">Digital Assets</h2>
+        </div>
+
+        <!-- Mobile Pull Interaction (Hidden on Desktop) -->
+        <div class="mobile-pull-container">
+            <!-- Background Panels -->
+            <div class="mobile-pull-panel mobile-pull-panel-left">
+                <div class="mobile-pull-label mobile-pull-label-left">Art & Photos</div>
+                <div class="mobile-pull-release mobile-pull-release-left">RELEASE</div>
+            </div>
+            <div class="mobile-pull-panel mobile-pull-panel-right">
+                <div class="mobile-pull-label mobile-pull-label-right">Digital Assets</div>
+                <div class="mobile-pull-release mobile-pull-release-right">RELEASE</div>
+            </div>
+
+            <!-- Draggable Foreground Layer -->
+            <div class="mobile-pull-foreground" id="mobilePullForeground">
+                <!-- Navigation inside draggable layer -->
+                <!-- Logo in draggable layer -->
+                <a href="index.html" class="mobile-pull-logo logo accent-color">
+                    <div class="logo-container">
+                        <div class="logo-svg"></div>
+                    </div>
+                </a>
+
+                <!-- Theme toggle (fixed position like mobile hamburger) -->
+                <button class="mobile-pull-theme-toggle" onclick="toggleTheme()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.98038 2.73135C9.79117 2.67374 9.59078 2.67397 9.40415 2.72944C7.79045 3.18158 6.32264 4.04719 5.14599 5.24078C3.96517 6.4386 3.11882 7.92491 2.69124 9.55165C2.26365 11.1784 2.26977 12.8888 2.70898 14.5124C3.14819 16.136 4.00515 17.6163 5.19451 18.8056C6.38386 19.995 7.86409 20.8519 9.48773 21.2911C11.1114 21.7303 12.8218 21.7364 14.4485 21.3088C16.0752 20.8812 17.5615 20.0348 18.7593 18.854C19.9525 17.6778 20.8179 16.2106 21.2702 14.5976C21.324 14.4177 21.3265 14.2247 21.275 14.041C21.1538 13.6089 20.7597 13.3102 20.311 13.3106C20.2099 13.3107 20.1116 13.326 20.0186 13.3546C18.7246 13.7093 17.3598 13.7164 16.0619 13.3751C14.7554 13.0314 13.5636 12.347 12.6083 11.3918C11.6531 10.4365 10.9686 9.24468 10.625 7.93818C10.2834 6.63949 10.2908 5.27379 10.6461 3.9791C10.6732 3.89024 10.6881 3.79655 10.6893 3.70018C10.6947 3.25564 10.4057 2.86084 9.98038 2.73135ZM6.57028 6.64485C7.11058 6.09677 7.72838 5.63598 8.40126 5.27566C8.32141 6.33717 8.41781 7.40898 8.69079 8.44689C9.12451 10.096 9.98839 11.6003 11.1941 12.806C12.3998 14.0117 13.9041 14.8756 15.5532 15.3093C16.5911 15.5822 17.6629 15.6786 18.7244 15.5988C18.3641 16.2717 17.9033 16.8894 17.3553 17.4297C16.4063 18.3652 15.2288 19.0357 13.9401 19.3745C12.6513 19.7133 11.2963 19.7084 10.01 19.3605C8.72365 19.0125 7.55096 18.3336 6.60871 17.3914C5.66647 16.4492 4.98755 15.2765 4.63959 13.9902C4.29163 12.7039 4.28679 11.3488 4.62553 10.0601C4.96428 8.77132 5.63479 7.59381 6.57028 6.64485Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <!-- Content -->
+                <div class="mobile-pull-content">
+                    <h1 class="mobile-pull-title">Side Hustle</h1>
+                    <h2 class="mobile-pull-subtitle">← Which Side? →</h2>
+                    <div class="mobile-pull-instruction">PULL</div>
+                </div>
+            </div>
         </div>
 
         <!-- Styles -->
@@ -290,6 +346,291 @@
             .hero-split-right:hover ~ .hero-side-label-right h2 {
                 color: var(--color-accent);
             }
+
+            /* Mobile button styles */
+            .mobile-cta-button {
+                display: none;
+                position: absolute;
+                bottom: 20vh;
+                padding: 16px 32px;
+                background: var(--color-accent);
+                color: white;
+                border: none;
+                border-radius: 50px;
+                font-family: var(--font-family-primary);
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                pointer-events: auto;
+                z-index: 100;
+                transition: transform 0.3s ease, opacity 0.3s ease;
+                opacity: 1;
+            }
+
+            .mobile-cta-button:active {
+                transform: scale(0.95);
+            }
+
+            /* Mobile Pull Interaction - Hidden on Desktop */
+            .mobile-pull-container {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            /* Slide animation for PULL instruction */
+            @keyframes pullSlide {
+                0%, 100% {
+                    transform: translateX(-8px);
+                }
+                50% {
+                    transform: translateX(8px);
+                }
+            }
+
+            /* Mobile styles */
+            @media (max-width: 768px) {
+                /* Hide RGB chromatic aberration layers */
+                .hero-split-layer-top,
+                .hero-split-layer-bottom {
+                    display: none !important;
+                }
+
+                /* Hide side labels */
+                .hero-side-label {
+                    display: none !important;
+                }
+
+                /* Hide the right side's main layer to avoid duplicate titles */
+                .hero-split-right .hero-split-layer-main {
+                    display: none !important;
+                }
+
+                /* Center the left side's main title and subtitle */
+                .hero-split-left .hero-split-layer-main {
+                    left: 50% !important;
+                    transform: translateX(-50%) translateY(calc(-50% - 100px)) !important;
+                }
+
+                /* Show mobile buttons */
+                .mobile-cta-button {
+                    display: block;
+                }
+
+                .mobile-cta-left {
+                    left: 25%;
+                    transform: translateX(-50%);
+                }
+
+                .mobile-cta-right {
+                    right: 25%;
+                    transform: translateX(50%);
+                }
+
+                /* Ensure split sides are still clickable */
+                .hero-split-side {
+                    pointer-events: auto;
+                }
+
+                /* Update subtitle text for mobile */
+                .hero-subtitle {
+                    font-size: 14px;
+                }
+
+                /* Adjust title size on mobile */
+                .hero-title {
+                    font-size: clamp(32px, 10vw, 48px) !important;
+                }
+
+                /* Show Mobile Pull Interaction */
+                .mobile-pull-container {
+                    display: block;
+                }
+
+                /* Hide desktop split sides and mobile CTA buttons */
+                .hero-split-side,
+                .mobile-cta-button {
+                    display: none !important;
+                }
+
+                /* Background Panels */
+                .mobile-pull-panel {
+                    position: absolute;
+                    top: 0;
+                    width: 50%;
+                    height: 100%;
+                    background: var(--color-accent);
+                    z-index: 1;
+                }
+
+                .mobile-pull-panel-left {
+                    left: 0;
+                }
+
+                .mobile-pull-panel-right {
+                    right: 0;
+                }
+
+                /* Vertical Text Labels */
+                .mobile-pull-label {
+                    position: absolute;
+                    top: 50%;
+                    font-family: var(--font-family-primary);
+                    font-size: 24px;
+                    font-weight: 600;
+                    color: white;
+                    white-space: nowrap;
+                }
+
+                .mobile-pull-label-left {
+                    left: 40px;
+                    transform: translateY(-50%) rotate(-90deg);
+                    transform-origin: left center;
+                }
+
+                .mobile-pull-label-right {
+                    right: 40px;
+                    transform: translateY(-50%) rotate(90deg);
+                    transform-origin: right center;
+                }
+
+                /* RELEASE Labels (positioned below side labels) */
+                .mobile-pull-release {
+                    position: absolute;
+                    top: 50%;
+                    font-family: var(--font-family-primary);
+                    font-size: 14px;
+                    font-weight: 600;
+                    letter-spacing: 2px;
+                    color: white;
+                    white-space: nowrap;
+                    opacity: 0;
+                }
+
+                .mobile-pull-release-left {
+                    left: 40px;
+                    top: 50%;
+                    transform: translateY(calc(-50% - 40px)) translateX(24px) rotate(-90deg);
+                    transform-origin: left center;
+                }
+
+                .mobile-pull-release-right {
+                    right: 40px;
+                    top: 50%;
+                    transform: translateY(calc(-50% - 40px)) translateX(-24px) rotate(90deg);
+                    transform-origin: right center;
+                }
+
+                /* Draggable Foreground Layer */
+                .mobile-pull-foreground {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: var(--bg-primary) !important;
+                    z-index: 10;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 16px;
+                    touch-action: pan-y; /* Allow vertical scroll but enable horizontal drag */
+                    will-change: transform;
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    pointer-events: auto;
+                }
+
+                .mobile-pull-foreground.dragging {
+                    transition: none; /* Disable transition while dragging */
+                }
+
+                /* Mobile Pull Title */
+                .mobile-pull-title {
+                    font-size: clamp(48px, 15vw, 72px);
+                    font-weight: 300;
+                    letter-spacing: -0.02em;
+                    margin: 0;
+                    line-height: 0.9;
+                    color: var(--text-primary);
+                }
+
+                /* Mobile Pull Subtitle */
+                .mobile-pull-subtitle {
+                    font-size: clamp(16px, 4vw, 24px);
+                    font-weight: 400;
+                    font-style: italic;
+                    margin: 0;
+                    color: var(--text-secondary);
+                }
+
+                /* PULL Instruction */
+                .mobile-pull-instruction {
+                    font-size: 14px;
+                    font-weight: 600;
+                    letter-spacing: 2px;
+                    color: var(--text-secondary);
+                    margin-top: 8px;
+                    animation: pullSlide 2s ease-in-out infinite;
+                }
+
+                /* Hide regular navigation on mobile */
+                .nav {
+                    display: none !important;
+                }
+
+                /* Mobile Pull Logo - Position like nav logo */
+                .mobile-pull-logo {
+                    position: absolute;
+                    top: 26px;
+                    left: 24px;
+                    z-index: 20;
+                }
+
+                /* Mobile Pull Theme Toggle - Position like mobile hamburger menu */
+                .mobile-pull-theme-toggle {
+                    position: fixed;
+                    top: 20px;
+                    right: 24px;
+                    width: 36px;
+                    height: 36px;
+                    border: none;
+                    background: transparent;
+                    color: var(--text-primary);
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+                    z-index: 20;
+                }
+
+                .mobile-pull-theme-toggle svg {
+                    width: 20px;
+                    height: 20px;
+                    fill: currentColor;
+                    transition: all 0.2s ease;
+                }
+
+                .mobile-pull-theme-toggle:hover {
+                    opacity: 0.5;
+                }
+
+                /* Mobile Pull Content - Center the title/subtitle/pull */
+                .mobile-pull-content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 16px;
+                    flex: 1;
+                    margin-top: -60px;
+                }
+            }
         </style>
     </section>
 
@@ -303,6 +644,11 @@
     <!-- RGB Split Hero Mouse Effect -->
     <script>
         (function() {
+            // Skip mouse effects on mobile
+            if (window.innerWidth <= 768) {
+                return;
+            }
+
             const heroSection = document.getElementById('hero');
 
             // Get all layers for both sides
@@ -486,6 +832,129 @@
 
             heroSection.addEventListener('mousemove', handleMouseMove);
             heroSection.addEventListener('mouseleave', handleMouseLeave);
+        })();
+    </script>
+
+    <!-- Mobile Pull Interaction Script -->
+    <script>
+        (function() {
+            // Only run on mobile
+            if (window.innerWidth > 768) {
+                return;
+            }
+
+            const foreground = document.getElementById('mobilePullForeground');
+            const releaseLeft = document.querySelector('.mobile-pull-release-left');
+            const releaseRight = document.querySelector('.mobile-pull-release-right');
+
+            if (!foreground || !releaseLeft || !releaseRight) {
+                console.log('Mobile pull elements not found');
+                return;
+            }
+
+            console.log('Mobile pull interaction initialized');
+
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            let isAnimating = false;
+
+            const PULL_THRESHOLD = 0.4; // 40% of screen width to trigger navigation
+            const MAX_PULL = 0.8; // Maximum pull distance (80% of screen width)
+
+            function handleTouchStart(e) {
+                if (isAnimating) return;
+
+                startX = e.touches[0].clientX;
+                isDragging = true;
+                foreground.classList.add('dragging');
+                // Hide both RELEASE labels on start
+                releaseLeft.style.opacity = 0;
+                releaseRight.style.opacity = 0;
+            }
+
+            function handleTouchMove(e) {
+                if (!isDragging || isAnimating) return;
+
+                const touch = e.touches[0];
+                const deltaX = touch.clientX - startX;
+                const screenWidth = window.innerWidth;
+
+                // Calculate pull percentage
+                let pullPercentage = deltaX / screenWidth;
+
+                // Clamp to maximum pull distance
+                pullPercentage = Math.max(-MAX_PULL, Math.min(MAX_PULL, pullPercentage));
+
+                // Apply translation
+                const translateX = pullPercentage * screenWidth;
+                foreground.style.transform = `translateX(${translateX}px)`;
+
+                currentX = pullPercentage;
+
+                // Gradually fade in RELEASE label as user pulls
+                const absPullPercentage = Math.abs(pullPercentage);
+                const FADE_START = 0.2; // Start fading in at 20%
+
+                // Calculate opacity (0 to 1) based on pull distance
+                let opacity = 0;
+                if (absPullPercentage >= FADE_START) {
+                    // Map 20% to 40% range into 0 to 1 opacity
+                    opacity = Math.min(1, (absPullPercentage - FADE_START) / (PULL_THRESHOLD - FADE_START));
+                }
+
+                // Apply opacity to the appropriate RELEASE label
+                if (pullPercentage > 0) {
+                    // Pulling right - fade in left panel's RELEASE
+                    releaseLeft.style.opacity = opacity;
+                    releaseRight.style.opacity = 0;
+                } else if (pullPercentage < 0) {
+                    // Pulling left - fade in right panel's RELEASE
+                    releaseRight.style.opacity = opacity;
+                    releaseLeft.style.opacity = 0;
+                } else {
+                    // Not pulling
+                    releaseLeft.style.opacity = 0;
+                    releaseRight.style.opacity = 0;
+                }
+            }
+
+            function handleTouchEnd(e) {
+                if (!isDragging || isAnimating) return;
+
+                isDragging = false;
+                foreground.classList.remove('dragging');
+
+                const screenWidth = window.innerWidth;
+                const absPullPercentage = Math.abs(currentX);
+
+                // Check if pulled past threshold
+                if (absPullPercentage >= PULL_THRESHOLD) {
+                    isAnimating = true;
+
+                    // Determine which page to navigate to
+                    if (currentX > 0) {
+                        // Pulled right - go to art.html
+                        window.location.href = 'art.html';
+                    } else {
+                        // Pulled left - go to digital.html
+                        window.location.href = 'digital.html';
+                    }
+                } else {
+                    // Snap back to center
+                    foreground.style.transform = 'translateX(0)';
+                    currentX = 0;
+                    // Hide RELEASE labels
+                    releaseLeft.style.opacity = 0;
+                    releaseRight.style.opacity = 0;
+                }
+            }
+
+            // Add touch event listeners
+            foreground.addEventListener('touchstart', handleTouchStart, { passive: true });
+            foreground.addEventListener('touchmove', handleTouchMove, { passive: false });
+            foreground.addEventListener('touchend', handleTouchEnd, { passive: true });
+            foreground.addEventListener('touchcancel', handleTouchEnd, { passive: true });
         })();
     </script>
 </body>
