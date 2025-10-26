@@ -7,7 +7,8 @@
 const NAV_CONFIG = {
     links: [
         { text: 'Home', href: 'index.html', id: 'home' },
-        { text: 'Shop', href: '#products', id: 'products' },
+        { text: 'Shop', href: '#top', id: 'top' },
+        { text: 'Info', href: '#products', id: 'products' },
         { text: 'About', href: '#about', id: 'about' },
         { text: 'Contact', href: '#contact', id: 'contact' },
         { text: 'Lab', href: 'lab.html', id: 'lab' }
@@ -57,6 +58,11 @@ function generateNavigation(currentPage = 'index') {
                 // Keep hash links on current page
                 const pageName = isArt ? 'art.html' : 'digital.html';
                 href = `${pageName}${link.href}`;
+
+                // Make Shop link active by default on page load
+                if (link.id === 'top') {
+                    isActive = true;
+                }
             } else if (link.id === 'lab') {
                 // Add referrer parameter to lab link
                 const fromPage = isArt ? 'art' : 'digital';

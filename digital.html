@@ -54,12 +54,13 @@
         /* Reverse scroll direction for digital page */
         .hero-scroll-track {
             flex-direction: row-reverse;
-            padding: 0 10vw 0 15vw; /* Flip padding for reversed direction */
+            padding: 0 5vw 0 15vw; /* Less right padding pushes content right, shows more gallery left */
         }
 
         /* Align content to the left on digital page */
         .hero-content {
             text-align: left;
+            min-width: 400px; /* Original value - better for mobile */
         }
 
         .hero-title {
@@ -68,6 +69,7 @@
         }
 
         .hero-description {
+            max-width: 600px; /* Wider for better readability */
             margin: 0 0 48px 0; /* Remove auto margin that centers the text */
         }
 
@@ -100,7 +102,7 @@
 
     <!-- Navigation Component Placeholder -->
     <div id="nav-placeholder"></div>
-    <script src="assets/js/components/navigation-component.js?v=1761463145"></script>
+    <script src="assets/js/components/navigation-component.js?v=1761465381"></script>
 
     <!-- Hero Scroll Container (Tall container for scroll-driven animation) -->
     <div class="hero-scroll-container">
@@ -245,7 +247,7 @@
     <script src="assets/js/utils/image-preloader.js"></script>
 
     <!-- Components -->
-    <script src="assets/js/components/navigation.js?v=1761463324"></script>
+    <script src="assets/js/components/navigation.js?v=1761465559"></script>
     <script src="assets/js/components/mobile-menu.js"></script>
     <script src="assets/js/components/logo-animation.js"></script>
     <script src="assets/js/components/carousel-base.js"></script>
