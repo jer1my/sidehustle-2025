@@ -1,6 +1,6 @@
 /* Hero Scroll Container - Tall container for scroll-driven animation */
 .hero-scroll-container {
-    height: 1500vh; /* 15x viewport height = scroll distance for 0.2x speed gallery */
+    height: var(--hero-scroll-height); /* Container height controls scroll speed */
     position: relative;
 }
 
@@ -40,12 +40,31 @@
 .hero-scroll-track {
     display: flex;
     align-items: center;
-    gap: 40px; /* Fixed spacing between frames */
-    padding: 0 15vw 0 10vw; /* More padding on right to ensure visibility */
+    gap: var(--hero-frame-gap); /* Spacing between frames */
+    padding: 0 var(--hero-padding-right) 0 var(--hero-padding-left); /* Configurable padding */
     width: max-content;
     transform: translateX(0);
     will-change: transform;
-    transition: transform 0.1s ease-out;
+    transition: var(--hero-scroll-transition);
+}
+
+/* Digital page: Reverse scroll direction */
+.hero-scroll-track[data-scroll-direction="right"] {
+    flex-direction: row-reverse;
+    padding: 0 var(--hero-padding-left) 0 var(--hero-padding-right); /* Swap padding */
+}
+
+/* Digital page: Left-align content */
+[data-scroll-direction="right"] .hero-content {
+    text-align: left;
+}
+
+[data-scroll-direction="right"] .hero-title {
+    align-items: flex-start; /* Left-align badge and title */
+}
+
+[data-scroll-direction="right"] .hero-description {
+    margin: 0 0 48px 0; /* Remove auto margin that centers text */
 }
 
 .hero-content {
@@ -53,7 +72,7 @@
     text-align: right; /* Right-align to sit next to gallery cards */
     position: relative;
     min-width: 400px;
-    height: 55vh; /* Match gallery card height */
+    height: var(--hero-frame-height); /* Match gallery card height */
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Top align with gallery cards */
@@ -189,8 +208,8 @@ body[data-theme="dark"] .coming-soon-badge {
 /* Gallery Frames */
 .gallery-frame {
     flex-shrink: 0;
-    height: 55vh; /* Viewport height-based */
-    width: calc(55vh * 0.75); /* 3:4 portrait ratio (width = height * 0.75) */
+    height: var(--hero-frame-height); /* Viewport height-based */
+    width: calc(var(--hero-frame-height) * var(--hero-frame-aspect)); /* Aspect ratio (3:4 portrait) */
     background: rgba(220, 220, 220, 0.4); /* Light grey for light mode */
     position: relative;
     overflow: hidden;
@@ -213,29 +232,19 @@ body[data-theme="dark"] .gallery-frame {
 
     /* Adjust horizontal container to account for mobile browser menu */
     .hero-horizontal-container {
-        transform: translateY(-36px); /* Shift up to account for mobile browser menu */
+        transform: translateY(var(--hero-mobile-offset)); /* Shift up to account for mobile browser menu */
     }
 
-    /* Gallery adjustments for mobile */
-    .hero-scroll-track {
-        gap: 24px; /* Fixed spacing (tighter on mobile) */
-        padding: 0 15vw 0 5vw; /* More padding on right to ensure gallery visibility */
-    }
-
+    /* Gallery adjustments for mobile - CSS variables auto-adjust via media query in _variables.css */
     .hero-content {
         min-width: auto;
-        width: calc(100vw - 20vw - 60px); /* Fit on screen with room for gallery sliver (5vw left + 15vw right padding) */
-        height: 50vh; /* Match mobile gallery card height */
+        width: calc(100vw - 20vw - 60px); /* Fit on screen with room for gallery sliver */
+        height: var(--hero-frame-height); /* Match mobile gallery card height (auto-updated) */
     }
 
     .hero-description {
         max-width: 100%;
         min-width: auto;
-    }
-
-    .gallery-frame {
-        height: 50vh; /* Viewport height-based (slightly shorter than desktop) */
-        width: calc(50vh * 0.75); /* 3:4 portrait ratio maintained */
     }
 }
 

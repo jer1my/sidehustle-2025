@@ -55,12 +55,6 @@
         .hero-subtitle {
             color: var(--color-accent) !important;
         }
-
-        /* Allow description to flex with container */
-        .hero-description {
-            max-width: 600px; /* Wider for better readability */
-            margin: 0 0 48px 0; /* Align right with title/subtitle */
-        }
     </style>
 
     <noscript>
@@ -95,7 +89,7 @@
 
             <!-- Horizontal Scrolling Track (Title + Gallery) -->
             <div class="hero-horizontal-container">
-                <div class="hero-scroll-track">
+                <div class="hero-scroll-track" data-scroll-direction="left">
                     <!-- Hero Content (Title/Subtitle) -->
                     <div class="hero-content">
                         <h1 class="hero-title">
