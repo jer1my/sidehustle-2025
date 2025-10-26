@@ -23,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="assets/css/main.css?v=1761458080">
+    <link rel="stylesheet" href="assets/css/main.css?v=1761460642">
 
     <!-- Critical inline styles to prevent flash -->
     <style>
@@ -271,6 +271,19 @@
             <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap;">Digital Assets</h2>
         </div>
 
+        <!-- Centered Tagline (outside RGB split layers, desktop only) -->
+        <h6 class="hero-tagline" style="
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(calc(-50% + 50px));
+            pointer-events: none;
+            z-index: 10;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeInUpTagline 0.6s ease-out 0.5s forwards;
+        ">I hustle all the sides 😂</h6>
+
         <!-- Mobile Pull Interaction (Hidden on Desktop) -->
         <div class="mobile-pull-container">
             <!-- Background Panels -->
@@ -304,6 +317,7 @@
                 <div class="mobile-pull-content">
                     <h1 class="mobile-pull-title">Side Hustle</h1>
                     <h2 class="mobile-pull-subtitle">← Which Side? →</h2>
+                    <h6 class="mobile-pull-tagline">I hustle all the sides 😂</h6>
                     <div class="mobile-pull-instruction">PULL</div>
                 </div>
             </div>
@@ -392,6 +406,41 @@
                 }
             }
 
+            /* Fade in and slide up animation for centered tagline */
+            @keyframes fadeInUpTagline {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(calc(-50% + 50px));
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(calc(-50% + 20px));
+                }
+            }
+
+            /* Shake animations for RELEASE text at full threshold */
+            /* Shake for left RELEASE (vertical text, rotated -90deg) */
+            @keyframes shakeLeft {
+                0%, 100% { transform: translateY(calc(-50% - 40px)) translateX(24px) rotate(-90deg); }
+                10%, 30%, 50%, 70%, 90% { transform: translateY(calc(-50% - 44px)) translateX(24px) rotate(-90deg); }
+                20%, 40%, 60%, 80% { transform: translateY(calc(-50% - 36px)) translateX(24px) rotate(-90deg); }
+            }
+
+            /* Shake for right RELEASE (vertical text, rotated 90deg) */
+            @keyframes shakeRight {
+                0%, 100% { transform: translateY(calc(-50% - 40px)) translateX(-24px) rotate(90deg); }
+                10%, 30%, 50%, 70%, 90% { transform: translateY(calc(-50% - 44px)) translateX(-24px) rotate(90deg); }
+                20%, 40%, 60%, 80% { transform: translateY(calc(-50% - 36px)) translateX(-24px) rotate(90deg); }
+            }
+
+            .release-shake-left {
+                animation: shakeLeft 0.5s ease-in-out infinite;
+            }
+
+            .release-shake-right {
+                animation: shakeRight 0.5s ease-in-out infinite;
+            }
+
             /* Mobile styles */
             @media (max-width: 768px) {
                 /* Hide RGB chromatic aberration layers */
@@ -402,6 +451,11 @@
 
                 /* Hide side labels */
                 .hero-side-label {
+                    display: none !important;
+                }
+
+                /* Hide desktop tagline on mobile */
+                .hero > .hero-tagline {
                     display: none !important;
                 }
 
@@ -570,6 +624,15 @@
                     font-style: italic;
                     margin: 0;
                     color: var(--text-secondary);
+                }
+
+                /* Mobile Pull Tagline */
+                .mobile-pull-tagline {
+                    font-size: clamp(12px, 3vw, 14px);
+                    font-weight: 400;
+                    margin: 16px 0 0 0;
+                    color: var(--text-secondary);
+                    opacity: 0.8;
                 }
 
                 /* PULL Instruction */
@@ -905,7 +968,7 @@
             let isDragging = false;
             let isAnimating = false;
 
-            const PULL_THRESHOLD = 0.4; // 40% of screen width to trigger navigation
+            const PULL_THRESHOLD = 0.2; // 20% of screen width to trigger navigation
             const MAX_PULL = 0.8; // Maximum pull distance (80% of screen width)
 
             function handleTouchStart(e) {
@@ -915,9 +978,11 @@
                 startX = e.touches ? e.touches[0].clientX : e.clientX;
                 isDragging = true;
                 foreground.classList.add('dragging');
-                // Hide both RELEASE labels on start
+                // Hide both RELEASE labels and remove shake on start
                 releaseLeft.style.opacity = 0;
                 releaseRight.style.opacity = 0;
+                releaseLeft.classList.remove('release-shake-left');
+                releaseRight.classList.remove('release-shake-right');
             }
 
             function handleTouchMove(e) {
@@ -947,28 +1012,47 @@
 
                 // Gradually fade in RELEASE label as user pulls
                 const absPullPercentage = Math.abs(pullPercentage);
-                const FADE_START = 0.2; // Start fading in at 20%
+                const FADE_START = 0.1; // Start fading in at 10%
 
                 // Calculate opacity (0 to 1) based on pull distance
                 let opacity = 0;
                 if (absPullPercentage >= FADE_START) {
-                    // Map 20% to 40% range into 0 to 1 opacity
+                    // Map 10% to 20% range into 0 to 1 opacity
                     opacity = Math.min(1, (absPullPercentage - FADE_START) / (PULL_THRESHOLD - FADE_START));
                 }
 
-                // Apply opacity to the appropriate RELEASE label
+                // Check if at full threshold for shake animation
+                const atThreshold = absPullPercentage >= PULL_THRESHOLD;
+
+                // Apply opacity and shake to the appropriate RELEASE label
                 if (pullPercentage > 0) {
                     // Pulling right - fade in left panel's RELEASE
                     releaseLeft.style.opacity = opacity;
                     releaseRight.style.opacity = 0;
+                    // Add shake when at threshold
+                    if (atThreshold) {
+                        releaseLeft.classList.add('release-shake-left');
+                    } else {
+                        releaseLeft.classList.remove('release-shake-left');
+                    }
+                    releaseRight.classList.remove('release-shake-right');
                 } else if (pullPercentage < 0) {
                     // Pulling left - fade in right panel's RELEASE
                     releaseRight.style.opacity = opacity;
                     releaseLeft.style.opacity = 0;
+                    // Add shake when at threshold
+                    if (atThreshold) {
+                        releaseRight.classList.add('release-shake-right');
+                    } else {
+                        releaseRight.classList.remove('release-shake-right');
+                    }
+                    releaseLeft.classList.remove('release-shake-left');
                 } else {
                     // Not pulling
                     releaseLeft.style.opacity = 0;
                     releaseRight.style.opacity = 0;
+                    releaseLeft.classList.remove('release-shake-left');
+                    releaseRight.classList.remove('release-shake-right');
                 }
             }
 
@@ -997,9 +1081,11 @@
                     // Snap back to center
                     foreground.style.transform = 'translateX(0)';
                     currentX = 0;
-                    // Hide RELEASE labels
+                    // Hide RELEASE labels and remove shake
                     releaseLeft.style.opacity = 0;
                     releaseRight.style.opacity = 0;
+                    releaseLeft.classList.remove('release-shake-left');
+                    releaseRight.classList.remove('release-shake-right');
                 }
             }
 
@@ -1031,8 +1117,14 @@
                     foreground.style.transform = '';
                     foreground.classList.remove('dragging');
                 }
-                if (releaseLeft) releaseLeft.style.opacity = '0';
-                if (releaseRight) releaseRight.style.opacity = '0';
+                if (releaseLeft) {
+                    releaseLeft.style.opacity = '0';
+                    releaseLeft.classList.remove('release-shake-left');
+                }
+                if (releaseRight) {
+                    releaseRight.style.opacity = '0';
+                    releaseRight.classList.remove('release-shake-right');
+                }
             };
         }
 

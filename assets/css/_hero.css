@@ -105,6 +105,14 @@ body[data-theme="dark"] .coming-soon-badge {
     animation: fadeInUp 0.6s ease-out 0.3s forwards;
 }
 
+.hero-tagline {
+    font-size: clamp(12px, 1.5vw, 16px);
+    font-weight: var(--font-weight-regular);
+    color: var(--text-secondary);
+    margin: 16px 0 0 0;
+    opacity: 0.8;
+}
+
 .hero-subtitle .mobile-break {
     display: none;
 }
