@@ -23,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="assets/css/main.css?v=1761456835">
+    <link rel="stylesheet" href="assets/css/main.css?v=1761457487">
 
     <!-- Critical inline styles to prevent flash -->
     <style>
@@ -547,6 +547,10 @@
 
                 .mobile-pull-foreground.dragging {
                     transition: none; /* Disable transition while dragging */
+                    user-select: none; /* Prevent text selection during mouse drag */
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
                 }
 
                 /* Mobile Pull Title */
@@ -865,7 +869,8 @@
             function handleTouchStart(e) {
                 if (isAnimating) return;
 
-                startX = e.touches[0].clientX;
+                // Extract X coordinate from touch or mouse event
+                startX = e.touches ? e.touches[0].clientX : e.clientX;
                 isDragging = true;
                 foreground.classList.add('dragging');
                 // Hide both RELEASE labels on start
@@ -876,8 +881,14 @@
             function handleTouchMove(e) {
                 if (!isDragging || isAnimating) return;
 
-                const touch = e.touches[0];
-                const deltaX = touch.clientX - startX;
+                // Prevent text selection during mouse drag
+                if (!e.touches) {
+                    e.preventDefault();
+                }
+
+                // Extract X coordinate from touch or mouse event
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const deltaX = clientX - startX;
                 const screenWidth = window.innerWidth;
 
                 // Calculate pull percentage
@@ -955,6 +966,12 @@
             foreground.addEventListener('touchmove', handleTouchMove, { passive: false });
             foreground.addEventListener('touchend', handleTouchEnd, { passive: true });
             foreground.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+
+            // Add mouse event listeners for desktop users with narrow windows
+            foreground.addEventListener('mousedown', handleTouchStart);
+            foreground.addEventListener('mousemove', handleTouchMove);
+            foreground.addEventListener('mouseup', handleTouchEnd);
+            foreground.addEventListener('mouseleave', handleTouchEnd); // Cancel drag if mouse leaves area
         })();
     </script>
 </body>
