@@ -41,8 +41,8 @@ function initSmoothScrolling() {
                 return; // Let browser handle navigation to other pages
             }
 
-            // If it's just # (home link), scroll to top
-            if (hash === '#' || hash === '#') {
+            // If it's just # (home link) or #top, scroll to top
+            if (hash === '#' || hash === '#top') {
                 e.preventDefault();
 
                 // Use custom smooth scroll for controlled speed (2000ms)
@@ -212,9 +212,9 @@ function updateNavigationActiveStates(targetHash, fullHref) {
     });
 
     // Add active to target links
-    if (targetHash === '#' || targetHash === '') {
-        // For home, activate links with href="#"
-        const homeLinks = document.querySelectorAll('a[href="#"]');
+    if (targetHash === '#' || targetHash === '' || targetHash === '#top') {
+        // For home/top, activate links with href="#" or href="#top"
+        const homeLinks = document.querySelectorAll('a[href="#"], a[href="#top"], a[href$="#top"]');
         homeLinks.forEach(link => {
             link.classList.add('active');
         });
@@ -265,7 +265,7 @@ function initNavigationActiveState() {
         // Special handling for Home link when at top of page
         // Check if we're at the very top or in the hero section
         if (window.scrollY <= 50) {
-            const homeLinks = document.querySelectorAll('a[href="#"]');
+            const homeLinks = document.querySelectorAll('a[href="#"], a[href="#top"], a[href$="#top"]');
             homeLinks.forEach(link => {
                 link.classList.add('active');
             });
