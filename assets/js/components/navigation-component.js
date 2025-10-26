@@ -25,6 +25,16 @@ function generateNavigation(currentPage = 'index') {
     const isDigital = currentPage === 'digital';
     const logoHref = 'index.html';
 
+    // Check if we're on lab page and determine referrer
+    let labReferrer = 'index';
+    if (isLab) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromParam = urlParams.get('from');
+        if (fromParam === 'art' || fromParam === 'digital') {
+            labReferrer = fromParam;
+        }
+    }
+
     // Adjust links based on current page
     const links = NAV_CONFIG.links.map(link => {
         let href = link.href;
@@ -35,14 +45,22 @@ function generateNavigation(currentPage = 'index') {
             if (link.id === 'lab') {
                 isActive = true;
             } else if (link.href.startsWith('#')) {
-                // Point hash links back to index.html
-                href = `index.html${link.href}`;
+                // Point hash links back to referrer page
+                const referrerPage = labReferrer === 'art' ? 'art.html' :
+                                     labReferrer === 'digital' ? 'digital.html' :
+                                     'index.html';
+                href = `${referrerPage}${link.href}`;
             }
         } else if (isArt || isDigital) {
             // On art or digital pages
             if (link.href.startsWith('#')) {
-                // Point hash links back to index.html
-                href = `index.html${link.href}`;
+                // Keep hash links on current page
+                const pageName = isArt ? 'art.html' : 'digital.html';
+                href = `${pageName}${link.href}`;
+            } else if (link.id === 'lab') {
+                // Add referrer parameter to lab link
+                const fromPage = isArt ? 'art' : 'digital';
+                href = `lab.html?from=${fromPage}`;
             }
         } else {
             // On index page
@@ -135,6 +153,9 @@ function initNavigation() {
     const navPlaceholder = document.getElementById('nav-placeholder');
     if (navPlaceholder) {
         navPlaceholder.innerHTML = navHTML.nav + '\n\n    ' + navHTML.mobileToggle + '\n\n    ' + navHTML.mobileMenu;
+
+        // Dispatch custom event to notify that navigation has been inserted
+        window.dispatchEvent(new CustomEvent('navigationLoaded'));
     }
 }
 

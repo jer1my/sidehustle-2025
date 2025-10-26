@@ -31,14 +31,21 @@ function initScrollAnimations() {
 }
 
 function initSmoothScrolling() {
+    // Get current page name
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
     // Smooth scroll for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
+    document.querySelectorAll('a[href^="#"], a[href*=".html#"]').forEach(link => {
         // Skip scroll arrow - it has custom behavior
         if (link.classList.contains('scroll-arrow')) {
             return;
         }
 
-        link.addEventListener('click', function(e) {
+        // Remove any existing smooth scroll listener to prevent duplicates
+        link.removeEventListener('click', link._smoothScrollHandler);
+
+        // Create and store the handler
+        link._smoothScrollHandler = function(e) {
             const href = this.getAttribute('href');
 
             // Skip if href is just '#' or empty
@@ -46,18 +53,40 @@ function initSmoothScrolling() {
                 return;
             }
 
-            e.preventDefault();
-            const target = document.querySelector(href);
-            if (target) {
-                const targetPosition = target.offsetTop - 48;
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+            // Extract page and hash from href
+            let targetPage = currentPage;
+            let hash = href;
+
+            if (href.includes('#')) {
+                const parts = href.split('#');
+                if (parts[0]) {
+                    targetPage = parts[0].split('/').pop();
+                }
+                hash = '#' + parts[1];
             }
-        });
+
+            // If link is to same page with hash, smooth scroll to section
+            if (targetPage === currentPage && hash) {
+                e.preventDefault();
+                const target = document.querySelector(hash);
+                if (target) {
+                    const targetPosition = target.offsetTop - 48;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        };
+
+        link.addEventListener('click', link._smoothScrollHandler);
     });
 }
+
+// Re-initialize smooth scrolling when navigation is dynamically loaded
+window.addEventListener('navigationLoaded', function() {
+    initSmoothScrolling();
+});
 
 // Custom Smooth Scroll Function
 // ==========================================
@@ -116,6 +145,24 @@ function initPageTransitions() {
         }
 
         link.addEventListener('click', function(e) {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+            // Check if link is to same page (e.g., art.html#products when on art.html)
+            let targetPage = currentPage;
+            if (href.includes('#')) {
+                const parts = href.split('#');
+                if (parts[0]) {
+                    targetPage = parts[0].split('/').pop();
+                }
+            } else if (href.includes('.html')) {
+                targetPage = href.split('/').pop().split('?')[0];
+            }
+
+            // Skip page transition if navigating to same page with hash
+            if (targetPage === currentPage && href.includes('#')) {
+                return; // Let smooth scroll handler deal with it
+            }
+
             e.preventDefault();
 
             const targetUrl = this.href;
