@@ -23,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="assets/css/main.css?v=1761467194">
+    <link rel="stylesheet" href="assets/css/main.css?v=1761511016">
 
     <!-- Critical inline styles to prevent flash -->
     <style>
@@ -318,7 +318,7 @@
                     <h1 class="mobile-pull-title">Side Hustle</h1>
                     <h2 class="mobile-pull-subtitle">← Which Side? →</h2>
                     <h6 class="mobile-pull-tagline">I hustle all the sides 😂</h6>
-                    <div class="mobile-pull-instruction">PULL</div>
+                    <div class="mobile-pull-instruction">SWIPE</div>
                 </div>
             </div>
         </div>
@@ -1134,6 +1134,31 @@
                 mobileInteractionCleanup = null;
             }
         }
+
+        // Handle browser back/forward cache restoration
+        window.addEventListener('pageshow', function(event) {
+            // Only run on mobile and when page is restored from bfcache
+            if (window.innerWidth <= 768 && event.persisted) {
+                const foreground = document.getElementById('mobilePullForeground');
+                const releaseLeft = document.querySelector('.mobile-pull-release-left');
+                const releaseRight = document.querySelector('.mobile-pull-release-right');
+
+                if (foreground && releaseLeft && releaseRight) {
+                    // Reset visual state
+                    foreground.style.transform = 'translateX(0)';
+                    foreground.classList.remove('dragging');
+                    releaseLeft.style.opacity = '0';
+                    releaseRight.style.opacity = '0';
+                    releaseLeft.classList.remove('release-shake-left');
+                    releaseRight.classList.remove('release-shake-right');
+
+                    // Reset state variables (they're scoped to initMobilePullInteraction, so we need to reinitialize)
+                    // The easiest way is to cleanup and reinitialize the entire interaction
+                    cleanupMobileInteraction();
+                    initMobilePullInteraction();
+                }
+            }
+        });
     </script>
 
     <!-- Responsive Breakpoint Handler -->
