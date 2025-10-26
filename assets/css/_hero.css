@@ -219,12 +219,12 @@ body[data-theme="dark"] .gallery-frame {
     /* Gallery adjustments for mobile */
     .hero-scroll-track {
         gap: 24px; /* Fixed spacing (tighter on mobile) */
-        padding: 0 10vw 0 5vw; /* More padding on right to ensure visibility */
+        padding: 0 15vw 0 5vw; /* More padding on right to ensure gallery visibility */
     }
 
     .hero-content {
         min-width: auto;
-        width: calc(100vw - 10vw - 60px); /* Fit on screen with room for gallery sliver */
+        width: calc(100vw - 20vw - 60px); /* Fit on screen with room for gallery sliver (5vw left + 15vw right padding) */
         height: 50vh; /* Match mobile gallery card height */
     }
 
