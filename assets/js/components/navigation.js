@@ -12,13 +12,37 @@
 
 // Smooth scroll to sections with hash navigation
 function initSmoothScrolling() {
-    // Handle all anchor links that start with #
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+    // Handle all anchor links (both # and .html# formats)
+    document.querySelectorAll('a[href^="#"], a[href*=".html#"]').forEach(anchor => {
+        // Remove any existing handler to prevent duplicates
+        if (anchor._navigationScrollHandler) {
+            anchor.removeEventListener('click', anchor._navigationScrollHandler);
+        }
+
+        anchor._navigationScrollHandler = function (e) {
             const href = this.getAttribute('href');
 
+            // Extract page and hash
+            let targetPage = currentPage;
+            let hash = href;
+
+            if (href.includes('#')) {
+                const parts = href.split('#');
+                if (parts[0]) {
+                    targetPage = parts[0].split('/').pop();
+                }
+                hash = '#' + parts[1];
+            }
+
+            // Only handle if it's a same-page link
+            if (targetPage !== currentPage) {
+                return; // Let browser handle navigation to other pages
+            }
+
             // If it's just # (home link), scroll to top
-            if (href === '#') {
+            if (hash === '#' || hash === '#') {
                 e.preventDefault();
 
                 // Use custom smooth scroll for controlled speed (2000ms)
@@ -36,13 +60,13 @@ function initSmoothScrolling() {
 
                 // Update active state (longer timeout for 2s scroll)
                 setTimeout(() => {
-                    updateNavigationActiveStates('#');
+                    updateNavigationActiveStates(hash, href);
                 }, 2100);
                 return;
             }
 
             // For section links
-            const targetSection = document.getElementById(href.substring(1));
+            const targetSection = document.getElementById(hash.substring(1));
 
             if (targetSection) {
                 e.preventDefault();
@@ -57,11 +81,11 @@ function initSmoothScrolling() {
                 }
 
                 // Update URL hash
-                history.pushState(null, null, href);
+                history.pushState(null, null, hash);
 
                 // Update active state after scroll completes (longer timeout for 2s scroll)
                 setTimeout(() => {
-                    updateNavigationActiveStates(href);
+                    updateNavigationActiveStates(hash, href);
                 }, 2100);
 
                 // Close mobile menu if open
@@ -75,9 +99,16 @@ function initSmoothScrolling() {
                     document.body.classList.remove('mobile-menu-open');
                 }
             }
-        });
+        };
+
+        anchor.addEventListener('click', anchor._navigationScrollHandler);
     });
 }
+
+// Re-initialize when navigation is dynamically loaded
+window.addEventListener('navigationLoaded', function() {
+    initSmoothScrolling();
+});
 
 function scrollToProjects() {
     const projectsSection = document.getElementById('projects');
@@ -172,7 +203,7 @@ function toggleBackToTop() {
 
 
 // Helper function to update active states manually
-function updateNavigationActiveStates(targetHash) {
+function updateNavigationActiveStates(targetHash, fullHref) {
     const navLinks = document.querySelectorAll('.nav-links a, .mobile-nav a');
 
     // Remove active from all section links
@@ -188,10 +219,15 @@ function updateNavigationActiveStates(targetHash) {
             link.classList.add('active');
         });
     } else {
-        // For sections, activate the matching links
-        const targetLinks = document.querySelectorAll(`a[href="${targetHash}"]`);
-        targetLinks.forEach(link => {
-            link.classList.add('active');
+        // For sections, activate matching links (both # and .html# formats)
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href) {
+                // Check if it's a match (either exact match or ends with the target hash)
+                if (href === targetHash || href === fullHref || href.endsWith(targetHash)) {
+                    link.classList.add('active');
+                }
+            }
         });
     }
 }
@@ -221,12 +257,9 @@ function initNavigationActiveState() {
             }
         });
 
-        // Remove active class only from section-based links (those with href starting with #)
+        // Remove active class from all nav links
         navLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && href.startsWith('#')) {
-                link.classList.remove('active');
-            }
+            link.classList.remove('active');
         });
 
         // Special handling for Home link when at top of page
@@ -237,10 +270,13 @@ function initNavigationActiveState() {
                 link.classList.add('active');
             });
         } else if (currentSection) {
-            // Add active class to current section's links
-            const currentLinks = document.querySelectorAll(`a[href="#${currentSection}"]`);
-            currentLinks.forEach(link => {
-                link.classList.add('active');
+            // Add active class to current section's links (both # and .html# formats)
+            const targetHash = `#${currentSection}`;
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && (href === targetHash || href.endsWith(targetHash))) {
+                    link.classList.add('active');
+                }
             });
         }
     }

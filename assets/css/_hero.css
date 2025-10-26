@@ -119,8 +119,8 @@ body[data-theme="dark"] .coming-soon-badge {
 
 .hero-description {
     font-size: 18px;
-    max-width: 500px;
-    margin: 0 0 48px auto;
+    max-width: 800px;
+    margin: 0 auto 48px;
     opacity: 0;
     transform: translateY(30px);
     animation: fadeInUp 0.6s ease-out 0.45s forwards;

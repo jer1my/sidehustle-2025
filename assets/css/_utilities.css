@@ -77,12 +77,6 @@
     color: var(--color-accent);
 }
 
-/* Page-specific overrides */
-.page-lab .hero-subtitle {
-    animation: none !important;
-    opacity: 1 !important;
-}
-
 /* Dark Mode */
 [data-theme="dark"] {
     background: var(--bg-primary);
