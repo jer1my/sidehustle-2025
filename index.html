@@ -23,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="assets/css/main.css?v=1761457487">
+    <link rel="stylesheet" href="assets/css/main.css?v=1761458080">
 
     <!-- Critical inline styles to prevent flash -->
     <style>
@@ -647,13 +647,17 @@
 
     <!-- RGB Split Hero Mouse Effect -->
     <script>
-        (function() {
+        // Desktop Hero Interaction
+        let desktopInteractionCleanup = null;
+
+        function initDesktopHeroInteraction() {
             // Skip mouse effects on mobile
             if (window.innerWidth <= 768) {
                 return;
             }
 
             const heroSection = document.getElementById('hero');
+            if (!heroSection) return;
 
             // Get all layers for both sides
             const leftLayerTop = document.querySelector('.hero-split-left .hero-split-layer-top');
@@ -817,31 +821,72 @@
                 rightSideRightArrow.style.color = '';
             }
 
-            // Side label hover handlers
-            leftSplitSide.addEventListener('mouseenter', function() {
+            // Side label hover handlers (named for cleanup)
+            const leftEnterHandler = () => {
                 leftSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(24px)`;
-            });
-
-            leftSplitSide.addEventListener('mouseleave', function() {
+            };
+            const leftLeaveHandler = () => {
                 leftSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(-100%)`;
-            });
-
-            rightSplitSide.addEventListener('mouseenter', function() {
+            };
+            const rightEnterHandler = () => {
                 rightSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(-24px)`;
-            });
-
-            rightSplitSide.addEventListener('mouseleave', function() {
+            };
+            const rightLeaveHandler = () => {
                 rightSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(100%)`;
-            });
+            };
 
+            leftSplitSide.addEventListener('mouseenter', leftEnterHandler);
+            leftSplitSide.addEventListener('mouseleave', leftLeaveHandler);
+            rightSplitSide.addEventListener('mouseenter', rightEnterHandler);
+            rightSplitSide.addEventListener('mouseleave', rightLeaveHandler);
             heroSection.addEventListener('mousemove', handleMouseMove);
             heroSection.addEventListener('mouseleave', handleMouseLeave);
-        })();
+
+            // Store cleanup function
+            desktopInteractionCleanup = () => {
+                leftSplitSide.removeEventListener('mouseenter', leftEnterHandler);
+                leftSplitSide.removeEventListener('mouseleave', leftLeaveHandler);
+                rightSplitSide.removeEventListener('mouseenter', rightEnterHandler);
+                rightSplitSide.removeEventListener('mouseleave', rightLeaveHandler);
+                heroSection.removeEventListener('mousemove', handleMouseMove);
+                heroSection.removeEventListener('mouseleave', handleMouseLeave);
+
+                // Reset styles
+                if (leftLayerTop) {
+                    leftLayerTop.style.transform = '';
+                    leftLayerTop.style.filter = '';
+                }
+                if (leftLayerBottom) {
+                    leftLayerBottom.style.transform = '';
+                    leftLayerBottom.style.filter = '';
+                }
+                if (rightLayerTop) {
+                    rightLayerTop.style.transform = '';
+                    rightLayerTop.style.filter = '';
+                }
+                if (rightLayerBottom) {
+                    rightLayerBottom.style.transform = '';
+                    rightLayerBottom.style.filter = '';
+                }
+                if (leftSideLabel) leftSideLabel.style.transform = '';
+                if (rightSideLabel) rightSideLabel.style.transform = '';
+            };
+        }
+
+        function cleanupDesktopInteraction() {
+            if (desktopInteractionCleanup) {
+                desktopInteractionCleanup();
+                desktopInteractionCleanup = null;
+            }
+        }
     </script>
 
     <!-- Mobile Pull Interaction Script -->
     <script>
-        (function() {
+        // Mobile Pull Interaction
+        let mobileInteractionCleanup = null;
+
+        function initMobilePullInteraction() {
             // Only run on mobile
             if (window.innerWidth > 768) {
                 return;
@@ -852,11 +897,8 @@
             const releaseRight = document.querySelector('.mobile-pull-release-right');
 
             if (!foreground || !releaseLeft || !releaseRight) {
-                console.log('Mobile pull elements not found');
                 return;
             }
-
-            console.log('Mobile pull interaction initialized');
 
             let startX = 0;
             let currentX = 0;
@@ -971,8 +1013,80 @@
             foreground.addEventListener('mousedown', handleTouchStart);
             foreground.addEventListener('mousemove', handleTouchMove);
             foreground.addEventListener('mouseup', handleTouchEnd);
-            foreground.addEventListener('mouseleave', handleTouchEnd); // Cancel drag if mouse leaves area
-        })();
+            foreground.addEventListener('mouseleave', handleTouchEnd);
+
+            // Store cleanup function
+            mobileInteractionCleanup = () => {
+                foreground.removeEventListener('touchstart', handleTouchStart);
+                foreground.removeEventListener('touchmove', handleTouchMove);
+                foreground.removeEventListener('touchend', handleTouchEnd);
+                foreground.removeEventListener('touchcancel', handleTouchEnd);
+                foreground.removeEventListener('mousedown', handleTouchStart);
+                foreground.removeEventListener('mousemove', handleTouchMove);
+                foreground.removeEventListener('mouseup', handleTouchEnd);
+                foreground.removeEventListener('mouseleave', handleTouchEnd);
+
+                // Reset styles
+                if (foreground) {
+                    foreground.style.transform = '';
+                    foreground.classList.remove('dragging');
+                }
+                if (releaseLeft) releaseLeft.style.opacity = '0';
+                if (releaseRight) releaseRight.style.opacity = '0';
+            };
+        }
+
+        function cleanupMobileInteraction() {
+            if (mobileInteractionCleanup) {
+                mobileInteractionCleanup();
+                mobileInteractionCleanup = null;
+            }
+        }
+    </script>
+
+    <!-- Responsive Breakpoint Handler -->
+    <script>
+        // Track current viewport mode
+        let currentMode = window.innerWidth <= 768 ? 'mobile' : 'desktop';
+        let resizeTimer;
+
+        function handleViewportResize() {
+            clearTimeout(resizeTimer);
+
+            // Debounce resize events (150ms)
+            resizeTimer = setTimeout(() => {
+                const newMode = window.innerWidth <= 768 ? 'mobile' : 'desktop';
+
+                // Only re-initialize if crossing the breakpoint
+                if (newMode !== currentMode) {
+                    // Cleanup old interaction
+                    if (currentMode === 'desktop') {
+                        cleanupDesktopInteraction();
+                    } else {
+                        cleanupMobileInteraction();
+                    }
+
+                    // Initialize new interaction
+                    if (newMode === 'desktop') {
+                        initDesktopHeroInteraction();
+                    } else {
+                        initMobilePullInteraction();
+                    }
+
+                    currentMode = newMode;
+                }
+            }, 150);
+        }
+
+        // Listen for resize events
+        window.addEventListener('resize', handleViewportResize);
+
+        // Initialize appropriate interaction on page load
+        if (currentMode === 'desktop') {
+            initDesktopHeroInteraction();
+        } else {
+            initMobilePullInteraction();
+        }
     </script>
 </body>
 </html>
