@@ -2,6 +2,8 @@
  * Hero Gallery Scroll-Driven Animation
  * Uses native browser scroll to drive horizontal gallery movement
  * Supports both left-to-right (art) and right-to-left (digital) scroll directions
+ *
+ * Configuration: assets/js/config/scroll-config.js
  */
 
 (function() {
@@ -14,19 +16,35 @@
         return;
     }
 
-    // Detect if on digital page (scroll direction reversed)
-    const isDigitalPage = window.location.pathname.includes('digital');
+    // Get scroll direction from data attribute (instead of pathname detection)
+    const scrollDirection = scrollTrack.getAttribute('data-scroll-direction') || 'left';
+    const isRightScroll = scrollDirection === 'right';
 
-    console.log('Hero gallery scroll-driven animation initialized', { isDigitalPage });
+    console.log('Hero gallery scroll-driven animation initialized', { scrollDirection, isRightScroll });
 
-    // Horizontal scroll speed is controlled by container height in CSS
-    // Container height: 1500vh = 0.2x speed (5x slower than original 300vh)
+    // Horizontal scroll speed is controlled by container height in CSS (--hero-scroll-height)
+    // Horizontal scroll distance is controlled by distance multiplier (--hero-scroll-distance-multiplier)
+    // See: assets/css/_variables.css and assets/js/config/scroll-config.js
 
-    // Calculate how far we need to scroll the track horizontally
-    function getTrackScrollWidth() {
+    // Get distance multiplier from CSS variable
+    function getDistanceMultiplier() {
+        const computedStyle = getComputedStyle(document.documentElement);
+        const multiplier = parseFloat(computedStyle.getPropertyValue('--hero-scroll-distance-multiplier')) || 1.0;
+        return multiplier;
+    }
+
+    // Calculate base scroll width (without multiplier)
+    function getBaseScrollWidth() {
         const trackWidth = scrollTrack.scrollWidth;
         const containerWidth = scrollTrack.parentElement.offsetWidth;
         return trackWidth - containerWidth;
+    }
+
+    // Calculate how far we need to scroll the track horizontally (with multiplier)
+    function getTrackScrollWidth() {
+        const baseScroll = getBaseScrollWidth();
+        const multiplier = getDistanceMultiplier();
+        return baseScroll * multiplier;
     }
 
     // Update gallery position based on scroll position
@@ -46,17 +64,19 @@
         const progress = Math.max(0, Math.min(1, (currentScroll - scrollStart) / scrollDistance));
 
         // Apply horizontal translation based on progress
-        // Speed is controlled by container height (1500vh for slow scroll)
+        // Speed is controlled by container height (CSS variable: --hero-scroll-height)
+        const baseScroll = getBaseScrollWidth();
         const maxScroll = getTrackScrollWidth();
 
         let translateX;
-        if (isDigitalPage) {
-            // Digital page: Start from right (negative offset), scroll right (towards 0)
-            // progress 0 = -maxScroll (start right), progress 1 = 0 (end left)
-            translateX = -(maxScroll - (progress * maxScroll));
+        if (isRightScroll) {
+            // Digital page (row-reverse): Start showing content on right, scroll toward showing gallery on left
+            // Use baseScroll (not maxScroll) for starting position to avoid over-scrolling content off-screen
+            // progress 0 = -baseScroll (content visible on right), progress 1 = -baseScroll + maxScroll (gallery visible on left)
+            translateX = -baseScroll + (progress * maxScroll);
         } else {
-            // Art page: Start from left (0), scroll left (towards -maxScroll)
-            // progress 0 = 0 (start left), progress 1 = -maxScroll (end right)
+            // Art page: Start showing content on left (0), scroll toward -maxScroll
+            // progress 0 = 0 (content visible on left), progress 1 = -maxScroll (gallery visible on right)
             translateX = -(progress * maxScroll);
         }
 
@@ -83,19 +103,24 @@
     window.addEventListener('load', updateGalleryPosition);
 
     // Handle scroll arrow - scroll to products section
+    // Configuration: See HERO_SCROLL_CONFIG.scrollArrowDuration and scrollArrowOffset
     const scrollArrow = document.querySelector('.scroll-arrow');
     if (scrollArrow) {
         scrollArrow.addEventListener('click', function(e) {
             e.preventDefault();
 
-            // Scroll to products section with custom smooth scroll (2s duration)
+            // Scroll to products section with custom smooth scroll
             const productsSection = document.querySelector('#products');
             if (productsSection) {
-                const targetPosition = productsSection.offsetTop - 48;
+                // These values mirror the config in scroll-config.js
+                const SCROLL_DURATION = 2000; // ms - adjust in scroll-config.js
+                const SCROLL_OFFSET = 48;     // px - adjust in scroll-config.js
 
-                // Use custom smooth scroll for controlled speed (2000ms)
+                const targetPosition = productsSection.offsetTop - SCROLL_OFFSET;
+
+                // Use custom smooth scroll for controlled speed
                 if (typeof smoothScrollTo === 'function') {
-                    smoothScrollTo(targetPosition, 2000);
+                    smoothScrollTo(targetPosition, SCROLL_DURATION);
                 } else {
                     // Fallback to native smooth scroll
                     window.scrollTo({

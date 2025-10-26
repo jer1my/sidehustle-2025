@@ -51,27 +51,6 @@
             background-image: url('assets/icons/logo-sh-dark-mode.svg') !important;
         }
 
-        /* Reverse scroll direction for digital page */
-        .hero-scroll-track {
-            flex-direction: row-reverse;
-            padding: 0 5vw 0 15vw; /* Less right padding pushes content right, shows more gallery left */
-        }
-
-        /* Align content to the left on digital page */
-        .hero-content {
-            text-align: left;
-        }
-
-        .hero-title {
-            justify-content: flex-start;
-            align-items: flex-start; /* Left-align badge and title */
-        }
-
-        .hero-description {
-            max-width: 600px; /* Wider for better readability */
-            margin: 0 0 48px 0; /* Remove auto margin that centers the text */
-        }
-
         /* Accent color for subtitle on digital page */
         .hero-subtitle {
             color: var(--color-accent) !important;
@@ -110,7 +89,7 @@
 
             <!-- Horizontal Scrolling Track (Title + Gallery) -->
             <div class="hero-horizontal-container">
-                <div class="hero-scroll-track">
+                <div class="hero-scroll-track" data-scroll-direction="right">
                     <!-- Hero Content (Title/Subtitle) -->
                     <div class="hero-content">
                         <h1 class="hero-title">

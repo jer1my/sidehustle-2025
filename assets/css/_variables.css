@@ -133,6 +133,24 @@
   --z-popover: 500;
   --z-tooltip: 600;
   --z-toast: 700;
+
+  /* Hero Scroll Configuration */
+  /* Adjust these values to tweak hero gallery scroll behavior */
+  --hero-scroll-height: 900vh;       /* Container height (higher = slower scroll) */
+  --hero-scroll-distance-multiplier: 1.1;  /* Horizontal scroll distance (higher = scroll further, see more frames) */
+  --hero-frame-gap: 40px;             /* Gap between gallery frames (desktop) */
+  --hero-frame-height: 55vh;          /* Gallery frame height (desktop) */
+  --hero-frame-aspect: 0.75;          /* Frame aspect ratio (3:4 portrait) */
+  --hero-padding-left: 10vw;          /* Track padding left side */
+  --hero-padding-right: 15vw;         /* Track padding right side */
+  --hero-scroll-transition: 0.1s ease-out;  /* Scroll animation easing */
+
+  /* Hero Scroll Mobile */
+  --hero-frame-gap-mobile: 24px;      /* Gap between frames (mobile) */
+  --hero-frame-height-mobile: 50vh;   /* Frame height (mobile) */
+  --hero-padding-left-mobile: 5vw;    /* Track padding left (mobile) */
+  --hero-padding-right-mobile: 15vw;  /* Track padding right (mobile) */
+  --hero-mobile-offset: -36px;        /* Vertical offset for mobile browser bars */
 }
 
 /* ===================
@@ -166,5 +184,11 @@
     --font-size-5xl: 48px;
     --font-size-hero: 64px;
     --font-size-hero-subtitle: 24px;
+
+    /* Apply mobile hero scroll values */
+    --hero-frame-gap: var(--hero-frame-gap-mobile);
+    --hero-frame-height: var(--hero-frame-height-mobile);
+    --hero-padding-left: var(--hero-padding-left-mobile);
+    --hero-padding-right: var(--hero-padding-right-mobile);
   }
 }
