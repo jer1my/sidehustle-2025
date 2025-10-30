@@ -74,10 +74,24 @@
             // Use baseScroll (not maxScroll) for starting position to avoid over-scrolling content off-screen
             // progress 0 = -baseScroll (content visible on right), progress 1 = -baseScroll + maxScroll (gallery visible on left)
             translateX = -baseScroll + (progress * maxScroll);
+
+            // Bounds checking: ensure content doesn't go off-screen during resize
+            // Min: ensure gallery stays visible (leftmost position)
+            // Max: ensure content stays visible (rightmost position - starting position)
+            const minBound = -baseScroll - (maxScroll * 0.2); // Allow 20% extra scroll
+            const maxBound = baseScroll * 0.5; // Keep content mostly visible
+            translateX = Math.max(minBound, Math.min(maxBound, translateX));
         } else {
             // Art page: Start showing content on left (0), scroll toward -maxScroll
             // progress 0 = 0 (content visible on left), progress 1 = -maxScroll (gallery visible on right)
             translateX = -(progress * maxScroll);
+
+            // Bounds checking: ensure content doesn't go off-screen during resize
+            // Min: ensure gallery stays visible (leftmost position)
+            // Max: ensure content stays visible at start (0 or slightly positive)
+            const minBound = -(maxScroll + (maxScroll * 0.2)); // Allow 20% extra scroll
+            const maxBound = baseScroll * 0.5; // Keep content mostly visible at start
+            translateX = Math.max(minBound, Math.min(maxBound, translateX));
         }
 
         scrollTrack.style.transform = `translateX(${translateX}px)`;
@@ -96,7 +110,28 @@
     }
 
     window.addEventListener('scroll', onScroll);
-    window.addEventListener('resize', updateGalleryPosition); // Recalculate on resize
+
+    // Debounced resize handler to prevent excessive recalculations
+    let resizeTimeout;
+    function onResize() {
+        // Immediate update for responsive feedback
+        updateGalleryPosition();
+
+        // Clear existing timeout
+        if (resizeTimeout) {
+            clearTimeout(resizeTimeout);
+        }
+
+        // Debounced final recalculation after resize stops (250ms)
+        resizeTimeout = setTimeout(() => {
+            // Use RAF to ensure DOM has fully updated
+            requestAnimationFrame(() => {
+                updateGalleryPosition();
+            });
+        }, 250);
+    }
+
+    window.addEventListener('resize', onResize);
 
     // Update on page load and after images/fonts load
     updateGalleryPosition();
