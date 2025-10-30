@@ -138,7 +138,7 @@ body[data-theme="dark"] .coming-soon-badge {
 
 .hero-description {
     font-size: 18px;
-    max-width: 800px;
+    max-width: min(800px, 50vw); /* Responsive width - never exceeds 800px but scales down on smaller screens */
     margin: 0 auto 48px;
     opacity: 0;
     transform: translateY(30px);
@@ -218,6 +218,20 @@ body[data-theme="dark"] .coming-soon-badge {
 /* Dark mode gallery frames */
 body[data-theme="dark"] .gallery-frame {
     background: rgba(30, 30, 30, 0.6); /* Darker grey for dark mode */
+}
+
+/* Tablet Responsive (768px - 1200px) */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .hero-description {
+        max-width: 55vw; /* Fluid width on tablets to ensure gallery peek */
+    }
+}
+
+/* Large Desktop Responsive (>1200px) */
+@media (min-width: 1201px) {
+    .hero-description {
+        max-width: min(800px, 60vw); /* Cap at 800px but scale down if needed */
+    }
 }
 
 /* Mobile Responsive */
