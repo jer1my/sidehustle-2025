@@ -1,37 +1,91 @@
 /* Components */
 
-/* Accent Link Component */
+/* Accent Link Component - Standard internal link with underline effect */
 .accent-link {
-    color: var(--color-accent);
+    color: var(--link-color);
     text-decoration: none;
     position: relative;
     display: inline-block;
-    font-weight: 500;
-    transition: color 0.3s ease;
+    font-weight: var(--link-font-weight);
+    transition: color var(--link-transition);
 }
 
 /* Underline that draws on hover */
 .accent-link::after {
     content: '';
     position: absolute;
-    bottom: -2px;
+    bottom: var(--link-underline-offset);
     left: 0;
     width: 0;
-    height: 2px;
-    background-color: var(--color-accent);
-    transition: width 0.3s ease;
+    height: var(--link-underline-height);
+    background-color: var(--link-color);
+    transition: width var(--link-transition);
 }
 
-/* On hover: fade text to 50% and draw full color underline */
+/* On hover: fade text and draw full underline */
 .accent-link:hover {
-    color: rgba(5, 150, 105, 0.5); /* Emerald green at 50% opacity */
-}
-
-[data-theme="dark"] .accent-link:hover {
-    color: rgba(184, 134, 11, 0.5); /* Jewelry gold at 50% opacity */
+    opacity: var(--link-hover-opacity);
 }
 
 .accent-link:hover::after {
+    width: 100%;
+}
+
+/* Accent Link with Arrow Component - Directional link with → */
+.accent-link-arrow {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: var(--link-font-weight);
+    position: relative;
+    display: inline-block;
+    transition: color var(--link-transition);
+}
+
+.accent-link-arrow::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: var(--link-underline-height);
+    bottom: var(--link-underline-offset);
+    left: 0;
+    background: var(--link-color);
+    transition: width var(--link-transition);
+}
+
+.accent-link-arrow:hover {
+    opacity: var(--link-hover-opacity);
+}
+
+.accent-link-arrow:hover::after {
+    width: 100%;
+}
+
+/* External Link Component - For external links with ↗ */
+.external-link {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: var(--link-font-weight);
+    position: relative;
+    display: inline-block;
+    transition: color var(--link-transition);
+}
+
+.external-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: var(--link-underline-height);
+    bottom: var(--link-underline-offset);
+    left: 0;
+    background: var(--link-color);
+    transition: width var(--link-transition);
+}
+
+.external-link:hover {
+    opacity: var(--link-hover-opacity);
+}
+
+.external-link:hover::after {
     width: 100%;
 }
 
@@ -54,6 +108,167 @@ body[data-theme="dark"] .section-subtitle {
     .section-subtitle {
         margin-top: 4px;
         margin-bottom: 32px;
+    }
+}
+
+/* Typography Sample Components - for lab page */
+.type-sample {
+    margin-bottom: var(--space-12);
+}
+
+.type-label {
+    font-size: var(--typo-label-size);
+    font-weight: var(--typo-label-weight);
+    letter-spacing: var(--typo-label-spacing);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-3);
+}
+
+.type-spec {
+    font-size: var(--typo-small-size);
+    line-height: var(--typo-small-line-height);
+    color: var(--text-secondary);
+    margin-top: var(--space-4);
+}
+
+.type-spec strong {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+/* Typography sample text styles */
+.hero-title-sample {
+    font-family: var(--font-family-display);
+    font-style: italic;
+    font-size: var(--typo-hero-title-size);
+    font-weight: var(--typo-hero-title-weight);
+    letter-spacing: var(--typo-hero-title-spacing);
+    line-height: var(--typo-hero-title-line-height);
+    color: var(--text-primary);
+}
+
+.hero-subtitle-sample {
+    font-family: var(--font-family-display);
+    font-size: var(--typo-hero-subtitle-size);
+    font-weight: var(--typo-hero-subtitle-weight);
+    line-height: var(--typo-hero-subtitle-line-height);
+    color: var(--text-primary);
+}
+
+.section-title-sample {
+    font-family: var(--font-family-display);
+    font-size: var(--typo-section-title-size);
+    font-weight: var(--typo-section-title-weight);
+    letter-spacing: var(--typo-section-title-spacing);
+    line-height: var(--typo-section-title-line-height);
+    color: var(--text-primary);
+}
+
+.h1-sample {
+    font-family: var(--font-family-display);
+    font-style: italic;
+    font-size: var(--typo-h1-size);
+    font-weight: var(--typo-h1-weight);
+    letter-spacing: var(--typo-h1-spacing);
+    line-height: var(--typo-h1-line-height);
+    color: var(--text-primary);
+}
+
+.h2-sample {
+    font-family: var(--font-family-display);
+    font-size: var(--typo-h2-size);
+    font-weight: var(--typo-h2-weight);
+    letter-spacing: var(--typo-h2-spacing);
+    line-height: var(--typo-h2-line-height);
+    color: var(--text-primary);
+}
+
+.h3-sample {
+    font-family: var(--font-family-primary);
+    font-size: var(--typo-h3-size);
+    font-weight: var(--typo-h3-weight);
+    line-height: var(--typo-h3-line-height);
+    color: var(--text-primary);
+}
+
+.h4-sample {
+    font-family: var(--font-family-primary);
+    font-size: var(--typo-h4-size);
+    font-weight: var(--typo-h4-weight);
+    line-height: var(--typo-h4-line-height);
+    color: var(--text-primary);
+}
+
+.h5-sample {
+    font-family: var(--font-family-primary);
+    font-size: var(--typo-h5-size);
+    font-weight: var(--typo-h5-weight);
+    line-height: var(--typo-h5-line-height);
+    color: var(--text-primary);
+}
+
+.h6-sample {
+    font-family: var(--font-family-primary);
+    font-size: var(--typo-h6-size);
+    font-weight: var(--typo-h6-weight);
+    line-height: var(--typo-h6-line-height);
+    color: var(--text-primary);
+}
+
+.body-sample {
+    font-family: var(--font-family-primary);
+    font-size: var(--typo-body-size);
+    font-weight: var(--typo-body-weight);
+    line-height: var(--typo-body-line-height);
+    color: var(--text-primary);
+}
+
+.small-sample {
+    font-family: var(--font-family-primary);
+    font-size: var(--typo-small-size);
+    font-weight: var(--typo-small-weight);
+    line-height: var(--typo-small-line-height);
+    color: var(--text-primary);
+}
+
+.type-label-sample {
+    font-family: var(--font-family-primary);
+    font-size: var(--typo-label-size);
+    font-weight: var(--typo-label-weight);
+    letter-spacing: var(--typo-label-spacing);
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+/* Ligature demonstration components */
+.ligature-demo {
+    margin-top: var(--space-6);
+}
+
+.ligature-example {
+    font-family: var(--font-family-display);
+    font-size: 48px;
+    font-weight: var(--font-weight-light);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: var(--space-4);
+    color: var(--text-primary);
+}
+
+/* Typography layout for lab page */
+.type-samples-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-top: 48px;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .type-samples-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
     }
 }
 
