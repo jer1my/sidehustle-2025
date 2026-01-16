@@ -270,6 +270,66 @@ Grid toggle colors follow the temperature-based theming system, using accent col
 
 **Best Practice:** Replace inline styles like `style="margin-bottom: 24px"` with `.mb-6` for consistency and easier maintenance.
 
+## Site Architecture & Page History
+
+**Current Homepage (January 2025):**
+The index page features a horizontal scroll hero gallery with products, about, and contact sections on a single page.
+
+**Previous Split-Screen Homepage:**
+The original design featured a split-screen landing page where users could swipe/click left for "Art & Photography" (`art.html`) or right for "Digital Assets" (`digital.html`). Each side had separate landing pages with their own product galleries.
+
+**Backup Files (untracked):**
+- `index-backup.html` - Original split-screen homepage
+- `art-backup.html` - Original art landing page
+
+**Related Pages Still in Use:**
+- `art.html` - Art & Photography landing page (may still be linked/accessible)
+- `digital.html` - Digital Assets landing page (may still be linked/accessible)
+- `shop-all.html` - Combined shop page (current Shop nav link destination)
+
+**To Restore Split-Screen Homepage:**
+1. Replace `index.html` with contents of `index-backup.html`
+2. Update navigation in `navigation-component.js` to link Shop back to `#top` instead of `shop-all.html`
+3. The art.html and digital.html pages should still work as destinations
+
+**Git History:**
+The split-screen design was replaced in commit `ccd7b9a` ("Redesign index page and add shop-all navigation"). Use `git show ccd7b9a` to see the full diff or `git checkout ccd7b9a~1 -- index.html` to restore the previous version.
+
+## Navigation Component
+
+The site navigation is managed by a single component that serves as the source of truth for all pages.
+
+**Configuration File:** `assets/js/components/navigation-component.js`
+
+**Current Navigation Order:**
+```javascript
+const NAV_CONFIG = {
+    links: [
+        { text: 'Home', href: 'index.html', id: 'home' },
+        { text: 'Info', href: '#products', id: 'products' },
+        { text: 'About', href: '#about', id: 'about' },
+        { text: 'Contact', href: '#contact', id: 'contact' },
+        { text: 'Shop', href: 'shop-all.html', id: 'shop-all' }
+        // { text: 'Lab', href: 'lab.html', id: 'lab' }
+    ]
+};
+```
+
+**Hidden Links:**
+- **Lab** - Currently commented out. To restore, uncomment the Lab line and add a comma after the Shop line.
+
+**To Restore Lab Link:**
+```javascript
+{ text: 'Shop', href: 'shop-all.html', id: 'shop-all' },
+{ text: 'Lab', href: 'lab.html', id: 'lab' }
+```
+
+**Page Detection:**
+The component auto-detects the current page and:
+- Sets the active state on the appropriate nav link
+- Adjusts hash links (e.g., `#about`) to point back to index.html when on subpages
+- Supports pages: index, lab, shop-all, art, digital
+
 ## Component Library
 
 **Buttons:**
