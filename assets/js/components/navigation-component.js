@@ -7,7 +7,7 @@
 const NAV_CONFIG = {
     links: [
         { text: 'Home', href: 'index.html', id: 'home' },
-        { text: 'Shop', href: '#top', id: 'top' },
+        { text: 'Shop', href: 'shop-all.html', id: 'shop-all' },
         { text: 'Info', href: '#products', id: 'products' },
         { text: 'About', href: '#about', id: 'about' },
         { text: 'Contact', href: '#contact', id: 'contact' },
@@ -22,6 +22,7 @@ const NAV_CONFIG = {
  */
 function generateNavigation(currentPage = 'index') {
     const isLab = currentPage === 'lab';
+    const isShopAll = currentPage === 'shop-all';
     const isArt = currentPage === 'art';
     const isDigital = currentPage === 'digital';
     const logoHref = 'index.html';
@@ -52,6 +53,14 @@ function generateNavigation(currentPage = 'index') {
                                      'index.html';
                 href = `${referrerPage}${link.href}`;
             }
+        } else if (isShopAll) {
+            // On shop-all page
+            if (link.id === 'shop-all') {
+                isActive = true;
+            } else if (link.href.startsWith('#')) {
+                // Point hash links back to index
+                href = `index.html${link.href}`;
+            }
         } else if (isArt || isDigital) {
             // On art or digital pages
             if (link.href.startsWith('#')) {
@@ -60,9 +69,9 @@ function generateNavigation(currentPage = 'index') {
                 href = `${pageName}${link.href}`;
 
                 // Make Shop link active by default on page load
-                if (link.id === 'top') {
-                    isActive = true;
-                }
+                // if (link.id === 'top') {
+                //     isActive = true;
+                // }
             } else if (link.id === 'lab') {
                 // Add referrer parameter to lab link
                 const fromPage = isArt ? 'art' : 'digital';
@@ -146,6 +155,8 @@ function initNavigation() {
 
     if (pathname.includes('lab')) {
         currentPage = 'lab';
+    } else if (pathname.includes('shop-all')) {
+        currentPage = 'shop-all';
     } else if (pathname.includes('art')) {
         currentPage = 'art';
     } else if (pathname.includes('digital')) {
