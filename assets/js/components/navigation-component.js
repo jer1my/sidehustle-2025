@@ -7,11 +7,11 @@
 const NAV_CONFIG = {
     links: [
         { text: 'Home', href: 'index.html', id: 'home' },
-        { text: 'Shop', href: 'shop-all.html', id: 'shop-all' },
         { text: 'Info', href: '#products', id: 'products' },
         { text: 'About', href: '#about', id: 'about' },
         { text: 'Contact', href: '#contact', id: 'contact' },
-        { text: 'Lab', href: 'lab.html', id: 'lab' }
+        { text: 'Shop', href: 'shop-all.html', id: 'shop-all' }
+        // { text: 'Lab', href: 'lab.html', id: 'lab' }
     ]
 };
 
