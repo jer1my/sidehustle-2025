@@ -235,7 +235,7 @@
   --hero-scroll-distance-multiplier: 1.1;  /* Horizontal scroll distance (higher = scroll further, see more frames) */
   --hero-frame-gap: 40px;             /* Gap between gallery frames (desktop) */
   --hero-frame-height: 55vh;          /* Gallery frame height (desktop) */
-  --hero-frame-aspect: 0.75;          /* Frame aspect ratio (3:4 portrait) */
+  --hero-frame-aspect: 3 / 4;          /* Frame aspect ratio (3:4 portrait) */
   --hero-padding-left: 10vw;          /* Track padding left side */
   --hero-padding-right: 15vw;         /* Track padding right side */
   --hero-scroll-transition: 0.1s ease-out;  /* Scroll animation easing */
@@ -246,6 +246,37 @@
   --hero-padding-left-mobile: 5vw;    /* Track padding left (mobile) */
   --hero-padding-right-mobile: 15vw;  /* Track padding right (mobile) */
   --hero-mobile-offset: -36px;        /* Vertical offset for mobile browser bars */
+
+  /* ===================
+     GALLERY VARIABLES
+     =================== */
+
+  /* Gallery Grid */
+  --gallery-grid-gap: var(--space-6);
+  --gallery-card-radius: var(--radius-md);
+  --gallery-card-shadow: var(--shadow-sm);
+  --gallery-card-shadow-hover: var(--shadow-md);
+
+  /* Gallery Filter Bar */
+  --gallery-filter-height: 60px;
+  --gallery-filter-bg: var(--bg-secondary);
+  --gallery-filter-border: var(--color-neutral-200);
+  --gallery-filter-gap: var(--space-4);
+
+  /* Gallery Card */
+  --gallery-card-bg: var(--bg-primary);
+  --gallery-card-border: var(--color-neutral-200);
+  --gallery-card-title-size: var(--font-size-sm);
+  --gallery-card-title-color: var(--text-primary);
+
+  /* Gallery Thumbnail (uses hero aspect ratio for consistency) */
+  --gallery-thumbnail-aspect: var(--hero-frame-aspect);
+
+  /* Product Detail Page */
+  --product-detail-max-width: 1000px;
+  --product-image-max-height: 70vh;
+  --print-option-border: var(--color-neutral-200);
+  --frame-option-size: 120px;
 }
 
 /* ===================
@@ -276,6 +307,14 @@
   --grid-toggle-bg-active-hover: rgba(184, 134, 11, .4);
   --grid-toggle-pill-bg: #fafafa;
   --grid-toggle-text-color: #fafafa;
+
+  /* Gallery Colors - Dark Mode */
+  --gallery-filter-bg: var(--bg-secondary);
+  --gallery-filter-border: var(--color-neutral-700);
+  --gallery-card-bg: var(--bg-primary);
+  --gallery-card-border: var(--color-neutral-700);
+  --gallery-card-title-color: var(--text-primary);
+  --print-option-border: var(--color-neutral-700);
 }
 
 /* ===================

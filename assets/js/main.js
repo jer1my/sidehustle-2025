@@ -20,10 +20,10 @@
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', async function() {
-    // Core system initialization
-    initTheme();
-    initGridLines();
-    initLogoLetterAnimation();
+    // Core system initialization (with safety checks for pages with minimal scripts)
+    if (typeof initTheme === 'function') initTheme();
+    if (typeof initGridLines === 'function') initGridLines();
+    if (typeof initLogoLetterAnimation === 'function') initLogoLetterAnimation();
 
     // Dynamic content generation - must run BEFORE scroll animations
     if (typeof initAboutCarousel === 'function') {
@@ -36,19 +36,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         initHoverPreloading(); // Initialize hover intent image preloading
     }
 
-    // Interactive features initialization
-    initScrollAnimations(); // Scroll-triggered animations
-    initSmoothScrolling(); // Smooth anchor scrolling with hash navigation
-    initBackToTop(); // Show/hide back-to-top button on scroll
-    initMobileMenuClose(); // Mobile menu toggle
-    if (typeof initCarousel === 'function') {
-        initCarousel(); // About carousel
-    }
-    initLogoColorChange(); // Logo accent color in hero
-    initNavigationActiveState(); // Active nav states on scroll
-    if (typeof initPageTransitions === 'function') {
-        initPageTransitions(); // Page fade transitions
-    }
+    // Interactive features initialization (with safety checks)
+    if (typeof initScrollAnimations === 'function') initScrollAnimations();
+    if (typeof initSmoothScrolling === 'function') initSmoothScrolling();
+    if (typeof initBackToTop === 'function') initBackToTop();
+    if (typeof initMobileMenuClose === 'function') initMobileMenuClose();
+    if (typeof initCarousel === 'function') initCarousel();
+    if (typeof initLogoColorChange === 'function') initLogoColorChange();
+    if (typeof initNavigationActiveState === 'function') initNavigationActiveState();
+    if (typeof initPageTransitions === 'function') initPageTransitions();
 
     // Initialize particle system (only on index page with hero section)
     if (typeof initParticleSystem === 'function') {

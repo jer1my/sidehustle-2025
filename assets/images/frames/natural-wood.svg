@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" fill="#f5f5f5"/>
+  <!-- Natural wood frame -->
+  <rect x="5" y="5" width="110" height="110" fill="#d4a574" rx="2"/>
+  <rect x="8" y="8" width="104" height="104" fill="#c4956a"/>
+  <!-- Wood grain lines -->
+  <line x1="5" y1="20" x2="115" y2="22" stroke="#b8855a" stroke-width="1" opacity="0.5"/>
+  <line x1="5" y1="40" x2="115" y2="38" stroke="#b8855a" stroke-width="1" opacity="0.3"/>
+  <line x1="5" y1="80" x2="115" y2="82" stroke="#b8855a" stroke-width="1" opacity="0.4"/>
+  <line x1="5" y1="100" x2="115" y2="98" stroke="#b8855a" stroke-width="1" opacity="0.3"/>
+  <!-- Image area -->
+  <rect x="18" y="18" width="84" height="84" fill="#fafafa"/>
+  <rect x="23" y="23" width="74" height="74" fill="#d4d4d4"/>
+  <text x="60" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#737373">Natural Wood</text>
+</svg>

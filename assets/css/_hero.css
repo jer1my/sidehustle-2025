@@ -220,6 +220,18 @@ body[data-theme="dark"] .gallery-frame {
     background: rgba(30, 30, 30, 0.6); /* Darker grey for dark mode */
 }
 
+/* Gallery frame as link */
+a.gallery-frame {
+    display: block;
+    text-decoration: none;
+    transition: opacity var(--transition-fast, 0.15s ease), transform var(--transition-fast, 0.15s ease);
+}
+
+a.gallery-frame:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
 /* Tablet Responsive (768px - 1200px) */
 @media (min-width: 769px) and (max-width: 1200px) {
     .hero-description {

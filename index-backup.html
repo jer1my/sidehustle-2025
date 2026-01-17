@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Side Hustle - Art, Photography and Digital Assets by Jerimy Brown</title>
+
+    <!-- Meta Tags -->
+    <meta name="description" content="Discover unique art, photography, and digital assets from Jerimy Brown's Side Hustle collections.">
+    <meta name="author" content="Jerimy Brown">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Side Hustle - Art, Photography and Digital Assets">
+    <meta property="og:description" content="Discover unique art, photography, and digital assets from Jerimy Brown's Side Hustle collections.">
+
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts: Montserrat + Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="assets/css/main.css?v=1761933474">
+
+    <!-- Critical inline styles to prevent flash -->
+    <style>
+        /* No gradient on nav for landing page */
+        .nav {
+            background: transparent !important;
+        }
+
+        /* Minimal navigation - hide nav links and mobile menu */
+        .nav-links {
+            display: none !important;
+        }
+
+        .nav-mobile-toggle {
+            display: none !important;
+        }
+
+        /* Keep nav-right visible on mobile for theme toggle */
+        .nav-right {
+            display: flex !important;
+        }
+
+        /* Ensure theme toggle is visible */
+        .nav-theme-toggle {
+            display: flex !important;
+        }
+
+        /* Ensure hero section is visible */
+        .hero-scroll-container {
+            min-height: 100vh;
+        }
+
+        .hero {
+            min-height: 100vh;
+        }
+
+        /* Ensure body and html have proper dimensions */
+        html, body {
+            min-height: 100vh;
+            height: 100%;
+        }
+
+        /* Make sure navigation is visible */
+        .nav {
+            position: fixed !important;
+            z-index: 99999 !important;
+        }
+
+        /* Override body opacity - show immediately */
+        body {
+            opacity: 1 !important;
+        }
+
+        /* Logo accent color */
+        .logo {
+            color: var(--color-accent) !important;
+        }
+
+        .logo .logo-svg {
+            background-image: url('assets/icons/logo-sh-light-acccent.svg') !important;
+        }
+
+        body[data-theme="dark"] .logo .logo-svg {
+            background-image: url('assets/icons/logo-sh-dark-accent.svg') !important;
+        }
+    </style>
+
+    <noscript>
+        <style>
+            body {
+                opacity: 1 !important;
+            }
+        </style>
+    </noscript>
+</head>
+<body>
+    <script>
+        // Apply theme immediately to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
+    <!-- Navigation Component Placeholder (Logo and Theme Switcher Only) -->
+    <div id="nav-placeholder"></div>
+    <script src="assets/js/components/navigation-component.js?v=1761465381"></script>
+
+    <!-- Hero Section - Split Screen Landing Page -->
+    <section class="hero" id="hero" style="
+        min-height: 100vh;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    ">
+        <!-- Left Side -->
+        <a href="art.html" class="hero-split-side hero-split-left" style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        ">
+            <!-- Layer 3: Bottom - Complementary color (moves down) -->
+            <div class="hero-split-layer-bottom" style="
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                text-align: center;
+                transition: transform 0.15s ease;
+                transform: translateX(-50%) translateY(calc(-50% - 100px));
+                z-index: 1;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; visibility: hidden;">← Which Side? →</h2>
+            </div>
+            <!-- Layer 2: Middle - Accent color (moves up) -->
+            <div class="hero-split-layer-top" style="
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                text-align: center;
+                transition: transform 0.15s ease;
+                transform: translateX(-50%) translateY(calc(-50% - 100px));
+                z-index: 2;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; visibility: hidden;">← Which Side? →</h2>
+            </div>
+            <!-- Layer 1: Top - Normal color (no movement) -->
+            <div class="hero-split-layer-main" style="
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                text-align: center;
+                transform: translateX(-50%) translateY(calc(-50% - 100px));
+                z-index: 3;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; position: relative; display: inline-block;">
+                    <span class="subtitle-left-arrow" style="position: absolute; right: 100%; margin-right: 0.5em; transition: transform 0.15s ease;">←</span>
+                    Which Side?
+                    <span class="subtitle-right-arrow" style="position: absolute; left: 100%; margin-left: 0.5em; transition: transform 0.15s ease;">→</span>
+                </h2>
+            </div>
+            <!-- Mobile CTA Button -->
+            <button class="mobile-cta-button mobile-cta-left">Art & Photo</button>
+        </a>
+
+        <!-- Right Side -->
+        <a href="digital.html" class="hero-split-side hero-split-right" style="
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        ">
+            <!-- Layer 3: Bottom - Complementary color (moves down) -->
+            <div class="hero-split-layer-bottom" style="
+                position: absolute;
+                right: 100%;
+                top: 50%;
+                text-align: center;
+                transition: transform 0.15s ease;
+                transform: translateX(50%) translateY(calc(-50% - 100px));
+                z-index: 1;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; visibility: hidden;">← Which Side? →</h2>
+            </div>
+            <!-- Layer 2: Middle - Accent color (moves up) -->
+            <div class="hero-split-layer-top" style="
+                position: absolute;
+                right: 100%;
+                top: 50%;
+                text-align: center;
+                transition: transform 0.15s ease;
+                transform: translateX(50%) translateY(calc(-50% - 100px));
+                z-index: 2;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; visibility: hidden;">← Which Side? →</h2>
+            </div>
+            <!-- Layer 1: Top - Normal color (no movement) -->
+            <div class="hero-split-layer-main" style="
+                position: absolute;
+                right: 100%;
+                top: 50%;
+                text-align: center;
+                transform: translateX(50%) translateY(calc(-50% - 100px));
+                z-index: 3;
+            ">
+                <h1 class="hero-title" style="margin: 0; white-space: nowrap;">Side Hustle</h1>
+                <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap; position: relative; display: inline-block;">
+                    <span class="subtitle-left-arrow" style="position: absolute; right: 100%; margin-right: 0.5em; transition: transform 0.15s ease;">←</span>
+                    Which Side?
+                    <span class="subtitle-right-arrow" style="position: absolute; left: 100%; margin-left: 0.5em; transition: transform 0.15s ease;">→</span>
+                </h2>
+            </div>
+            <!-- Mobile CTA Button -->
+            <button class="mobile-cta-button mobile-cta-right">Digital Assets</button>
+        </a>
+
+        <!-- Side Labels -->
+        <div class="hero-side-label hero-side-label-left" style="
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(calc(-50% - 45px)) translateX(-100%);
+            pointer-events: none;
+            z-index: 10;
+            transition: transform 0.15s ease, color 0.3s ease;
+        ">
+            <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap;">Art & Photography</h2>
+        </div>
+
+        <div class="hero-side-label hero-side-label-right" style="
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(calc(-50% - 45px)) translateX(100%);
+            pointer-events: none;
+            z-index: 10;
+            transition: transform 0.15s ease, color 0.3s ease;
+        ">
+            <h2 class="hero-subtitle" style="margin: 0; white-space: nowrap;">Digital Assets</h2>
+        </div>
+
+        <!-- Centered Tagline (outside RGB split layers, desktop only) -->
+        <h6 class="hero-tagline" style="
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(calc(-50% + 50px));
+            pointer-events: none;
+            z-index: 10;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeInUpTagline 0.6s ease-out 0.5s forwards;
+        ">I hustle all the sides 😂</h6>
+
+        <!-- Mobile Pull Interaction (Hidden on Desktop) -->
+        <div class="mobile-pull-container">
+            <!-- Background Panels -->
+            <div class="mobile-pull-panel mobile-pull-panel-left">
+                <div class="mobile-pull-label mobile-pull-label-left">Art & Photos</div>
+                <div class="mobile-pull-release mobile-pull-release-left">RELEASE</div>
+            </div>
+            <div class="mobile-pull-panel mobile-pull-panel-right">
+                <div class="mobile-pull-label mobile-pull-label-right">Digital Assets</div>
+                <div class="mobile-pull-release mobile-pull-release-right">RELEASE</div>
+            </div>
+
+            <!-- Draggable Foreground Layer -->
+            <div class="mobile-pull-foreground" id="mobilePullForeground">
+                <!-- Navigation inside draggable layer -->
+                <!-- Logo in draggable layer -->
+                <a href="index.html" class="mobile-pull-logo logo accent-color">
+                    <div class="logo-container">
+                        <div class="logo-svg"></div>
+                    </div>
+                </a>
+
+                <!-- Theme toggle (fixed position like mobile hamburger) -->
+                <button class="mobile-pull-theme-toggle" onclick="toggleTheme()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.98038 2.73135C9.79117 2.67374 9.59078 2.67397 9.40415 2.72944C7.79045 3.18158 6.32264 4.04719 5.14599 5.24078C3.96517 6.4386 3.11882 7.92491 2.69124 9.55165C2.26365 11.1784 2.26977 12.8888 2.70898 14.5124C3.14819 16.136 4.00515 17.6163 5.19451 18.8056C6.38386 19.995 7.86409 20.8519 9.48773 21.2911C11.1114 21.7303 12.8218 21.7364 14.4485 21.3088C16.0752 20.8812 17.5615 20.0348 18.7593 18.854C19.9525 17.6778 20.8179 16.2106 21.2702 14.5976C21.324 14.4177 21.3265 14.2247 21.275 14.041C21.1538 13.6089 20.7597 13.3102 20.311 13.3106C20.2099 13.3107 20.1116 13.326 20.0186 13.3546C18.7246 13.7093 17.3598 13.7164 16.0619 13.3751C14.7554 13.0314 13.5636 12.347 12.6083 11.3918C11.6531 10.4365 10.9686 9.24468 10.625 7.93818C10.2834 6.63949 10.2908 5.27379 10.6461 3.9791C10.6732 3.89024 10.6881 3.79655 10.6893 3.70018C10.6947 3.25564 10.4057 2.86084 9.98038 2.73135ZM6.57028 6.64485C7.11058 6.09677 7.72838 5.63598 8.40126 5.27566C8.32141 6.33717 8.41781 7.40898 8.69079 8.44689C9.12451 10.096 9.98839 11.6003 11.1941 12.806C12.3998 14.0117 13.9041 14.8756 15.5532 15.3093C16.5911 15.5822 17.6629 15.6786 18.7244 15.5988C18.3641 16.2717 17.9033 16.8894 17.3553 17.4297C16.4063 18.3652 15.2288 19.0357 13.9401 19.3745C12.6513 19.7133 11.2963 19.7084 10.01 19.3605C8.72365 19.0125 7.55096 18.3336 6.60871 17.3914C5.66647 16.4492 4.98755 15.2765 4.63959 13.9902C4.29163 12.7039 4.28679 11.3488 4.62553 10.0601C4.96428 8.77132 5.63479 7.59381 6.57028 6.64485Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <!-- Content -->
+                <div class="mobile-pull-content">
+                    <h1 class="mobile-pull-title">Side Hustle</h1>
+                    <h2 class="mobile-pull-subtitle">← Which Side? →</h2>
+                    <h6 class="mobile-pull-tagline">I hustle all the sides 😂</h6>
+                    <div class="mobile-pull-instruction">SWIPE</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Styles -->
+        <style>
+            /* Prevent link dimming */
+            .hero-split-side {
+                opacity: 1 !important;
+            }
+
+            /* Layer colors - Light mode */
+            .hero-split-layer-top .hero-title {
+                color: #6ee7b7; /* Even Lighter Green - splits left */
+            }
+
+            .hero-split-layer-bottom .hero-title {
+                color: #fbbf24; /* Gold - splits right */
+            }
+
+            /* Layer colors - Dark mode */
+            body[data-theme="dark"] .hero-split-layer-top .hero-title {
+                color: #d97706; /* Darker Gold - splits left */
+            }
+
+            body[data-theme="dark"] .hero-split-layer-bottom .hero-title {
+                color: #047857; /* Even Darker Green - splits right */
+            }
+
+            /* Side label hover effect */
+            .hero-side-label h2 {
+                transition: color 0.3s ease;
+            }
+
+            .hero-split-left:hover ~ .hero-side-label-left h2 {
+                color: var(--color-accent);
+            }
+
+            .hero-split-right:hover ~ .hero-side-label-right h2 {
+                color: var(--color-accent);
+            }
+
+            /* Mobile button styles */
+            .mobile-cta-button {
+                display: none;
+                position: absolute;
+                bottom: 20vh;
+                padding: 16px 32px;
+                background: var(--color-accent);
+                color: white;
+                border: none;
+                border-radius: 50px;
+                font-family: var(--font-family-primary);
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                pointer-events: auto;
+                z-index: 100;
+                transition: transform 0.3s ease, opacity 0.3s ease;
+                opacity: 1;
+            }
+
+            .mobile-cta-button:active {
+                transform: scale(0.95);
+            }
+
+            /* Mobile Pull Interaction - Hidden on Desktop */
+            .mobile-pull-container {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            /* Slide animation for PULL instruction */
+            @keyframes pullSlide {
+                0%, 100% {
+                    transform: translateX(-8px);
+                }
+                50% {
+                    transform: translateX(8px);
+                }
+            }
+
+            /* Fade in and slide up animation for centered tagline */
+            @keyframes fadeInUpTagline {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(calc(-50% + 50px));
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(calc(-50% + 20px));
+                }
+            }
+
+            /* Shake animations for RELEASE text at full threshold */
+            /* Shake for left RELEASE (vertical text, rotated -90deg) */
+            @keyframes shakeLeft {
+                0%, 100% { transform: translateY(calc(-50% - 40px)) translateX(24px) rotate(-90deg); }
+                10%, 30%, 50%, 70%, 90% { transform: translateY(calc(-50% - 44px)) translateX(24px) rotate(-90deg); }
+                20%, 40%, 60%, 80% { transform: translateY(calc(-50% - 36px)) translateX(24px) rotate(-90deg); }
+            }
+
+            /* Shake for right RELEASE (vertical text, rotated 90deg) */
+            @keyframes shakeRight {
+                0%, 100% { transform: translateY(calc(-50% - 40px)) translateX(-24px) rotate(90deg); }
+                10%, 30%, 50%, 70%, 90% { transform: translateY(calc(-50% - 44px)) translateX(-24px) rotate(90deg); }
+                20%, 40%, 60%, 80% { transform: translateY(calc(-50% - 36px)) translateX(-24px) rotate(90deg); }
+            }
+
+            .release-shake-left {
+                animation: shakeLeft 0.5s ease-in-out infinite;
+            }
+
+            .release-shake-right {
+                animation: shakeRight 0.5s ease-in-out infinite;
+            }
+
+            /* Mobile styles */
+            @media (max-width: 768px) {
+                /* Hide RGB chromatic aberration layers */
+                .hero-split-layer-top,
+                .hero-split-layer-bottom {
+                    display: none !important;
+                }
+
+                /* Hide side labels */
+                .hero-side-label {
+                    display: none !important;
+                }
+
+                /* Hide desktop tagline on mobile */
+                .hero > .hero-tagline {
+                    display: none !important;
+                }
+
+                /* Hide the right side's main layer to avoid duplicate titles */
+                .hero-split-right .hero-split-layer-main {
+                    display: none !important;
+                }
+
+                /* Center the left side's main title and subtitle */
+                .hero-split-left .hero-split-layer-main {
+                    left: 50% !important;
+                    transform: translateX(-50%) translateY(calc(-50% - 100px)) !important;
+                }
+
+                /* Show mobile buttons */
+                .mobile-cta-button {
+                    display: block;
+                }
+
+                .mobile-cta-left {
+                    left: 25%;
+                    transform: translateX(-50%);
+                }
+
+                .mobile-cta-right {
+                    right: 25%;
+                    transform: translateX(50%);
+                }
+
+                /* Ensure split sides are still clickable */
+                .hero-split-side {
+                    pointer-events: auto;
+                }
+
+                /* Update subtitle text for mobile */
+                .hero-subtitle {
+                    font-size: 14px;
+                }
+
+                /* Adjust title size on mobile */
+                .hero-title {
+                    font-size: clamp(32px, 10vw, 48px) !important;
+                }
+
+                /* Show Mobile Pull Interaction */
+                .mobile-pull-container {
+                    display: block;
+                }
+
+                /* Hide desktop split sides and mobile CTA buttons */
+                .hero-split-side,
+                .mobile-cta-button {
+                    display: none !important;
+                }
+
+                /* Background Panels */
+                .mobile-pull-panel {
+                    position: absolute;
+                    top: 0;
+                    width: 50%;
+                    height: 100%;
+                    background: var(--color-accent);
+                    z-index: 1;
+                }
+
+                .mobile-pull-panel-left {
+                    left: 0;
+                }
+
+                .mobile-pull-panel-right {
+                    right: 0;
+                }
+
+                /* Vertical Text Labels */
+                .mobile-pull-label {
+                    position: absolute;
+                    top: 50%;
+                    font-family: var(--font-family-primary);
+                    font-size: 24px;
+                    font-weight: 600;
+                    color: white;
+                    white-space: nowrap;
+                }
+
+                .mobile-pull-label-left {
+                    left: 40px;
+                    transform: translateY(-50%) rotate(-90deg);
+                    transform-origin: left center;
+                }
+
+                .mobile-pull-label-right {
+                    right: 40px;
+                    transform: translateY(-50%) rotate(90deg);
+                    transform-origin: right center;
+                }
+
+                /* RELEASE Labels (positioned below side labels) */
+                .mobile-pull-release {
+                    position: absolute;
+                    top: 50%;
+                    font-family: var(--font-family-primary);
+                    font-size: 14px;
+                    font-weight: 600;
+                    letter-spacing: 2px;
+                    color: white;
+                    white-space: nowrap;
+                    opacity: 0;
+                }
+
+                .mobile-pull-release-left {
+                    left: 40px;
+                    top: 50%;
+                    transform: translateY(calc(-50% - 40px)) translateX(24px) rotate(-90deg);
+                    transform-origin: left center;
+                }
+
+                .mobile-pull-release-right {
+                    right: 40px;
+                    top: 50%;
+                    transform: translateY(calc(-50% - 40px)) translateX(-24px) rotate(90deg);
+                    transform-origin: right center;
+                }
+
+                /* Draggable Foreground Layer */
+                .mobile-pull-foreground {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: var(--bg-primary) !important;
+                    z-index: 10;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 16px;
+                    touch-action: pan-y; /* Allow vertical scroll but enable horizontal drag */
+                    will-change: transform;
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    pointer-events: auto;
+                }
+
+                .mobile-pull-foreground.dragging {
+                    transition: none; /* Disable transition while dragging */
+                    user-select: none; /* Prevent text selection during mouse drag */
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                }
+
+                /* Mobile Pull Title */
+                .mobile-pull-title {
+                    font-size: clamp(48px, 15vw, 72px);
+                    font-weight: 300;
+                    letter-spacing: -0.02em;
+                    margin: 0;
+                    line-height: 0.9;
+                    color: var(--text-primary);
+                }
+
+                /* Mobile Pull Subtitle */
+                .mobile-pull-subtitle {
+                    font-size: clamp(16px, 4vw, 24px);
+                    font-weight: 400;
+                    font-style: italic;
+                    margin: 0;
+                    color: var(--text-secondary);
+                }
+
+                /* Mobile Pull Tagline */
+                .mobile-pull-tagline {
+                    font-size: clamp(12px, 3vw, 14px);
+                    font-weight: 400;
+                    margin: 16px 0 0 0;
+                    color: var(--text-secondary);
+                    opacity: 0.8;
+                }
+
+                /* PULL Instruction */
+                .mobile-pull-instruction {
+                    font-size: 14px;
+                    font-weight: 600;
+                    letter-spacing: 2px;
+                    color: var(--text-secondary);
+                    margin-top: 8px;
+                    animation: pullSlide 2s ease-in-out infinite;
+                }
+
+                /* Hide regular navigation on mobile */
+                .nav {
+                    display: none !important;
+                }
+
+                /* Mobile Pull Logo - Position like nav logo */
+                .mobile-pull-logo {
+                    position: absolute;
+                    top: 26px;
+                    left: 24px;
+                    z-index: 20;
+                }
+
+                /* Mobile Pull Theme Toggle - Position like mobile hamburger menu */
+                .mobile-pull-theme-toggle {
+                    position: fixed;
+                    top: 20px;
+                    right: 24px;
+                    width: 36px;
+                    height: 36px;
+                    border: none;
+                    background: transparent;
+                    color: var(--text-primary);
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+                    z-index: 20;
+                }
+
+                .mobile-pull-theme-toggle svg {
+                    width: 20px;
+                    height: 20px;
+                    fill: currentColor;
+                    transition: all 0.2s ease;
+                }
+
+                .mobile-pull-theme-toggle:hover {
+                    opacity: 0.5;
+                }
+
+                /* Mobile Pull Content - Center the title/subtitle/pull */
+                .mobile-pull-content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 16px;
+                    flex: 1;
+                    margin-top: -60px;
+                }
+            }
+        </style>
+    </section>
+
+    <!-- Core JavaScript -->
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/theme-system.js"></script>
+    <script src="assets/js/utils/helpers.js"></script>
+    <script src="assets/js/components/logo-animation.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <!-- RGB Split Hero Mouse Effect -->
+    <script>
+        // Desktop Hero Interaction
+        let desktopInteractionCleanup = null;
+
+        function initDesktopHeroInteraction() {
+            // Skip mouse effects on mobile
+            if (window.innerWidth <= 768) {
+                return;
+            }
+
+            const heroSection = document.getElementById('hero');
+            if (!heroSection) return;
+
+            // Get all layers for both sides
+            const leftLayerTop = document.querySelector('.hero-split-left .hero-split-layer-top');
+            const leftLayerBottom = document.querySelector('.hero-split-left .hero-split-layer-bottom');
+            const rightLayerTop = document.querySelector('.hero-split-right .hero-split-layer-top');
+            const rightLayerBottom = document.querySelector('.hero-split-right .hero-split-layer-bottom');
+
+            // Get arrow elements
+            const leftSideLeftArrow = document.querySelector('.hero-split-left .subtitle-left-arrow');
+            const leftSideRightArrow = document.querySelector('.hero-split-left .subtitle-right-arrow');
+            const rightSideLeftArrow = document.querySelector('.hero-split-right .subtitle-left-arrow');
+            const rightSideRightArrow = document.querySelector('.hero-split-right .subtitle-right-arrow');
+
+            // Get side labels
+            const leftSideLabel = document.querySelector('.hero-side-label-left');
+            const rightSideLabel = document.querySelector('.hero-side-label-right');
+
+            // Get split sides for hover
+            const leftSplitSide = document.querySelector('.hero-split-left');
+            const rightSplitSide = document.querySelector('.hero-split-right');
+
+            const maxSplit = 10; // Maximum pixels for RGB split (5-10px)
+            const maxBlur = 3; // Maximum blur in pixels
+            const maxArrowMove = 120; // Maximum pixels for arrow movement
+            const deadZone = 0.15; // 15% dead zone on each side of center (30% total)
+            let rafId = null;
+
+            function handleMouseMove(e) {
+                if (rafId) return; // Throttle with RAF
+
+                rafId = requestAnimationFrame(() => {
+                    const viewportWidth = window.innerWidth;
+                    const centerX = viewportWidth / 2;
+                    const mouseX = e.clientX;
+
+                    // Calculate distance from center (-1 to 1, negative = left, positive = right)
+                    const normalizedDistance = (mouseX - centerX) / centerX;
+
+                    // Dead zone in center - no split effect, no blur, reset arrow position but keep color
+                    if (Math.abs(normalizedDistance) < deadZone) {
+                        leftLayerTop.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                        leftLayerTop.style.filter = `blur(0px)`;
+                        leftLayerBottom.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                        leftLayerBottom.style.filter = `blur(0px)`;
+                        rightLayerTop.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                        rightLayerTop.style.filter = `blur(0px)`;
+                        rightLayerBottom.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                        rightLayerBottom.style.filter = `blur(0px)`;
+
+                        // Reset arrow position only
+                        leftSideLeftArrow.style.transform = `translateX(0)`;
+                        leftSideRightArrow.style.transform = `translateX(0)`;
+                        rightSideLeftArrow.style.transform = `translateX(0)`;
+                        rightSideRightArrow.style.transform = `translateX(0)`;
+
+                        // Arrow color based on side (no dead zone for color)
+                        if (normalizedDistance < 0) {
+                            // Mouse on left - left arrow gets accent
+                            leftSideLeftArrow.style.color = 'var(--color-accent)';
+                            leftSideRightArrow.style.color = '';
+                            rightSideLeftArrow.style.color = 'var(--color-accent)';
+                            rightSideRightArrow.style.color = '';
+                        } else {
+                            // Mouse on right - right arrow gets accent
+                            leftSideLeftArrow.style.color = '';
+                            leftSideRightArrow.style.color = 'var(--color-accent)';
+                            rightSideLeftArrow.style.color = '';
+                            rightSideRightArrow.style.color = 'var(--color-accent)';
+                        }
+                    }
+                    // Left side: RGB split when mouse is on left
+                    else if (normalizedDistance < 0) {
+                        const adjustedDistance = (Math.abs(normalizedDistance) - deadZone) / (1 - deadZone);
+                        const splitAmount = adjustedDistance * maxSplit;
+                        const blurAmount = adjustedDistance * maxBlur;
+
+                        // Arrow movement (no dead zone for arrows)
+                        const arrowDistance = Math.abs(normalizedDistance) * maxArrowMove;
+
+                        // Left side splits with blur (horizontal split)
+                        leftLayerTop.style.transform = `translateX(calc(-50% - ${splitAmount}px)) translateY(calc(-50% - 100px))`;
+                        leftLayerTop.style.filter = `blur(${blurAmount}px)`;
+                        leftLayerBottom.style.transform = `translateX(calc(-50% + ${splitAmount}px)) translateY(calc(-50% - 100px))`;
+                        leftLayerBottom.style.filter = `blur(${blurAmount}px)`;
+
+                        // Right side stays aligned, no blur
+                        rightLayerTop.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                        rightLayerTop.style.filter = `blur(0px)`;
+                        rightLayerBottom.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                        rightLayerBottom.style.filter = `blur(0px)`;
+
+                        // Move left arrow on both sides and color with accent
+                        leftSideLeftArrow.style.transform = `translateX(-${arrowDistance}px)`;
+                        leftSideLeftArrow.style.color = 'var(--color-accent)';
+                        leftSideRightArrow.style.transform = `translateX(0)`;
+                        leftSideRightArrow.style.color = '';
+                        rightSideLeftArrow.style.transform = `translateX(-${arrowDistance}px)`;
+                        rightSideLeftArrow.style.color = 'var(--color-accent)';
+                        rightSideRightArrow.style.transform = `translateX(0)`;
+                        rightSideRightArrow.style.color = '';
+                    }
+                    // Right side: RGB split when mouse is on right
+                    else {
+                        const adjustedDistance = (normalizedDistance - deadZone) / (1 - deadZone);
+                        const splitAmount = adjustedDistance * maxSplit;
+                        const blurAmount = adjustedDistance * maxBlur;
+
+                        // Arrow movement (no dead zone for arrows)
+                        const arrowDistance = normalizedDistance * maxArrowMove;
+
+                        // Left side stays aligned, no blur
+                        leftLayerTop.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                        leftLayerTop.style.filter = `blur(0px)`;
+                        leftLayerBottom.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                        leftLayerBottom.style.filter = `blur(0px)`;
+
+                        // Right side splits with blur (horizontal split)
+                        rightLayerTop.style.transform = `translateX(calc(50% - ${splitAmount}px)) translateY(calc(-50% - 100px))`;
+                        rightLayerTop.style.filter = `blur(${blurAmount}px)`;
+                        rightLayerBottom.style.transform = `translateX(calc(50% + ${splitAmount}px)) translateY(calc(-50% - 100px))`;
+                        rightLayerBottom.style.filter = `blur(${blurAmount}px)`;
+
+                        // Move right arrow on both sides and color with accent
+                        leftSideLeftArrow.style.transform = `translateX(0)`;
+                        leftSideLeftArrow.style.color = '';
+                        leftSideRightArrow.style.transform = `translateX(${arrowDistance}px)`;
+                        leftSideRightArrow.style.color = 'var(--color-accent)';
+                        rightSideLeftArrow.style.transform = `translateX(0)`;
+                        rightSideLeftArrow.style.color = '';
+                        rightSideRightArrow.style.transform = `translateX(${arrowDistance}px)`;
+                        rightSideRightArrow.style.color = 'var(--color-accent)';
+                    }
+
+                    rafId = null;
+                });
+            }
+
+            function handleMouseLeave() {
+                // Reset to aligned when mouse leaves
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                }
+                leftLayerTop.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                leftLayerTop.style.filter = `blur(0px)`;
+                leftLayerBottom.style.transform = `translateX(-50%) translateY(calc(-50% - 100px))`;
+                leftLayerBottom.style.filter = `blur(0px)`;
+                rightLayerTop.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                rightLayerTop.style.filter = `blur(0px)`;
+                rightLayerBottom.style.transform = `translateX(50%) translateY(calc(-50% - 100px))`;
+                rightLayerBottom.style.filter = `blur(0px)`;
+
+                // Reset arrows
+                leftSideLeftArrow.style.transform = `translateX(0)`;
+                leftSideLeftArrow.style.color = '';
+                leftSideRightArrow.style.transform = `translateX(0)`;
+                leftSideRightArrow.style.color = '';
+                rightSideLeftArrow.style.transform = `translateX(0)`;
+                rightSideLeftArrow.style.color = '';
+                rightSideRightArrow.style.transform = `translateX(0)`;
+                rightSideRightArrow.style.color = '';
+            }
+
+            // Side label hover handlers (named for cleanup)
+            const leftEnterHandler = () => {
+                leftSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(24px)`;
+            };
+            const leftLeaveHandler = () => {
+                leftSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(-100%)`;
+            };
+            const rightEnterHandler = () => {
+                rightSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(-24px)`;
+            };
+            const rightLeaveHandler = () => {
+                rightSideLabel.style.transform = `translateY(calc(-50% - 45px)) translateX(100%)`;
+            };
+
+            leftSplitSide.addEventListener('mouseenter', leftEnterHandler);
+            leftSplitSide.addEventListener('mouseleave', leftLeaveHandler);
+            rightSplitSide.addEventListener('mouseenter', rightEnterHandler);
+            rightSplitSide.addEventListener('mouseleave', rightLeaveHandler);
+            heroSection.addEventListener('mousemove', handleMouseMove);
+            heroSection.addEventListener('mouseleave', handleMouseLeave);
+
+            // Store cleanup function
+            desktopInteractionCleanup = () => {
+                leftSplitSide.removeEventListener('mouseenter', leftEnterHandler);
+                leftSplitSide.removeEventListener('mouseleave', leftLeaveHandler);
+                rightSplitSide.removeEventListener('mouseenter', rightEnterHandler);
+                rightSplitSide.removeEventListener('mouseleave', rightLeaveHandler);
+                heroSection.removeEventListener('mousemove', handleMouseMove);
+                heroSection.removeEventListener('mouseleave', handleMouseLeave);
+
+                // Reset styles
+                if (leftLayerTop) {
+                    leftLayerTop.style.transform = '';
+                    leftLayerTop.style.filter = '';
+                }
+                if (leftLayerBottom) {
+                    leftLayerBottom.style.transform = '';
+                    leftLayerBottom.style.filter = '';
+                }
+                if (rightLayerTop) {
+                    rightLayerTop.style.transform = '';
+                    rightLayerTop.style.filter = '';
+                }
+                if (rightLayerBottom) {
+                    rightLayerBottom.style.transform = '';
+                    rightLayerBottom.style.filter = '';
+                }
+                if (leftSideLabel) leftSideLabel.style.transform = '';
+                if (rightSideLabel) rightSideLabel.style.transform = '';
+            };
+        }
+
+        function cleanupDesktopInteraction() {
+            if (desktopInteractionCleanup) {
+                desktopInteractionCleanup();
+                desktopInteractionCleanup = null;
+            }
+        }
+    </script>
+
+    <!-- Mobile Pull Interaction Script -->
+    <script>
+        // Mobile Pull Interaction
+        let mobileInteractionCleanup = null;
+
+        function initMobilePullInteraction() {
+            // Only run on mobile
+            if (window.innerWidth > 768) {
+                return;
+            }
+
+            const foreground = document.getElementById('mobilePullForeground');
+            const releaseLeft = document.querySelector('.mobile-pull-release-left');
+            const releaseRight = document.querySelector('.mobile-pull-release-right');
+
+            if (!foreground || !releaseLeft || !releaseRight) {
+                return;
+            }
+
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            let isAnimating = false;
+
+            const PULL_THRESHOLD = 0.2; // 20% of screen width to trigger navigation
+            const MAX_PULL = 0.8; // Maximum pull distance (80% of screen width)
+
+            function handleTouchStart(e) {
+                if (isAnimating) return;
+
+                // Extract X coordinate from touch or mouse event
+                startX = e.touches ? e.touches[0].clientX : e.clientX;
+                isDragging = true;
+                foreground.classList.add('dragging');
+                // Hide both RELEASE labels and remove shake on start
+                releaseLeft.style.opacity = 0;
+                releaseRight.style.opacity = 0;
+                releaseLeft.classList.remove('release-shake-left');
+                releaseRight.classList.remove('release-shake-right');
+            }
+
+            function handleTouchMove(e) {
+                if (!isDragging || isAnimating) return;
+
+                // Prevent text selection during mouse drag
+                if (!e.touches) {
+                    e.preventDefault();
+                }
+
+                // Extract X coordinate from touch or mouse event
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const deltaX = clientX - startX;
+                const screenWidth = window.innerWidth;
+
+                // Calculate pull percentage
+                let pullPercentage = deltaX / screenWidth;
+
+                // Clamp to maximum pull distance
+                pullPercentage = Math.max(-MAX_PULL, Math.min(MAX_PULL, pullPercentage));
+
+                // Apply translation
+                const translateX = pullPercentage * screenWidth;
+                foreground.style.transform = `translateX(${translateX}px)`;
+
+                currentX = pullPercentage;
+
+                // Gradually fade in RELEASE label as user pulls
+                const absPullPercentage = Math.abs(pullPercentage);
+                const FADE_START = 0.1; // Start fading in at 10%
+
+                // Calculate opacity (0 to 1) based on pull distance
+                let opacity = 0;
+                if (absPullPercentage >= FADE_START) {
+                    // Map 10% to 20% range into 0 to 1 opacity
+                    opacity = Math.min(1, (absPullPercentage - FADE_START) / (PULL_THRESHOLD - FADE_START));
+                }
+
+                // Check if at full threshold for shake animation
+                const atThreshold = absPullPercentage >= PULL_THRESHOLD;
+
+                // Apply opacity and shake to the appropriate RELEASE label
+                if (pullPercentage > 0) {
+                    // Pulling right - fade in left panel's RELEASE
+                    releaseLeft.style.opacity = opacity;
+                    releaseRight.style.opacity = 0;
+                    // Add shake when at threshold
+                    if (atThreshold) {
+                        releaseLeft.classList.add('release-shake-left');
+                    } else {
+                        releaseLeft.classList.remove('release-shake-left');
+                    }
+                    releaseRight.classList.remove('release-shake-right');
+                } else if (pullPercentage < 0) {
+                    // Pulling left - fade in right panel's RELEASE
+                    releaseRight.style.opacity = opacity;
+                    releaseLeft.style.opacity = 0;
+                    // Add shake when at threshold
+                    if (atThreshold) {
+                        releaseRight.classList.add('release-shake-right');
+                    } else {
+                        releaseRight.classList.remove('release-shake-right');
+                    }
+                    releaseLeft.classList.remove('release-shake-left');
+                } else {
+                    // Not pulling
+                    releaseLeft.style.opacity = 0;
+                    releaseRight.style.opacity = 0;
+                    releaseLeft.classList.remove('release-shake-left');
+                    releaseRight.classList.remove('release-shake-right');
+                }
+            }
+
+            function handleTouchEnd(e) {
+                if (!isDragging || isAnimating) return;
+
+                isDragging = false;
+                foreground.classList.remove('dragging');
+
+                const screenWidth = window.innerWidth;
+                const absPullPercentage = Math.abs(currentX);
+
+                // Check if pulled past threshold
+                if (absPullPercentage >= PULL_THRESHOLD) {
+                    isAnimating = true;
+
+                    // Determine which page to navigate to
+                    if (currentX > 0) {
+                        // Pulled right - go to art.html
+                        window.location.href = 'art.html';
+                    } else {
+                        // Pulled left - go to digital.html
+                        window.location.href = 'digital.html';
+                    }
+                } else {
+                    // Snap back to center
+                    foreground.style.transform = 'translateX(0)';
+                    currentX = 0;
+                    // Hide RELEASE labels and remove shake
+                    releaseLeft.style.opacity = 0;
+                    releaseRight.style.opacity = 0;
+                    releaseLeft.classList.remove('release-shake-left');
+                    releaseRight.classList.remove('release-shake-right');
+                }
+            }
+
+            // Add touch event listeners
+            foreground.addEventListener('touchstart', handleTouchStart, { passive: true });
+            foreground.addEventListener('touchmove', handleTouchMove, { passive: false });
+            foreground.addEventListener('touchend', handleTouchEnd, { passive: true });
+            foreground.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+
+            // Add mouse event listeners for desktop users with narrow windows
+            foreground.addEventListener('mousedown', handleTouchStart);
+            foreground.addEventListener('mousemove', handleTouchMove);
+            foreground.addEventListener('mouseup', handleTouchEnd);
+            foreground.addEventListener('mouseleave', handleTouchEnd);
+
+            // Store cleanup function
+            mobileInteractionCleanup = () => {
+                foreground.removeEventListener('touchstart', handleTouchStart);
+                foreground.removeEventListener('touchmove', handleTouchMove);
+                foreground.removeEventListener('touchend', handleTouchEnd);
+                foreground.removeEventListener('touchcancel', handleTouchEnd);
+                foreground.removeEventListener('mousedown', handleTouchStart);
+                foreground.removeEventListener('mousemove', handleTouchMove);
+                foreground.removeEventListener('mouseup', handleTouchEnd);
+                foreground.removeEventListener('mouseleave', handleTouchEnd);
+
+                // Reset styles
+                if (foreground) {
+                    foreground.style.transform = '';
+                    foreground.classList.remove('dragging');
+                }
+                if (releaseLeft) {
+                    releaseLeft.style.opacity = '0';
+                    releaseLeft.classList.remove('release-shake-left');
+                }
+                if (releaseRight) {
+                    releaseRight.style.opacity = '0';
+                    releaseRight.classList.remove('release-shake-right');
+                }
+            };
+        }
+
+        function cleanupMobileInteraction() {
+            if (mobileInteractionCleanup) {
+                mobileInteractionCleanup();
+                mobileInteractionCleanup = null;
+            }
+        }
+
+        // Handle browser back/forward cache restoration
+        window.addEventListener('pageshow', function(event) {
+            // Only run on mobile and when page is restored from bfcache
+            if (window.innerWidth <= 768 && event.persisted) {
+                const foreground = document.getElementById('mobilePullForeground');
+                const releaseLeft = document.querySelector('.mobile-pull-release-left');
+                const releaseRight = document.querySelector('.mobile-pull-release-right');
+
+                if (foreground && releaseLeft && releaseRight) {
+                    // Reset visual state
+                    foreground.style.transform = 'translateX(0)';
+                    foreground.classList.remove('dragging');
+                    releaseLeft.style.opacity = '0';
+                    releaseRight.style.opacity = '0';
+                    releaseLeft.classList.remove('release-shake-left');
+                    releaseRight.classList.remove('release-shake-right');
+
+                    // Reset state variables (they're scoped to initMobilePullInteraction, so we need to reinitialize)
+                    // The easiest way is to cleanup and reinitialize the entire interaction
+                    cleanupMobileInteraction();
+                    initMobilePullInteraction();
+                }
+            }
+        });
+    </script>
+
+    <!-- Responsive Breakpoint Handler -->
+    <script>
+        // Track current viewport mode
+        let currentMode = window.innerWidth <= 768 ? 'mobile' : 'desktop';
+        let resizeTimer;
+
+        function handleViewportResize() {
+            clearTimeout(resizeTimer);
+
+            // Debounce resize events (150ms)
+            resizeTimer = setTimeout(() => {
+                const newMode = window.innerWidth <= 768 ? 'mobile' : 'desktop';
+
+                // Only re-initialize if crossing the breakpoint
+                if (newMode !== currentMode) {
+                    // Cleanup old interaction
+                    if (currentMode === 'desktop') {
+                        cleanupDesktopInteraction();
+                    } else {
+                        cleanupMobileInteraction();
+                    }
+
+                    // Initialize new interaction
+                    if (newMode === 'desktop') {
+                        initDesktopHeroInteraction();
+                    } else {
+                        initMobilePullInteraction();
+                    }
+
+                    currentMode = newMode;
+                }
+            }, 150);
+        }
+
+        // Listen for resize events
+        window.addEventListener('resize', handleViewportResize);
+
+        // Initialize appropriate interaction on page load
+        if (currentMode === 'desktop') {
+            initDesktopHeroInteraction();
+        } else {
+            initMobilePullInteraction();
+        }
+    </script>
+</body>
+</html>
