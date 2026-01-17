@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sidehustle.example.com/schemas/gallery-data.json",
+  "title": "Gallery Data Schema",
+  "description": "Schema for the Shop Gallery Viewer data structure",
+  "type": "object",
+  "required": ["categories", "galleryItems", "printOptions", "frameOptions"],
+  "properties": {
+    "categories": {
+      "type": "array",
+      "description": "Main category definitions with sub-categories",
+      "items": {
+        "$ref": "#/$defs/Category"
+      },
+      "minItems": 1
+    },
+    "galleryItems": {
+      "type": "array",
+      "description": "All gallery items",
+      "items": {
+        "$ref": "#/$defs/GalleryItem"
+      }
+    },
+    "productDetails": {
+      "type": "object",
+      "description": "Extended product details keyed by gallery item ID",
+      "additionalProperties": {
+        "$ref": "#/$defs/ProductDetail"
+      }
+    },
+    "printOptions": {
+      "type": "array",
+      "description": "Available print size options",
+      "items": {
+        "$ref": "#/$defs/PrintOption"
+      },
+      "minItems": 1
+    },
+    "frameOptions": {
+      "type": "array",
+      "description": "Available framing options",
+      "items": {
+        "$ref": "#/$defs/FrameOption"
+      }
+    }
+  },
+  "$defs": {
+    "Category": {
+      "type": "object",
+      "required": ["id", "name", "subCategories"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": ["art", "photography"],
+          "description": "Unique category identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name for the category"
+        },
+        "subCategories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubCategory"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "SubCategory": {
+      "type": "object",
+      "required": ["id", "name", "parentCategory"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Unique sub-category identifier within parent"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name for the sub-category"
+        },
+        "parentCategory": {
+          "type": "string",
+          "enum": ["art", "photography"],
+          "description": "Reference to parent category ID"
+        }
+      }
+    },
+    "GalleryItem": {
+      "type": "object",
+      "required": ["id", "title", "slug", "type", "subCategory", "thumbnail", "fullImage", "dateCreated"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the gallery item"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Display title"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "URL-safe identifier"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["art", "photography"],
+          "description": "Main category type"
+        },
+        "subCategory": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Sub-category identifier"
+        },
+        "thumbnail": {
+          "type": "string",
+          "description": "Relative path to thumbnail image"
+        },
+        "fullImage": {
+          "type": "string",
+          "description": "Relative path to full-size image"
+        },
+        "dateCreated": {
+          "type": "string",
+          "format": "date",
+          "description": "Creation date in ISO 8601 format (YYYY-MM-DD)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description for the item"
+        },
+        "featured": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the item should be featured"
+        }
+      }
+    },
+    "ProductDetail": {
+      "type": "object",
+      "required": ["galleryItemId", "printOptions"],
+      "properties": {
+        "galleryItemId": {
+          "type": "string",
+          "description": "Reference to the GalleryItem.id"
+        },
+        "longDescription": {
+          "type": "string",
+          "description": "Extended description or story"
+        },
+        "printOptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of PrintOption IDs available for this item"
+        },
+        "frameOptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of FrameOption IDs available for this item"
+        },
+        "relatedItems": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of related GalleryItem IDs"
+        }
+      }
+    },
+    "PrintOption": {
+      "type": "object",
+      "required": ["id", "size", "sizeLabel", "price", "available"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the print option"
+        },
+        "size": {
+          "type": "string",
+          "pattern": "^[0-9]+x[0-9]+$",
+          "description": "Print dimensions (e.g., '8x10')"
+        },
+        "sizeLabel": {
+          "type": "string",
+          "description": "Human-readable size label"
+        },
+        "price": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Price in cents (USD)"
+        },
+        "available": {
+          "type": "boolean",
+          "description": "Whether this print option is currently available"
+        }
+      }
+    },
+    "FrameOption": {
+      "type": "object",
+      "required": ["id", "name", "description", "previewImage", "priceModifier"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the frame option"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name for the framing style"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of the framing style"
+        },
+        "previewImage": {
+          "type": "string",
+          "description": "Relative path to preview image"
+        },
+        "priceModifier": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Additional cost in cents (USD)"
+        }
+      }
+    }
+  }
+}
