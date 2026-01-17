@@ -32,6 +32,11 @@ A **slug** is the URL-friendly identifier for each gallery item. It's used in:
 | `city-lights` | City Lights |
 | `ocean-waves` | Ocean Waves |
 | `forest-path` | Forest Path |
+| `neon-dreams` | Neon Dreams |
+| `quiet-moment` | Quiet Moment |
+| `botanical-study` | Botanical Study |
+| `rainy-evening` | Rainy Evening |
+| `layers-of-time` | Layers of Time |
 
 ## Image Specifications
 

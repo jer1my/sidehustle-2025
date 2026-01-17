@@ -135,6 +135,56 @@ export const galleryItems = [
     dateCreated: '2024-08-12',
     description: 'Misty morning in an ancient forest, with light filtering through the canopy.',
     featured: true
+  },
+  {
+    id: 'gal-006',
+    title: 'Neon Dreams',
+    slug: 'neon-dreams',
+    type: 'art',
+    subCategory: 'digital',
+    dateCreated: '2025-01-10',
+    description: 'A vibrant exploration of color and light in the digital realm.',
+    featured: true
+  },
+  {
+    id: 'gal-007',
+    title: 'Quiet Moment',
+    slug: 'quiet-moment',
+    type: 'photography',
+    subCategory: 'portrait',
+    dateCreated: '2025-01-05',
+    description: 'An intimate portrait capturing a fleeting moment of reflection.',
+    featured: false
+  },
+  {
+    id: 'gal-008',
+    title: 'Botanical Study',
+    slug: 'botanical-study',
+    type: 'art',
+    subCategory: 'illustration',
+    dateCreated: '2024-12-28',
+    description: 'Detailed botanical illustration inspired by vintage scientific drawings.',
+    featured: true
+  },
+  {
+    id: 'gal-009',
+    title: 'Rainy Evening',
+    slug: 'rainy-evening',
+    type: 'photography',
+    subCategory: 'street',
+    dateCreated: '2024-12-20',
+    description: 'City streets glistening with rain, reflections dancing in puddles.',
+    featured: false
+  },
+  {
+    id: 'gal-010',
+    title: 'Layers of Time',
+    slug: 'layers-of-time',
+    type: 'art',
+    subCategory: 'mixed-media',
+    dateCreated: '2024-11-30',
+    description: 'Mixed media piece combining photography, paint, and found materials.',
+    featured: false
   }
 ];
 
@@ -214,6 +264,41 @@ export const productDetails = {
     printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
     frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
     relatedItems: ['gal-001', 'gal-004']
+  },
+  'gal-006': {
+    galleryItemId: 'gal-006',
+    longDescription: 'Neon Dreams pushes the boundaries of digital art, creating a vivid dreamscape of electric colors and impossible geometries. Each element pulses with energy, inviting the viewer into a world where reality bends to imagination.',
+    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
+    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
+    relatedItems: ['gal-002', 'gal-010']
+  },
+  'gal-007': {
+    galleryItemId: 'gal-007',
+    longDescription: 'Quiet Moment captures the beauty found in stillness. Natural light falls softly across the subject, revealing textures and emotions that often go unnoticed in our busy lives. A celebration of the intimate and the everyday.',
+    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
+    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
+    relatedItems: ['gal-009']
+  },
+  'gal-008': {
+    galleryItemId: 'gal-008',
+    longDescription: 'Botanical Study draws inspiration from the golden age of scientific illustration. Each leaf and petal is rendered with careful attention to detail, blending artistic expression with botanical accuracy. A tribute to the beauty of the natural world.',
+    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
+    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
+    relatedItems: ['gal-005', 'gal-004']
+  },
+  'gal-009': {
+    galleryItemId: 'gal-009',
+    longDescription: 'Rainy Evening transforms an ordinary city street into a canvas of light and reflection. The rain creates mirrors on the pavement, doubling the glow of neon signs and streetlights. An homage to the beauty found in urban moments we often rush past.',
+    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
+    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
+    relatedItems: ['gal-003', 'gal-007']
+  },
+  'gal-010': {
+    galleryItemId: 'gal-010',
+    longDescription: 'Layers of Time is a mixed media exploration of memory and history. Fragments of photographs, hand-painted elements, and found materials combine to create a rich tapestry of texture and meaning. Each layer reveals and conceals, inviting deeper contemplation.',
+    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
+    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
+    relatedItems: ['gal-002', 'gal-006']
   }
 };
 

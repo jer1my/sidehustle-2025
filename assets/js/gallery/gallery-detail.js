@@ -83,11 +83,11 @@ function renderProductDetail(item, detail) {
         <div class="product-detail-layout">
             <div class="product-images-column">
                 <!-- Large main image -->
-                <div class="product-image-main" data-src="${mainImage}"></div>
+                <div class="product-image-main" style="background-image: url('${mainImage}'); background-size: cover; background-position: center;"></div>
 
                 <!-- Smaller sample images in 2-column grid -->
                 <div class="product-thumbnails-grid">
-                    ${altImages.map((src, i) => `<div class="product-thumbnail" data-src="${src}"></div>`).join('')}
+                    ${altImages.map((src, i) => `<div class="product-thumbnail" style="background-image: url('${src}'); background-size: cover; background-position: center;"></div>`).join('')}
                 </div>
             </div>
 

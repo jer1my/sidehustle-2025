@@ -15,7 +15,7 @@ All UI changes must work in both light and dark modes. Test theme toggle behavio
 Follow a mobile-first approach. Test all changes on mobile, tablet, and desktop breakpoints. Use the existing grid system and responsive utilities rather than creating custom media queries.
 
 ### V. Design System Compliance
-Reference `docs/design-system.md` for all styling decisions. Follow established typography, color, and component patterns. The lab page (`lab.html`) serves as living documentation and a visual reference for all design system elements.
+**Always use existing components before creating new ones.** Reference `docs/design-system.md` and the lab page (`lab.html`) for available buttons, cards, typography, and UI patterns. Only create custom styles when no existing component fits the need. When in doubt, check the lab page first—if a similar element exists, use it.
 
 ### VI. Clean Up Unused Code
 When refactoring or replacing functionality, always remove obsolete code, files, and folders unless explicitly asked to keep a backup. Dead code creates confusion and maintenance burden. If backup is needed, clearly document it in CLAUDE.md under "Backup Files."
@@ -40,4 +40,4 @@ When refactoring or replacing functionality, always remove obsolete code, files,
 - Navigation changes must go through `assets/js/components/navigation-component.js` (single source of truth)
 - New CSS utilities should be added to `_utilities.css` and documented in the design system
 
-**Version**: 1.1.0 | **Ratified**: 2025-01-16 | **Last Amended**: 2025-01-16
+**Version**: 1.2.0 | **Ratified**: 2025-01-16 | **Last Amended**: 2026-01-16

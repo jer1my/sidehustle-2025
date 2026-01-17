@@ -722,21 +722,18 @@ body[data-theme="dark"] .card {
     outline: none;
 }
 
-.gallery-clear-btn {
-    padding: var(--space-2) var(--space-4);
-    background: transparent;
-    border: 1px solid var(--gallery-filter-border);
-    border-radius: var(--radius-sm);
-    color: var(--text-secondary);
-    font-size: var(--font-size-sm);
-    font-family: var(--font-family-primary);
-    cursor: pointer;
-    transition: all var(--transition-fast);
+/* Active state when filter/sort is applied */
+.gallery-filter-bar select.is-active {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
 }
 
-.gallery-clear-btn:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
+/* Match button height to form elements in filter bar */
+.gallery-filter-bar .button {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--font-size-sm);
+    margin: 0;
+    /* Keep pill shape from .button class */
 }
 
 /* Gallery Grid */
@@ -776,7 +773,8 @@ body[data-theme="dark"] .card {
 }
 
 .gallery-card:hover {
-    opacity: 0.8;
+    opacity: 0.9;
+    transform: scale(1.02);
 }
 
 .gallery-card:focus {
@@ -922,6 +920,13 @@ body[data-theme="dark"] .card {
     width: 100%;
     aspect-ratio: 3 / 4;
     background: rgba(220, 220, 220, 0.4);
+    transition: opacity var(--transition-fast, 0.15s ease), transform var(--transition-fast, 0.15s ease);
+    cursor: pointer;
+}
+
+.product-image-main:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
 }
 
 [data-theme="dark"] .product-image-main {
@@ -939,6 +944,13 @@ body[data-theme="dark"] .card {
     width: 100%;
     aspect-ratio: 3 / 4;
     background: rgba(220, 220, 220, 0.4);
+    transition: opacity var(--transition-fast, 0.15s ease), transform var(--transition-fast, 0.15s ease);
+    cursor: pointer;
+}
+
+.product-thumbnail:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
 }
 
 [data-theme="dark"] .product-thumbnail {

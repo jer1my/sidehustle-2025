@@ -58,8 +58,9 @@ export function init() {
     // Render the gallery
     renderGallery();
 
-    // Update clear button visibility
+    // Update UI states
     updateClearButtonVisibility();
+    updateActiveStates();
 }
 
 /**
@@ -102,6 +103,7 @@ function handleTypeChange(e) {
     saveState();
     renderGallery();
     updateClearButtonVisibility();
+    updateActiveStates();
 }
 
 /**
@@ -112,6 +114,7 @@ function handleSubCategoryChange(e) {
     saveState();
     renderGallery();
     updateClearButtonVisibility();
+    updateActiveStates();
 }
 
 /**
@@ -121,6 +124,8 @@ function handleSortChange(e) {
     currentSort = e.target.value;
     saveState();
     renderGallery();
+    updateClearButtonVisibility();
+    updateActiveStates();
 }
 
 /**
@@ -182,6 +187,7 @@ function clearFilters() {
     saveState();
     renderGallery();
     updateClearButtonVisibility();
+    updateActiveStates();
 }
 
 /**
@@ -195,6 +201,24 @@ function updateClearButtonVisibility() {
                             currentSort !== 'newest';
 
     clearButton.style.display = hasActiveFilters ? 'inline-block' : 'none';
+}
+
+/**
+ * Update active state styling on filter/sort controls
+ */
+function updateActiveStates() {
+    // Type filter
+    if (typeFilter) {
+        typeFilter.classList.toggle('is-active', currentFilter.type !== 'all');
+    }
+    // Sub-category filter
+    if (subCategoryFilter) {
+        subCategoryFilter.classList.toggle('is-active', currentFilter.subCategory !== 'all');
+    }
+    // Sort select
+    if (sortSelect) {
+        sortSelect.classList.toggle('is-active', currentSort !== 'newest');
+    }
 }
 
 /**
@@ -257,8 +281,11 @@ function createGalleryCard(item) {
     const subCategory = category?.subCategories.find(s => s.id === item.subCategory);
     const categoryLabel = subCategory ? subCategory.name : item.subCategory;
 
+    // Get main image path
+    const imagePath = getMainImagePath(item.slug);
+
     card.innerHTML = `
-        <div class="gallery-thumbnail"></div>
+        <div class="gallery-thumbnail" style="background-image: url('${imagePath}'); background-size: cover; background-position: center;"></div>
         <div class="gallery-card-info">
             <h3 class="gallery-card-title">${item.title}</h3>
             <p class="gallery-card-category">${categoryLabel}</p>

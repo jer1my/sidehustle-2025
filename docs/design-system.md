@@ -330,7 +330,7 @@ The gallery system provides a responsive grid layout for browsing art and photog
 ```css
 .gallery-filter-bar: Toolbar container with role="toolbar"
 .gallery-controls: Flex container for filter elements
-.gallery-clear-btn: Reset button (hidden when no filters active)
+Clear button uses standard .btn-accent.button classes
 ```
 
 **Filter Controls:**
@@ -365,7 +365,7 @@ The gallery system provides a responsive grid layout for browsing art and photog
         <select id="type-filter" aria-label="Filter by type">...</select>
         <select id="subcategory-filter" aria-label="Filter by category">...</select>
         <select id="sort-select" aria-label="Sort gallery">...</select>
-        <button id="clear-filters" class="gallery-clear-btn">Clear Filters</button>
+        <button id="clear-filters" class="btn-accent button">Clear Filters</button>
     </div>
 </div>
 <div class="gallery-container">

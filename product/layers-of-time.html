@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layers of Time - Side Hustle</title>
+
+    <!-- Meta Tags -->
+    <meta name="description" content="Mixed media piece combining photography, paint, and found materials.">
+    <meta name="author" content="Jerimy Brown">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Layers of Time - Side Hustle">
+    <meta property="og:description" content="Mixed media piece combining photography, paint, and found materials.">
+
+    <!-- Favicon -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts: Montserrat + Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+
+    <noscript>
+        <style>
+            body {
+                opacity: 1 !important;
+            }
+        </style>
+    </noscript>
+</head>
+<body>
+    <script>
+        // Apply theme immediately to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
+    <!-- Fullpage Product Detail -->
+    <main class="product-takeover">
+        <!-- Close Button -->
+        <a href="../shop-all.html" class="product-close-btn" aria-label="Close and return to gallery">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+
+        <div id="product-detail" class="product-detail" data-product-slug="layers-of-time">
+            <!-- Content will be rendered by JavaScript -->
+            <noscript>
+                <p>Please enable JavaScript to view product details.</p>
+                <a href="../shop-all.html">Return to Gallery</a>
+            </noscript>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <!-- Core modules -->
+    <script src="../assets/js/core/config.js"></script>
+    <script src="../assets/js/core/theme-system.js"></script>
+
+    <!-- Utilities -->
+    <script src="../assets/js/utils/helpers.js"></script>
+    <script src="../assets/js/utils/animations.js"></script>
+
+    <!-- Gallery Detail Module -->
+    <script type="module" src="../assets/js/gallery/gallery-detail.js"></script>
+
+    <!-- Main initialization -->
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
