@@ -947,118 +947,195 @@ body[data-theme="dark"] .card {
     margin-bottom: var(--space-8);
 }
 
-/* Print Options */
-.print-options {
+/* Purchase Options */
+.purchase-options {
     margin-bottom: var(--space-8);
 }
 
-.print-options h3,
-.frame-options h3 {
+.purchase-options h3 {
     font-size: var(--typo-h4-size);
     font-weight: var(--font-weight-semibold);
     margin-bottom: var(--space-4);
     color: var(--text-primary);
 }
 
-.print-options-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.print-options-table th,
-.print-options-table td {
-    padding: var(--space-3) var(--space-4);
-    text-align: left;
-    border-bottom: 1px solid var(--print-option-border);
-}
-
-.print-options-table th {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-secondary);
-}
-
-.print-options-table td {
-    font-size: var(--font-size-sm);
-    color: var(--text-primary);
-}
-
-.print-price {
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-accent);
-}
-
-.print-unavailable {
-    color: var(--text-tertiary);
-    font-style: italic;
-}
-
-/* Frame Options */
-.frame-options {
-    margin-bottom: var(--space-8);
-}
-
-.frame-options-grid {
+/* Type Cards Grid */
+.purchase-options__types {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-4);
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
 }
 
-.frame-option {
+.purchase-type-card {
+    padding: var(--space-4);
+    border: 1px solid var(--color-neutral-200);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
     text-align: center;
-    padding: var(--space-4) 0;
-    border: none;
-    transition: opacity var(--transition-fast);
 }
 
-.frame-option:hover {
-    opacity: 0.8;
+.purchase-type-card:hover {
+    border-color: var(--color-neutral-400);
 }
 
-.frame-option-image {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-    border-radius: 0;
-    margin-bottom: var(--space-3);
-    background: rgba(220, 220, 220, 0.4);
+.purchase-type-card--selected {
+    border-color: var(--color-accent);
+    background-color: rgba(5, 150, 105, 0.05);
 }
 
-[data-theme="dark"] .frame-option-image {
-    background: rgba(30, 30, 30, 0.6);
+[data-theme="dark"] .purchase-type-card {
+    border-color: var(--color-neutral-700);
 }
 
-.frame-option-name {
+[data-theme="dark"] .purchase-type-card:hover {
+    border-color: var(--color-neutral-500);
+}
+
+[data-theme="dark"] .purchase-type-card--selected {
+    border-color: var(--color-accent);
+    background-color: rgba(184, 134, 11, 0.08);
+}
+
+.purchase-type-card__label {
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     color: var(--text-primary);
     margin-bottom: var(--space-1);
 }
 
-.frame-option-price {
-    font-size: var(--font-size-xs);
+.purchase-type-card__price {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
     color: var(--color-accent);
 }
 
-.frame-option-desc {
+/* Sub-option Pills */
+.purchase-sub-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+}
+
+.purchase-sub-options__label {
+    width: 100%;
     font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--text-secondary);
+    margin-bottom: var(--space-1);
+}
+
+.purchase-pill {
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--color-neutral-200);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+    background: transparent;
+    font-family: var(--font-family-primary);
+}
+
+.purchase-pill:hover {
+    border-color: var(--color-neutral-400);
+}
+
+.purchase-pill--selected {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    color: var(--text-inverse);
+}
+
+.purchase-pill--selected:hover {
+    border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .purchase-pill {
+    border-color: var(--color-neutral-700);
+}
+
+[data-theme="dark"] .purchase-pill:hover {
+    border-color: var(--color-neutral-500);
+}
+
+[data-theme="dark"] .purchase-pill--selected {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    color: #171717;
+}
+
+/* Total Row */
+.purchase-options__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--color-neutral-200);
+    margin-bottom: var(--space-4);
+}
+
+[data-theme="dark"] .purchase-options__total {
+    border-top-color: var(--color-neutral-700);
+}
+
+.purchase-options__total-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.purchase-options__total-price {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+}
+
+.purchase-options__tax-note {
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    margin-top: var(--space-1);
+}
+
+/* Add to Cart Button */
+.purchase-options__add-btn {
+    width: 100%;
+    margin-bottom: var(--space-4);
+}
+
+/* Frame Note */
+.purchase-options__frame-note {
+    font-size: var(--font-size-xs);
+    font-style: italic;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--space-3);
     margin-top: var(--space-2);
 }
 
-/* Coming Soon Fallback */
-.options-coming-soon {
-    padding: var(--space-8);
+/* Added confirmation */
+.purchase-options__confirmation {
     text-align: center;
-    background: rgba(220, 220, 220, 0.4);
-    border-radius: 0;
-    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-accent);
+    margin-top: var(--space-2);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
 }
 
-[data-theme="dark"] .options-coming-soon {
-    background: rgba(30, 30, 30, 0.6);
+.purchase-options__confirmation--visible {
+    opacity: 1;
+}
+
+/* Mobile: single column type cards */
+@media (max-width: 480px) {
+    .purchase-options__types {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Mobile adjustments for product detail */

@@ -275,9 +275,6 @@
   /* Product Detail Page */
   --product-detail-max-width: 1000px;
   --product-image-max-height: 70vh;
-  --print-option-border: var(--color-neutral-200);
-  --frame-option-size: 120px;
-
   /* Cart */
   --cart-max-width: 900px;
 }
@@ -317,7 +314,6 @@
   --gallery-card-bg: var(--bg-primary);
   --gallery-card-border: var(--color-neutral-700);
   --gallery-card-title-color: var(--text-primary);
-  --print-option-border: var(--color-neutral-700);
 }
 
 /* ===================

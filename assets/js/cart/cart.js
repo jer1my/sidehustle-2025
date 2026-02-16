@@ -4,6 +4,21 @@
  */
 
 const CART_STORAGE_KEY = 'sidehustle_cart';
+const CART_VERSION_KEY = 'sidehustle_cart_version';
+const CART_VERSION = 2;
+
+// Migrate old cart data if version mismatch
+(function migrateCart() {
+    try {
+        const version = parseInt(localStorage.getItem(CART_VERSION_KEY), 10);
+        if (version !== CART_VERSION) {
+            localStorage.removeItem(CART_STORAGE_KEY);
+            localStorage.setItem(CART_VERSION_KEY, CART_VERSION.toString());
+        }
+    } catch (e) {
+        // Ignore storage errors
+    }
+})();
 
 // Cart event types
 export const CART_EVENTS = {
@@ -16,12 +31,12 @@ export const CART_EVENTS = {
 /**
  * Generate a unique cart item ID
  * @param {string} productId - The product/gallery item ID
- * @param {string} printSize - The selected print size
- * @param {string} frameOption - The selected frame option
+ * @param {string} optionId - The selected purchase option ID
+ * @param {string} subOption - The selected sub-option ID (or empty string)
  * @returns {string} Unique cart item ID
  */
-function generateCartItemId(productId, printSize, frameOption) {
-    return `${productId}_${printSize}_${frameOption}`;
+function generateCartItemId(productId, optionId, subOption) {
+    return `${productId}_${optionId}_${subOption || 'none'}`;
 }
 
 /**
@@ -74,18 +89,18 @@ function dispatchCartEvent(eventType, detail = {}) {
  * @param {string} item.slug - The product slug (for image paths)
  * @param {string} item.title - The product title
  * @param {string} item.type - Product type (art/photography)
- * @param {string} item.printSize - Selected print size ID
- * @param {string} item.printSizeLabel - Human-readable size label
- * @param {string} item.frameOption - Selected frame option ID
- * @param {string} item.frameOptionName - Human-readable frame name
- * @param {number} item.printPrice - Print price in cents
- * @param {number} item.framePrice - Frame price modifier in cents
+ * @param {string} item.optionId - Selected purchase option ID
+ * @param {string} item.optionLabel - Human-readable option label
+ * @param {string} [item.subOption] - Selected sub-option ID
+ * @param {string} [item.subOptionLabel] - Human-readable sub-option label
+ * @param {string} [item.sizeNote] - Size note (e.g., "13×19")
+ * @param {number} item.price - Price in cents
  * @param {number} [item.quantity=1] - Quantity to add
  * @returns {Object} The added/updated cart item
  */
 export function addItem(item) {
     const cart = getCart();
-    const cartItemId = generateCartItemId(item.productId, item.printSize, item.frameOption);
+    const cartItemId = generateCartItemId(item.productId, item.optionId, item.subOption);
 
     // Check if item already exists in cart
     const existingIndex = cart.findIndex(cartItem => cartItem.id === cartItemId);
@@ -105,12 +120,12 @@ export function addItem(item) {
         slug: item.slug,
         title: item.title,
         type: item.type,
-        printSize: item.printSize,
-        printSizeLabel: item.printSizeLabel,
-        frameOption: item.frameOption,
-        frameOptionName: item.frameOptionName,
-        printPrice: item.printPrice,
-        framePrice: item.framePrice,
+        optionId: item.optionId,
+        optionLabel: item.optionLabel,
+        subOption: item.subOption || '',
+        subOptionLabel: item.subOptionLabel || '',
+        sizeNote: item.sizeNote || '',
+        price: item.price,
         quantity: item.quantity || 1,
         addedAt: new Date().toISOString()
     };
@@ -122,29 +137,27 @@ export function addItem(item) {
 }
 
 /**
- * Add item with default options (8x10, no frame)
+ * Add item with default options (Digital File, Square)
  * Used for quick "Add to Cart" from product cards
  * @param {Object} galleryItem - The gallery item from gallery-data.js
- * @param {Array} printOptions - Available print options
- * @param {Array} frameOptions - Available frame options
+ * @param {Array} purchaseOptions - Available purchase options
  * @returns {Object} The added cart item
  */
-export function addItemWithDefaults(galleryItem, printOptions, frameOptions) {
-    // Default to smallest print size (8x10) and no frame
-    const defaultPrint = printOptions.find(p => p.id === 'print-8x10') || printOptions[0];
-    const defaultFrame = frameOptions.find(f => f.id === 'frame-none') || frameOptions[0];
+export function addItemWithDefaults(galleryItem, purchaseOptions) {
+    const defaultOption = purchaseOptions[0];
+    const defaultSub = defaultOption.subOptions?.[0];
 
     return addItem({
         productId: galleryItem.id,
         slug: galleryItem.slug,
         title: galleryItem.title,
         type: galleryItem.type,
-        printSize: defaultPrint.id,
-        printSizeLabel: defaultPrint.sizeLabel,
-        frameOption: defaultFrame.id,
-        frameOptionName: defaultFrame.name,
-        printPrice: defaultPrint.price,
-        framePrice: defaultFrame.priceModifier,
+        optionId: defaultOption.id,
+        optionLabel: defaultOption.label,
+        subOption: defaultSub?.id || '',
+        subOptionLabel: defaultSub?.label || '',
+        sizeNote: defaultSub?.sizeNote || defaultOption.sizeNote || '',
+        price: defaultOption.price,
         quantity: 1
     });
 }
@@ -199,8 +212,7 @@ export function updateQuantity(cartItemId, quantity) {
 export function getCartTotal() {
     const cart = getCart();
     return cart.reduce((total, item) => {
-        const itemPrice = (item.printPrice + item.framePrice) * item.quantity;
-        return total + itemPrice;
+        return total + item.price * item.quantity;
     }, 0);
 }
 
@@ -265,5 +277,5 @@ export function formatPrice(cents) {
  * @returns {number} Subtotal in cents
  */
 export function getItemSubtotal(item) {
-    return (item.printPrice + item.framePrice) * item.quantity;
+    return item.price * item.quantity;
 }

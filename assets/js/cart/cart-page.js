@@ -110,8 +110,16 @@ function renderCartItems(cart) {
  */
 function createCartItemHTML(item) {
     const imagePath = getMainImagePath(item.slug);
-    const itemPrice = item.printPrice + item.framePrice;
     const subtotal = getItemSubtotal(item);
+
+    // Build option description line
+    let optionDesc = item.optionLabel;
+    if (item.subOptionLabel) {
+        optionDesc += ` · ${item.subOptionLabel}`;
+    }
+    if (item.sizeNote) {
+        optionDesc += ` (${item.sizeNote})`;
+    }
 
     return `
         <li class="cart-item" data-cart-item-id="${item.id}">
@@ -119,10 +127,10 @@ function createCartItemHTML(item) {
             <div class="cart-item__details">
                 <h3 class="cart-item__title">${item.title}</h3>
                 <p class="cart-item__options">
-                    ${item.printSizeLabel} · ${item.frameOptionName}
+                    ${optionDesc}
                 </p>
                 <p class="cart-item__price">
-                    ${formatPrice(itemPrice)} each
+                    ${formatPrice(item.price)} each
                 </p>
             </div>
             <div class="cart-item__actions">
@@ -216,15 +224,20 @@ export function getPayPalOrderData() {
                     }
                 }
             },
-            items: cart.map(item => ({
-                name: `${item.title} - ${item.printSizeLabel}`,
-                description: item.frameOptionName,
-                unit_amount: {
-                    currency_code: 'USD',
-                    value: ((item.printPrice + item.framePrice) / 100).toFixed(2)
-                },
-                quantity: item.quantity.toString()
-            }))
+            items: cart.map(item => {
+                let desc = item.optionLabel;
+                if (item.subOptionLabel) desc += ` - ${item.subOptionLabel}`;
+                if (item.sizeNote) desc += ` (${item.sizeNote})`;
+                return {
+                    name: item.title,
+                    description: desc,
+                    unit_amount: {
+                        currency_code: 'USD',
+                        value: (item.price / 100).toFixed(2)
+                    },
+                    quantity: item.quantity.toString()
+                };
+            })
         }]
     };
 }

@@ -188,118 +188,66 @@ export const galleryItems = [
   }
 ];
 
-// Standard Print Options (shared across all items)
-export const printOptions = [
-  { id: 'print-8x10', size: '8x10', sizeLabel: '8" × 10" (Small)', price: 4500, available: true },
-  { id: 'print-11x14', size: '11x14', sizeLabel: '11" × 14" (Medium)', price: 7500, available: true },
-  { id: 'print-16x20', size: '16x20', sizeLabel: '16" × 20" (Large)', price: 12500, available: true },
-  { id: 'print-24x30', size: '24x30', sizeLabel: '24" × 30" (X-Large)', price: 22500, available: true }
-];
-
-// Standard Frame Options (shared across all items)
-export const frameOptions = [
+// ===========================================
+// Purchase Options (shared across all items)
+// ===========================================
+export const purchaseOptions = [
   {
-    id: 'frame-none',
-    name: 'Print Only',
-    description: 'Unframed print, ready for your own framing',
-    previewImage: 'assets/images/frames/print-only.svg',
-    priceModifier: 0
+    id: 'digital',
+    label: 'Digital File',
+    price: 2000,
+    subType: 'aspect-ratio',
+    subOptions: [
+      { id: 'square', label: 'Square' },
+      { id: 'portrait', label: 'Portrait' },
+      { id: 'landscape', label: 'Landscape' }
+    ]
   },
   {
-    id: 'frame-gallery-wrap',
-    name: 'Gallery Wrap',
-    description: 'Canvas stretched over wooden frame, ready to hang',
-    previewImage: 'assets/images/frames/gallery-wrap.svg',
-    priceModifier: 5000
+    id: 'print',
+    label: 'Print Only',
+    price: 5000,
+    subType: 'aspect-ratio',
+    subOptions: [
+      { id: 'square', label: 'Square' },
+      { id: 'portrait', label: 'Portrait' },
+      { id: 'landscape', label: 'Landscape' }
+    ]
   },
   {
-    id: 'frame-classic-black',
-    name: 'Classic Black Frame',
-    description: 'Timeless black wood frame with white mat',
-    previewImage: 'assets/images/frames/classic-black.svg',
-    priceModifier: 7500
+    id: 'framed-square',
+    label: 'Framed Print (Square)',
+    price: 17500,
+    sizeNote: '13×13',
+    subType: null,
+    subOptions: []
   },
   {
-    id: 'frame-natural-wood',
-    name: 'Natural Wood Frame',
-    description: 'Light oak frame with natural finish',
-    previewImage: 'assets/images/frames/natural-wood.svg',
-    priceModifier: 8500
+    id: 'framed-rect',
+    label: 'Framed Print (Portrait/Landscape)',
+    price: 22500,
+    subType: 'orientation',
+    subOptions: [
+      { id: 'portrait', label: 'Portrait', sizeNote: '13×19' },
+      { id: 'landscape', label: 'Landscape', sizeNote: '19×13' }
+    ]
   }
 ];
 
-// Product Details (extended info for detail pages)
-export const productDetails = {
-  'gal-001': {
-    galleryItemId: 'gal-001',
-    longDescription: 'This photograph was captured during golden hour in the Sierra Nevada mountain range. The warm light of the setting sun creates a magical glow across the peaks, while the valleys below are shrouded in soft shadow. A moment of perfect stillness frozen in time.',
-    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
-    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
-    relatedItems: ['gal-004', 'gal-005']
-  },
-  'gal-002': {
-    galleryItemId: 'gal-002',
-    longDescription: 'Abstract Flow explores the concept of movement and energy through fluid shapes and vibrant colors. Created using a combination of digital techniques, this piece invites viewers to find their own meaning in the interplay of form and color.',
-    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
-    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
-    relatedItems: []
-  },
-  'gal-003': {
-    galleryItemId: 'gal-003',
-    longDescription: 'City Lights captures the rhythm of urban life through the glowing windows of a nighttime skyline. Each lit window represents a story, a life, a moment happening simultaneously across the city. The contrast between the dark silhouettes and warm light creates a sense of intimacy within the vast urban landscape.',
-    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
-    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
-    relatedItems: []
-  },
-  'gal-004': {
-    galleryItemId: 'gal-004',
-    longDescription: 'Ocean Waves captures the timeless dance between sea and sky. The gentle rhythm of the waves creates a meditative quality, while the soft colors of the sky reflect off the water surface. A reminder of nature\'s endless cycles and the peace found at the water\'s edge.',
-    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
-    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
-    relatedItems: ['gal-001', 'gal-005']
-  },
-  'gal-005': {
-    galleryItemId: 'gal-005',
-    longDescription: 'Forest Path invites you to step into an ancient woodland on a misty morning. The winding path leads deeper into the trees, where light filters through the canopy creating an ethereal atmosphere. A journey into the heart of nature\'s quiet sanctuary.',
-    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
-    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
-    relatedItems: ['gal-001', 'gal-004']
-  },
-  'gal-006': {
-    galleryItemId: 'gal-006',
-    longDescription: 'Neon Dreams pushes the boundaries of digital art, creating a vivid dreamscape of electric colors and impossible geometries. Each element pulses with energy, inviting the viewer into a world where reality bends to imagination.',
-    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
-    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
-    relatedItems: ['gal-002', 'gal-010']
-  },
-  'gal-007': {
-    galleryItemId: 'gal-007',
-    longDescription: 'Quiet Moment captures the beauty found in stillness. Natural light falls softly across the subject, revealing textures and emotions that often go unnoticed in our busy lives. A celebration of the intimate and the everyday.',
-    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
-    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
-    relatedItems: ['gal-009']
-  },
-  'gal-008': {
-    galleryItemId: 'gal-008',
-    longDescription: 'Botanical Study draws inspiration from the golden age of scientific illustration. Each leaf and petal is rendered with careful attention to detail, blending artistic expression with botanical accuracy. A tribute to the beauty of the natural world.',
-    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
-    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
-    relatedItems: ['gal-005', 'gal-004']
-  },
-  'gal-009': {
-    galleryItemId: 'gal-009',
-    longDescription: 'Rainy Evening transforms an ordinary city street into a canvas of light and reflection. The rain creates mirrors on the pavement, doubling the glow of neon signs and streetlights. An homage to the beauty found in urban moments we often rush past.',
-    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
-    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
-    relatedItems: ['gal-003', 'gal-007']
-  },
-  'gal-010': {
-    galleryItemId: 'gal-010',
-    longDescription: 'Layers of Time is a mixed media exploration of memory and history. Fragments of photographs, hand-painted elements, and found materials combine to create a rich tapestry of texture and meaning. Each layer reveals and conceals, inviting deeper contemplation.',
-    printOptions: ['print-8x10', 'print-11x14', 'print-16x20', 'print-24x30'],
-    frameOptions: ['frame-none', 'frame-gallery-wrap', 'frame-classic-black', 'frame-natural-wood'],
-    relatedItems: ['gal-002', 'gal-006']
-  }
+export const frameNote = 'Frames made in USA with 99% UV protection cover.';
+
+// Long descriptions for detail pages
+export const longDescriptions = {
+  'gal-001': 'This photograph was captured during golden hour in the Sierra Nevada mountain range. The warm light of the setting sun creates a magical glow across the peaks, while the valleys below are shrouded in soft shadow. A moment of perfect stillness frozen in time.',
+  'gal-002': 'Abstract Flow explores the concept of movement and energy through fluid shapes and vibrant colors. Created using a combination of digital techniques, this piece invites viewers to find their own meaning in the interplay of form and color.',
+  'gal-003': 'City Lights captures the rhythm of urban life through the glowing windows of a nighttime skyline. Each lit window represents a story, a life, a moment happening simultaneously across the city. The contrast between the dark silhouettes and warm light creates a sense of intimacy within the vast urban landscape.',
+  'gal-004': 'Ocean Waves captures the timeless dance between sea and sky. The gentle rhythm of the waves creates a meditative quality, while the soft colors of the sky reflect off the water surface. A reminder of nature\'s endless cycles and the peace found at the water\'s edge.',
+  'gal-005': 'Forest Path invites you to step into an ancient woodland on a misty morning. The winding path leads deeper into the trees, where light filters through the canopy creating an ethereal atmosphere. A journey into the heart of nature\'s quiet sanctuary.',
+  'gal-006': 'Neon Dreams pushes the boundaries of digital art, creating a vivid dreamscape of electric colors and impossible geometries. Each element pulses with energy, inviting the viewer into a world where reality bends to imagination.',
+  'gal-007': 'Quiet Moment captures the beauty found in stillness. Natural light falls softly across the subject, revealing textures and emotions that often go unnoticed in our busy lives. A celebration of the intimate and the everyday.',
+  'gal-008': 'Botanical Study draws inspiration from the golden age of scientific illustration. Each leaf and petal is rendered with careful attention to detail, blending artistic expression with botanical accuracy. A tribute to the beauty of the natural world.',
+  'gal-009': 'Rainy Evening transforms an ordinary city street into a canvas of light and reflection. The rain creates mirrors on the pavement, doubling the glow of neon signs and streetlights. An homage to the beauty found in urban moments we often rush past.',
+  'gal-010': 'Layers of Time is a mixed media exploration of memory and history. Fragments of photographs, hand-painted elements, and found materials combine to create a rich tapestry of texture and meaning. Each layer reveals and conceals, inviting deeper contemplation.'
 };
 
 // Helper function to get all subcategories for a category
@@ -313,9 +261,14 @@ export function getItemBySlug(slug) {
   return galleryItems.find(item => item.slug === slug);
 }
 
-// Helper function to get product detail by gallery item ID
-export function getProductDetail(galleryItemId) {
-  return productDetails[galleryItemId];
+// Helper function to get long description by gallery item ID
+export function getLongDescription(galleryItemId) {
+  return longDescriptions[galleryItemId] || '';
+}
+
+// Helper function to get a purchase option by ID
+export function getPurchaseOption(optionId) {
+  return purchaseOptions.find(opt => opt.id === optionId);
 }
 
 // Helper function to format price (cents to dollars)
