@@ -77,15 +77,39 @@ function renderProductDetail(item) {
     const mainImage = getMainImagePath(item.slug, IMAGE_BASE_PATH);
     const altImages = getAltImagePaths(item.slug, IMAGE_BASE_PATH);
 
+    // Overlay info for detail images
+    const overlayLabels = [
+        { label: 'Square', meta: 'Digital · Print · Framed 13×13' },
+        { label: 'Portrait', meta: 'Digital · Print · Framed 13×19' },
+        { label: 'Landscape', meta: 'Digital · Print · Framed 19×13' },
+        { label: 'Framed Square', meta: '13×13 · Made in USA · 99% UV' },
+        { label: 'Framed Portrait', meta: '13×19 · Made in USA · 99% UV' }
+    ];
+
     container.innerHTML = `
         <div class="product-detail-layout">
             <div class="product-images-column">
                 <!-- Large main image -->
-                <div class="product-image-main" style="background-image: url('${mainImage}'); background-size: cover; background-position: center;"></div>
+                <div class="product-image-main">
+                    <div class="product-image-main__bg" style="background-image: url('${mainImage}');"></div>
+                    <div class="product-image-overlay">
+                        <p class="product-image-overlay__label">Available Formats</p>
+                        <p class="product-image-overlay__meta">Digital · Print · Framed</p>
+                    </div>
+                </div>
 
                 <!-- Smaller sample images in 2-column grid -->
                 <div class="product-thumbnails-grid">
-                    ${altImages.map(src => `<div class="product-thumbnail" style="background-image: url('${src}'); background-size: cover; background-position: center;"></div>`).join('')}
+                    ${altImages.map((src, i) => {
+                        const info = overlayLabels[i] || overlayLabels[0];
+                        return `<div class="product-thumbnail">
+                            <div class="product-thumbnail__bg" style="background-image: url('${src}');"></div>
+                            <div class="product-image-overlay">
+                                <p class="product-image-overlay__label">${info.label}</p>
+                                <p class="product-image-overlay__meta">${info.meta}</p>
+                            </div>
+                        </div>`;
+                    }).join('')}
                 </div>
             </div>
 
@@ -134,6 +158,8 @@ function renderPurchaseOptions() {
                 ${subOptionsHTML}
             </div>
 
+            <div class="purchase-frame-color__container"></div>
+
             <div class="purchase-options__frame-note-container" style="display: none;">
                 <p class="purchase-options__frame-note">${frameNote}</p>
             </div>
@@ -177,6 +203,29 @@ function renderSubOptions(option) {
 }
 
 /**
+ * Render frame color pills
+ * @param {Object} option - Purchase option
+ * @returns {string} HTML string
+ */
+function renderFrameColors(option) {
+    if (!option.frameColors || option.frameColors.length === 0) {
+        return '';
+    }
+
+    const pills = option.frameColors.map((fc, i) => `
+        <button class="purchase-pill${i === 0 ? ' purchase-pill--selected' : ''}"
+                data-frame-color-id="${fc.id}">${fc.label}</button>
+    `).join('');
+
+    return `
+        <div class="purchase-sub-options">
+            <span class="purchase-sub-options__label">Frame Color</span>
+            ${pills}
+        </div>
+    `;
+}
+
+/**
  * Initialize purchase option interactions
  * @param {Object} item - Gallery item
  */
@@ -187,9 +236,11 @@ function initPurchaseInteractions(item) {
     // State
     let selectedOptionId = purchaseOptions[0].id;
     let selectedSubId = purchaseOptions[0].subOptions?.[0]?.id || '';
+    let selectedFrameColorId = '';
 
     const typeCards = container.querySelectorAll('.purchase-type-card');
     const subContainer = container.querySelector('.purchase-sub-options__container');
+    const frameColorContainer = container.querySelector('.purchase-frame-color__container');
     const frameNoteContainer = container.querySelector('.purchase-options__frame-note-container');
     const totalPrice = container.querySelector('.purchase-options__total-price');
     const addBtn = container.querySelector('.purchase-options__add-btn');
@@ -205,6 +256,12 @@ function initPurchaseInteractions(item) {
         return opt.subOptions.find(s => s.id === selectedSubId) || opt.subOptions[0];
     }
 
+    function getSelectedFrameColor() {
+        const opt = getSelectedOption();
+        if (!opt || !opt.frameColors?.length) return null;
+        return opt.frameColors.find(fc => fc.id === selectedFrameColorId) || opt.frameColors[0];
+    }
+
     function updatePrice() {
         const opt = getSelectedOption();
         totalPrice.textContent = formatPrice(opt.price);
@@ -215,20 +272,28 @@ function initPurchaseInteractions(item) {
         frameNoteContainer.style.display = isFramed ? 'block' : 'none';
     }
 
-    function updateSubOptions() {
-        const opt = getSelectedOption();
-        // Reset selected sub-option
-        selectedSubId = opt.subOptions?.[0]?.id || '';
-        subContainer.innerHTML = renderSubOptions(opt);
-
-        // Bind pill clicks
-        subContainer.querySelectorAll('.purchase-pill').forEach(pill => {
+    function bindPillClicks(parent, dataAttr, callback) {
+        parent.querySelectorAll('.purchase-pill').forEach(pill => {
             pill.addEventListener('click', () => {
-                subContainer.querySelectorAll('.purchase-pill').forEach(p => p.classList.remove('purchase-pill--selected'));
+                parent.querySelectorAll('.purchase-pill').forEach(p => p.classList.remove('purchase-pill--selected'));
                 pill.classList.add('purchase-pill--selected');
-                selectedSubId = pill.dataset.subId;
+                callback(pill.dataset[dataAttr]);
             });
         });
+    }
+
+    function updateSubOptions() {
+        const opt = getSelectedOption();
+        selectedSubId = opt.subOptions?.[0]?.id || '';
+        subContainer.innerHTML = renderSubOptions(opt);
+        bindPillClicks(subContainer, 'subId', id => { selectedSubId = id; });
+    }
+
+    function updateFrameColors() {
+        const opt = getSelectedOption();
+        selectedFrameColorId = opt.frameColors?.[0]?.id || '';
+        frameColorContainer.innerHTML = renderFrameColors(opt);
+        bindPillClicks(frameColorContainer, 'frameColorId', id => { selectedFrameColorId = id; });
     }
 
     // Type card clicks
@@ -239,24 +304,20 @@ function initPurchaseInteractions(item) {
             selectedOptionId = card.dataset.optionId;
 
             updateSubOptions();
+            updateFrameColors();
             updatePrice();
             updateFrameNote();
         });
     });
 
-    // Initial sub-option pill clicks
-    subContainer.querySelectorAll('.purchase-pill').forEach(pill => {
-        pill.addEventListener('click', () => {
-            subContainer.querySelectorAll('.purchase-pill').forEach(p => p.classList.remove('purchase-pill--selected'));
-            pill.classList.add('purchase-pill--selected');
-            selectedSubId = pill.dataset.subId;
-        });
-    });
+    // Initial pill bindings
+    bindPillClicks(subContainer, 'subId', id => { selectedSubId = id; });
 
     // Add to Cart
     addBtn.addEventListener('click', () => {
         const opt = getSelectedOption();
         const sub = getSelectedSubOption();
+        const fc = getSelectedFrameColor();
 
         addItem({
             productId: item.id,
@@ -268,6 +329,8 @@ function initPurchaseInteractions(item) {
             subOption: sub?.id || '',
             subOptionLabel: sub?.label || '',
             sizeNote: sub?.sizeNote || opt.sizeNote || '',
+            frameColor: fc?.id || '',
+            frameColorLabel: fc?.label || '',
             price: opt.price,
             quantity: 1
         });
@@ -279,8 +342,9 @@ function initPurchaseInteractions(item) {
         }, 2000);
     });
 
-    // Set initial frame note state
+    // Set initial states
     updateFrameNote();
+    updateFrameColors();
 }
 
 // Auto-initialize if product-detail element exists

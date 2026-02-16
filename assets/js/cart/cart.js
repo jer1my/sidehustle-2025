@@ -5,7 +5,7 @@
 
 const CART_STORAGE_KEY = 'sidehustle_cart';
 const CART_VERSION_KEY = 'sidehustle_cart_version';
-const CART_VERSION = 2;
+const CART_VERSION = 3;
 
 // Migrate old cart data if version mismatch
 (function migrateCart() {
@@ -33,10 +33,11 @@ export const CART_EVENTS = {
  * @param {string} productId - The product/gallery item ID
  * @param {string} optionId - The selected purchase option ID
  * @param {string} subOption - The selected sub-option ID (or empty string)
+ * @param {string} frameColor - The selected frame color ID (or empty string)
  * @returns {string} Unique cart item ID
  */
-function generateCartItemId(productId, optionId, subOption) {
-    return `${productId}_${optionId}_${subOption || 'none'}`;
+function generateCartItemId(productId, optionId, subOption, frameColor) {
+    return `${productId}_${optionId}_${subOption || 'none'}_${frameColor || 'none'}`;
 }
 
 /**
@@ -94,13 +95,15 @@ function dispatchCartEvent(eventType, detail = {}) {
  * @param {string} [item.subOption] - Selected sub-option ID
  * @param {string} [item.subOptionLabel] - Human-readable sub-option label
  * @param {string} [item.sizeNote] - Size note (e.g., "13×19")
+ * @param {string} [item.frameColor] - Selected frame color ID
+ * @param {string} [item.frameColorLabel] - Human-readable frame color label
  * @param {number} item.price - Price in cents
  * @param {number} [item.quantity=1] - Quantity to add
  * @returns {Object} The added/updated cart item
  */
 export function addItem(item) {
     const cart = getCart();
-    const cartItemId = generateCartItemId(item.productId, item.optionId, item.subOption);
+    const cartItemId = generateCartItemId(item.productId, item.optionId, item.subOption, item.frameColor);
 
     // Check if item already exists in cart
     const existingIndex = cart.findIndex(cartItem => cartItem.id === cartItemId);
@@ -125,6 +128,8 @@ export function addItem(item) {
         subOption: item.subOption || '',
         subOptionLabel: item.subOptionLabel || '',
         sizeNote: item.sizeNote || '',
+        frameColor: item.frameColor || '',
+        frameColorLabel: item.frameColorLabel || '',
         price: item.price,
         quantity: item.quantity || 1,
         addedAt: new Date().toISOString()

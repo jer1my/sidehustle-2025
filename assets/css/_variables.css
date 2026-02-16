@@ -273,7 +273,7 @@
   --gallery-thumbnail-aspect: var(--hero-frame-aspect);
 
   /* Product Detail Page */
-  --product-detail-max-width: 1000px;
+  --product-detail-max-width: var(--container-max-width);
   --product-image-max-height: 70vh;
   /* Cart */
   --cart-max-width: 900px;

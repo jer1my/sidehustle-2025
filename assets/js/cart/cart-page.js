@@ -120,6 +120,9 @@ function createCartItemHTML(item) {
     if (item.sizeNote) {
         optionDesc += ` (${item.sizeNote})`;
     }
+    if (item.frameColorLabel) {
+        optionDesc += ` · ${item.frameColorLabel}`;
+    }
 
     return `
         <li class="cart-item" data-cart-item-id="${item.id}">
@@ -228,6 +231,7 @@ export function getPayPalOrderData() {
                 let desc = item.optionLabel;
                 if (item.subOptionLabel) desc += ` - ${item.subOptionLabel}`;
                 if (item.sizeNote) desc += ` (${item.sizeNote})`;
+                if (item.frameColorLabel) desc += ` - ${item.frameColorLabel}`;
                 return {
                     name: item.title,
                     description: desc,

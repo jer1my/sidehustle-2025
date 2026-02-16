@@ -220,7 +220,11 @@ export const purchaseOptions = [
     price: 17500,
     sizeNote: '13×13',
     subType: null,
-    subOptions: []
+    subOptions: [],
+    frameColors: [
+      { id: 'white', label: 'White Frame / White Mat' },
+      { id: 'black', label: 'Black Frame / Black Mat' }
+    ]
   },
   {
     id: 'framed-rect',
@@ -230,6 +234,10 @@ export const purchaseOptions = [
     subOptions: [
       { id: 'portrait', label: 'Portrait', sizeNote: '13×19' },
       { id: 'landscape', label: 'Landscape', sizeNote: '19×13' }
+    ],
+    frameColors: [
+      { id: 'white', label: 'White Frame / White Mat' },
+      { id: 'black', label: 'Black Frame / Black Mat' }
     ]
   }
 ];

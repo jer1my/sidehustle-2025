@@ -871,22 +871,80 @@ body[data-theme="dark"] .card {
     gap: var(--space-6, 24px);
 }
 
-/* Large main image */
-.product-image-main {
+/* Detail image shared hover pattern (matches product-card overlay) */
+.product-image-main,
+.product-thumbnail {
+    position: relative;
+    overflow: hidden;
     width: 100%;
     aspect-ratio: 3 / 4;
     background: rgba(220, 220, 220, 0.4);
-    transition: opacity var(--transition-fast, 0.15s ease), transform var(--transition-fast, 0.15s ease);
     cursor: pointer;
 }
 
-.product-image-main:hover {
-    opacity: 0.9;
-    transform: scale(1.02);
+[data-theme="dark"] .product-image-main,
+[data-theme="dark"] .product-thumbnail {
+    background: rgba(30, 30, 30, 0.6);
 }
 
-[data-theme="dark"] .product-image-main {
-    background: rgba(30, 30, 30, 0.6);
+.product-image-main__bg,
+.product-thumbnail__bg {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.4s var(--transition-cubic);
+}
+
+.product-image-main:hover .product-image-main__bg,
+.product-thumbnail:hover .product-thumbnail__bg {
+    opacity: 0.4;
+}
+
+/* Slide-up overlay on detail images */
+.product-image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-4);
+    background: rgba(250, 250, 250, 0.92);
+    transform: translateY(100%);
+    transition: transform 0.35s var(--transition-cubic);
+}
+
+[data-theme="dark"] .product-image-overlay {
+    background: rgba(23, 23, 23, 0.92);
+}
+
+.product-image-main:hover .product-image-overlay,
+.product-thumbnail:hover .product-image-overlay {
+    transform: translateY(0);
+}
+
+.product-image-overlay__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-1) 0;
+}
+
+.product-image-overlay__meta {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Mobile: always show overlay since there is no hover */
+@media (hover: none) {
+    .product-image-overlay {
+        transform: translateY(0);
+        background: linear-gradient(to top, rgba(250, 250, 250, 0.92) 80%, transparent 100%);
+    }
+
+    [data-theme="dark"] .product-image-overlay {
+        background: linear-gradient(to top, rgba(23, 23, 23, 0.92) 80%, transparent 100%);
+    }
 }
 
 /* Smaller thumbnails grid (2 columns) */
@@ -894,23 +952,6 @@ body[data-theme="dark"] .card {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-6, 24px);
-}
-
-.product-thumbnail {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    background: rgba(220, 220, 220, 0.4);
-    transition: opacity var(--transition-fast, 0.15s ease), transform var(--transition-fast, 0.15s ease);
-    cursor: pointer;
-}
-
-.product-thumbnail:hover {
-    opacity: 0.9;
-    transform: scale(1.02);
-}
-
-[data-theme="dark"] .product-thumbnail {
-    background: rgba(30, 30, 30, 0.6);
 }
 
 /* Product not found state */
