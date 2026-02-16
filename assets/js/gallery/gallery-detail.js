@@ -10,11 +10,10 @@ import {
     getItemBySlug,
     getLongDescription,
     formatPrice,
-    getMainImagePath,
-    getAltImagePaths
+    getAllImagePaths
 } from './gallery-data.js';
 
-import { addItem } from '../cart/cart.js';
+import { addItem, isInCart } from '../cart/cart.js';
 
 // Base path for images (relative to product/ directory)
 const IMAGE_BASE_PATH = '../assets/images/gallery';
@@ -73,43 +72,45 @@ function renderProductDetail(item) {
     // Get description
     const description = getLongDescription(item.id) || item.description || '';
 
-    // Get image paths
-    const mainImage = getMainImagePath(item.slug, IMAGE_BASE_PATH);
-    const altImages = getAltImagePaths(item.slug, IMAGE_BASE_PATH);
+    // Get all image paths
+    const images = getAllImagePaths(item.slug, IMAGE_BASE_PATH);
+    const allSlides = [images.main, ...images.alts];
 
-    // Overlay info for detail images
-    const overlayLabels = [
-        { label: 'Square', meta: 'Digital · Print · Framed 13×13' },
-        { label: 'Portrait', meta: 'Digital · Print · Framed 13×19' },
-        { label: 'Landscape', meta: 'Digital · Print · Framed 19×13' },
-        { label: 'Framed Square', meta: '13×13 · Made in USA · 99% UV' },
-        { label: 'Framed Portrait', meta: '13×19 · Made in USA · 99% UV' }
-    ];
+    // Arrow SVGs
+    const prevArrowSVG = `<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
+    const nextArrowSVG = `<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
 
     container.innerHTML = `
         <div class="product-detail-layout">
             <div class="product-images-column">
-                <!-- Large main image -->
-                <div class="product-image-main">
-                    <div class="product-image-main__bg" style="background-image: url('${mainImage}');"></div>
-                    <div class="product-image-overlay">
-                        <p class="product-image-overlay__label">Available Formats</p>
-                        <p class="product-image-overlay__meta">Digital · Print · Framed</p>
+                <!-- Image Carousel -->
+                <div class="product-carousel">
+                    <div class="product-carousel__container">
+                        <div class="product-carousel__track">
+                            ${allSlides.map(src => `
+                                <div class="product-carousel__slide">
+                                    <div class="product-carousel__slide-bg" style="background-image: url('${src}');"></div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
+                    <button class="product-carousel__arrow product-carousel__arrow--prev" aria-label="Previous image">${prevArrowSVG}</button>
+                    <button class="product-carousel__arrow product-carousel__arrow--next" aria-label="Next image">${nextArrowSVG}</button>
                 </div>
 
-                <!-- Smaller sample images in 2-column grid -->
-                <div class="product-thumbnails-grid">
-                    ${altImages.map((src, i) => {
-                        const info = overlayLabels[i] || overlayLabels[0];
-                        return `<div class="product-thumbnail">
-                            <div class="product-thumbnail__bg" style="background-image: url('${src}');"></div>
-                            <div class="product-image-overlay">
-                                <p class="product-image-overlay__label">${info.label}</p>
-                                <p class="product-image-overlay__meta">${info.meta}</p>
-                            </div>
-                        </div>`;
-                    }).join('')}
+                <!-- Thumbnail Strip -->
+                <div class="product-thumbnail-strip">
+                    <button class="product-thumbnail-strip__arrow product-thumbnail-strip__arrow--prev" aria-label="Previous thumbnails">${prevArrowSVG}</button>
+                    <div class="product-thumbnail-strip__viewport">
+                        <div class="product-thumbnail-strip__track">
+                            ${allSlides.map((src, i) => `
+                                <div class="product-thumbnail-strip__item${i === 0 ? ' product-thumbnail-strip__item--active' : ''}" data-slide="${i}">
+                                    <div class="product-thumbnail-strip__bg" style="background-image: url('${src}');"></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <button class="product-thumbnail-strip__arrow product-thumbnail-strip__arrow--next" aria-label="Next thumbnails">${nextArrowSVG}</button>
                 </div>
             </div>
 
@@ -124,7 +125,200 @@ function renderProductDetail(item) {
         </div>
     `;
 
+    initCarousel();
     initPurchaseInteractions(item);
+}
+
+/**
+ * Initialize carousel behavior: auto-advance, arrows, thumbnails, touch swipe, visibility
+ */
+function initCarousel() {
+    const track = document.querySelector('.product-carousel__track');
+    const carouselContainer = document.querySelector('.product-carousel__container');
+    const thumbs = document.querySelectorAll('.product-thumbnail-strip__item');
+    const prevBtn = document.querySelector('.product-carousel__arrow--prev');
+    const nextBtn = document.querySelector('.product-carousel__arrow--next');
+
+    // Thumbnail strip navigation
+    const thumbTrack = document.querySelector('.product-thumbnail-strip__track');
+    const thumbViewport = document.querySelector('.product-thumbnail-strip__viewport');
+    const thumbPrevBtn = document.querySelector('.product-thumbnail-strip__arrow--prev');
+    const thumbNextBtn = document.querySelector('.product-thumbnail-strip__arrow--next');
+
+    if (!track || !carouselContainer) return;
+
+    const totalSlides = thumbs.length;
+    let currentSlide = 0;
+    let autoAdvanceTimer = null;
+    let resumeTimer = null;
+
+    // Thumbnail strip scroll state
+    const VISIBLE_THUMBS = 5;
+    const GAP_PX = 8;
+
+    function getThumbMetrics() {
+        if (!thumbViewport) return { thumbWidth: 0, step: 0 };
+        const viewportWidth = thumbViewport.offsetWidth;
+        const visibleCount = Math.min(totalSlides, VISIBLE_THUMBS);
+        const thumbWidth = (viewportWidth - (visibleCount - 1) * GAP_PX) / visibleCount;
+        return { thumbWidth, step: thumbWidth + GAP_PX, viewportWidth };
+    }
+
+    function sizeThumbItems() {
+        if (!thumbTrack || !thumbViewport || totalSlides === 0) return;
+        const { thumbWidth } = getThumbMetrics();
+        thumbs.forEach(t => { t.style.width = `${thumbWidth}px`; });
+    }
+
+    function goToSlide(index) {
+        currentSlide = ((index % totalSlides) + totalSlides) % totalSlides;
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+        thumbs.forEach((t, i) => {
+            t.classList.toggle('product-thumbnail-strip__item--active', i === currentSlide);
+        });
+
+        centerThumbOnActive();
+    }
+
+    function centerThumbOnActive() {
+        if (!thumbTrack || !thumbViewport || totalSlides <= VISIBLE_THUMBS) return;
+
+        const { thumbWidth, step, viewportWidth } = getThumbMetrics();
+
+        // Position of the active thumb's center relative to track start
+        const activeCenter = currentSlide * step + thumbWidth / 2;
+
+        // Shift so the active thumb center aligns with viewport center
+        let shift = activeCenter - viewportWidth / 2;
+
+        // Clamp so we don't scroll past the edges
+        const maxShift = (totalSlides * step - GAP_PX) - viewportWidth;
+        shift = Math.max(0, Math.min(shift, maxShift));
+
+        thumbTrack.style.transform = `translateX(-${shift}px)`;
+    }
+
+    function nextSlide() {
+        goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+        goToSlide(currentSlide - 1);
+    }
+
+    function startAutoAdvance() {
+        stopAutoAdvance();
+        autoAdvanceTimer = setInterval(nextSlide, 4500);
+    }
+
+    function stopAutoAdvance() {
+        if (autoAdvanceTimer) {
+            clearInterval(autoAdvanceTimer);
+            autoAdvanceTimer = null;
+        }
+    }
+
+    function pauseAndResume() {
+        stopAutoAdvance();
+        if (resumeTimer) clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(startAutoAdvance, 8000);
+    }
+
+    // Carousel arrow clicks
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            pauseAndResume();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            pauseAndResume();
+        });
+    }
+
+    // Thumbnail strip arrows navigate the carousel (prev/next slide)
+    if (thumbPrevBtn) {
+        thumbPrevBtn.addEventListener('click', () => {
+            prevSlide();
+            pauseAndResume();
+        });
+    }
+
+    if (thumbNextBtn) {
+        thumbNextBtn.addEventListener('click', () => {
+            nextSlide();
+            pauseAndResume();
+        });
+    }
+
+    // Thumbnail clicks
+    thumbs.forEach(thumb => {
+        thumb.addEventListener('click', () => {
+            const index = parseInt(thumb.dataset.slide, 10);
+            goToSlide(index);
+            pauseAndResume();
+        });
+    });
+
+    // Touch swipe on carousel
+    let touchStartX = 0;
+    let touchDeltaX = 0;
+    let isSwiping = false;
+
+    carouselContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchDeltaX = 0;
+        isSwiping = true;
+        track.classList.add('product-carousel__track--no-transition');
+    }, { passive: true });
+
+    carouselContainer.addEventListener('touchmove', (e) => {
+        if (!isSwiping) return;
+        touchDeltaX = e.touches[0].clientX - touchStartX;
+    }, { passive: true });
+
+    carouselContainer.addEventListener('touchend', () => {
+        if (!isSwiping) return;
+        isSwiping = false;
+        track.classList.remove('product-carousel__track--no-transition');
+
+        if (Math.abs(touchDeltaX) > 30) {
+            if (touchDeltaX < 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+            pauseAndResume();
+        }
+    });
+
+    // Visibility API: pause when page hidden, resume when visible
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopAutoAdvance();
+        } else {
+            startAutoAdvance();
+        }
+    });
+
+    // Set initial thumb sizes
+    sizeThumbItems();
+
+    // Recalculate on resize so thumbnails stay centered and properly sized
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            sizeThumbItems();
+            centerThumbOnActive();
+        }, 100);
+    });
+
+    startAutoAdvance();
 }
 
 /**
@@ -172,8 +366,9 @@ function renderPurchaseOptions() {
                 <div class="purchase-options__total-price">${formatPrice(defaultOption.price)}</div>
             </div>
 
+            <div class="purchase-options__in-cart-notice"></div>
             <button class="btn-accent button purchase-options__add-btn">Add to Cart</button>
-            <div class="purchase-options__confirmation">Added to cart!</div>
+            <a href="../cart.html" class="btn-accent button purchase-options__go-to-cart-btn">Go to Cart</a>
         </div>
     `;
 }
@@ -244,7 +439,27 @@ function initPurchaseInteractions(item) {
     const frameNoteContainer = container.querySelector('.purchase-options__frame-note-container');
     const totalPrice = container.querySelector('.purchase-options__total-price');
     const addBtn = container.querySelector('.purchase-options__add-btn');
-    const confirmation = container.querySelector('.purchase-options__confirmation');
+    const goToCartBtn = container.querySelector('.purchase-options__go-to-cart-btn');
+    const inCartNotice = container.querySelector('.purchase-options__in-cart-notice');
+
+    function updateInCartState() {
+        const alreadyInCart = isInCart(item.id);
+        if (alreadyInCart) {
+            inCartNotice.textContent = 'This item is in your cart';
+            inCartNotice.classList.add('purchase-options__in-cart-notice--visible');
+            addBtn.textContent = 'Add Another';
+            addBtn.classList.remove('btn-accent');
+            addBtn.classList.add('btn-secondary');
+            goToCartBtn.classList.add('purchase-options__go-to-cart-btn--visible');
+        } else {
+            inCartNotice.textContent = '';
+            inCartNotice.classList.remove('purchase-options__in-cart-notice--visible');
+            addBtn.textContent = 'Add to Cart';
+            addBtn.classList.remove('btn-secondary');
+            addBtn.classList.add('btn-accent');
+            goToCartBtn.classList.remove('purchase-options__go-to-cart-btn--visible');
+        }
+    }
 
     function getSelectedOption() {
         return purchaseOptions.find(o => o.id === selectedOptionId);
@@ -335,14 +550,20 @@ function initPurchaseInteractions(item) {
             quantity: 1
         });
 
-        // Show confirmation
-        confirmation.classList.add('purchase-options__confirmation--visible');
+        // Brief confirmation flash, then show persistent "in cart" state
+        addBtn.textContent = 'Added!';
+        addBtn.classList.add('purchase-options__add-btn--added');
+        addBtn.disabled = true;
+
         setTimeout(() => {
-            confirmation.classList.remove('purchase-options__confirmation--visible');
-        }, 2000);
+            addBtn.classList.remove('purchase-options__add-btn--added');
+            addBtn.disabled = false;
+            updateInCartState();
+        }, 1500);
     });
 
     // Set initial states
+    updateInCartState();
     updateFrameNote();
     updateFrameColors();
 }

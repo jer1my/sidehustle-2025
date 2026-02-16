@@ -13,6 +13,7 @@
 //     alt-2.jpg    - Alternate view 2
 //     alt-3.jpg    - Alternate view 3
 //     alt-4.jpg    - Alternate view 4
+//     (add alt-5.jpg through alt-11.jpg for up to 12 carousel slides)
 //
 // All images should be 3:4 aspect ratio (portrait)
 // Recommended sizes: main.jpg (1200x1600), alternates (600x800)
@@ -21,7 +22,11 @@
 const IMAGE_CONFIG = {
     basePath: 'assets/images/gallery',
     mainImage: 'main.jpg',
-    altImages: ['alt-1.jpg', 'alt-2.jpg', 'alt-3.jpg', 'alt-4.jpg'],
+    altImages: [
+        'alt-1.jpg', 'alt-2.jpg', 'alt-3.jpg', 'alt-4.jpg',
+        'alt-5.jpg', 'alt-6.jpg', 'alt-7.jpg', 'alt-8.jpg',
+        'alt-9.jpg', 'alt-10.jpg', 'alt-11.jpg'
+    ],
     extension: 'jpg'
 };
 

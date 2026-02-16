@@ -59,9 +59,11 @@
     <script>
         // Apply theme immediately to prevent flash
         (function() {
+            document.documentElement.style.backgroundColor = '#171717';
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'light') {
                 document.body.removeAttribute('data-theme');
+                document.documentElement.style.backgroundColor = '#fafafa';
             } else {
                 document.body.setAttribute('data-theme', 'dark');
             }

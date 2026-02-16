@@ -73,9 +73,9 @@ const NAV_CONFIG = {
 
 **Page Detection:**
 The component auto-detects the current page and:
-- Sets the active state on the appropriate nav link
+- Sets the active state on the appropriate nav link (or cart icon on the cart page)
 - Adjusts hash links (e.g., `#about`) to point back to index.html when on subpages
-- Supports pages: index, lab, shop-all, art, digital
+- Supports pages: index, lab, shop-all, cart, art, digital
 
 ## File Organization
 
@@ -131,6 +131,8 @@ For spec-driven development:
 
 **Always use utility classes** instead of inline styles for better maintainability.
 
+**All pages must use `--container-max-width` (1200px) as their max-width.** Do not hardcode narrower widths on page containers. Every page (shop, cart, product detail, etc.) should feel the same width. The single source of truth is `--container-max-width` in `_variables.css`.
+
 **When making changes:**
 1. Test in both light and dark modes
 2. Test on mobile, tablet, and desktop
@@ -159,11 +161,31 @@ The site uses a page transition system where `body` starts with `opacity: 0` and
 
 **For subpages (in subdirectories like `product/`):** Add `../` prefix to all script paths.
 
+**Inline theme script (REQUIRED in every page):**
+Every page must include this script immediately after `<body>` to prevent theme flash during navigation:
+```html
+<script>
+    // Apply theme immediately to prevent flash
+    (function() {
+        document.documentElement.style.backgroundColor = '#171717';
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.removeAttribute('data-theme');
+            document.documentElement.style.backgroundColor = '#fafafa';
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+        }
+    })();
+</script>
+```
+The dark background is set first (before localStorage check) since dark is the default theme. This eliminates any white flash between page transitions.
+
 **How it works:**
-1. `_base.css` sets `body { opacity: 0 }`
-2. `animations.js` defines `initPageTransitions()` which adds `page-transition-in` class
-3. `main.js` calls `initPageTransitions()` on DOMContentLoaded
-4. CSS animation fades body to `opacity: 1`
+1. Inline script sets `<html>` background to dark immediately, then checks localStorage
+2. `_base.css` sets `body { opacity: 0 }`
+3. `animations.js` defines `initPageTransitions()` which adds `page-transition-in` class
+4. `main.js` calls `initPageTransitions()` on DOMContentLoaded
+5. CSS animation fades body to `opacity: 1`
 
 **Safety features:**
 - `main.js` uses `typeof` checks so missing optional scripts won't break the page
@@ -181,12 +203,14 @@ All gallery images use a standardized folder structure. Images are served from a
 ```
 assets/images/gallery/
   {slug}/
-    main.jpg      # Primary image (hero, grid thumbnail, detail main)
-    alt-1.jpg     # Alternate view 1
-    alt-2.jpg     # Alternate view 2
-    alt-3.jpg     # Alternate view 3
-    alt-4.jpg     # Alternate view 4
+    main.jpg      # Primary image (hero, grid thumbnail, detail carousel slide 1)
+    alt-1.jpg     # Carousel slide 2
+    alt-2.jpg     # Carousel slide 3
+    ...
+    alt-11.jpg    # Carousel slide 12
 ```
+
+The carousel supports up to 12 slides (main + 11 alts). `IMAGE_CONFIG.altImages` in `gallery-data.js` defines which alt filenames to look for. The carousel dynamically adapts to however many images exist.
 
 **Image Specifications:**
 - **Aspect ratio:** 3:4 (portrait) for all images
@@ -201,15 +225,44 @@ assets/images/gallery/
 
 **Adding a new gallery item:**
 1. Create folder: `assets/images/gallery/{slug}/`
-2. Add images: `main.jpg`, `alt-1.jpg`, `alt-2.jpg`, `alt-3.jpg`, `alt-4.jpg`
+2. Add images: `main.jpg`, `alt-1.jpg` through `alt-11.jpg` (carousel uses all that exist)
 3. Add item to `galleryItems` array in `gallery-data.js` (only needs slug, no image paths)
 4. Create product page: Copy `product/_template.html` to `product/{slug}.html`
 
 **Configuration:** `assets/js/gallery/gallery-data.js` → `IMAGE_CONFIG` object
+
+## Product Detail Page
+
+The product detail page (`product/{slug}.html`) features:
+
+**Image Carousel:**
+- Auto-advancing carousel (4.5s interval) with all available images (main + alts)
+- Synced thumbnail strip below with active highlight always centered
+- Prev/next arrows on thumbnail strip navigate the carousel
+- Touch swipe support on mobile; auto-advance pauses on interaction (resumes after 8s)
+- Pauses when page is hidden (Visibility API)
+
+**Cart UX:**
+- "Add to Cart" button uses `btn-accent` (primary) styling
+- After adding: button briefly shows "Added!" (1.5s), then transitions to persistent state:
+  - "This item is in your cart" bold notice appears above the button
+  - Button changes to "Add Another" with `btn-secondary` (outlined) styling
+  - "Go to Cart" button appears below as `btn-accent` (primary)
+- State persists on page load via `isInCart()` check against localStorage
+
+**Key files:**
+- `assets/js/gallery/gallery-detail.js` — Carousel logic, purchase options, cart UX
+- `assets/js/gallery/gallery-data.js` — Item data, purchase options, image path helpers
+- `assets/js/cart/cart.js` — Cart state management (localStorage)
 
 ## Active Technologies
 - HTML5, CSS3, Vanilla JavaScript (ES6+) + None (static site using existing CSS architecture) (001-shop-gallery-viewer)
 - Static JSON data file for gallery items (no server/database) (001-shop-gallery-viewer)
 
 ## Recent Changes
+- Added 12-slide image carousel with synced thumbnail strip to product detail pages
+- Added cart UX flow: "Added!" confirmation → "This item is in your cart" notice → "Add Another" / "Go to Cart" buttons
+- Fixed white flash on page transitions by setting `<html>` background in inline theme script (dark-first default)
+- Added cart page active state to navigation component (desktop icon + mobile link)
+- All pages use `--container-max-width` for consistent widths
 - 001-shop-gallery-viewer: Added HTML5, CSS3, Vanilla JavaScript (ES6+) + None (static site using existing CSS architecture)

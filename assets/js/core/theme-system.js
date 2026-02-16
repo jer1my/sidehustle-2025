@@ -89,11 +89,13 @@ function initTheme() {
     // Check for saved theme or default to dark
     if (savedTheme === 'light') {
         body.removeAttribute('data-theme');
+        document.documentElement.style.backgroundColor = '#fafafa';
         updateThemeIcon(navToggle, 'moon');
         updateThemeIcon(styleGuideToggle, 'moon');
         updateThemeIcon(mobileToggle, 'moon');
     } else {
         body.setAttribute('data-theme', 'dark');
+        document.documentElement.style.backgroundColor = '#171717';
         updateThemeIcon(navToggle, 'sun');
         updateThemeIcon(styleGuideToggle, 'sun');
         updateThemeIcon(mobileToggle, 'sun');
@@ -116,12 +118,14 @@ function toggleTheme() {
 
     if (body.getAttribute('data-theme') === 'dark') {
         body.removeAttribute('data-theme');
+        document.documentElement.style.backgroundColor = '#fafafa';
         localStorage.setItem('theme', 'light');
         updateThemeIcon(navToggle, 'moon');
         updateThemeIcon(styleGuideToggle, 'moon');
         updateThemeIcon(mobileToggle, 'moon');
     } else {
         body.setAttribute('data-theme', 'dark');
+        document.documentElement.style.backgroundColor = '#171717';
         localStorage.setItem('theme', 'dark');
         updateThemeIcon(navToggle, 'sun');
         updateThemeIcon(styleGuideToggle, 'sun');

@@ -275,8 +275,15 @@
   /* Product Detail Page */
   --product-detail-max-width: var(--container-max-width);
   --product-image-max-height: 70vh;
+
+  /* Carousel */
+  --product-carousel-arrow-size: 40px;
+  --product-carousel-arrow-bg: rgba(250, 250, 250, 0.85);
+  --product-carousel-transition: transform 0.5s var(--transition-cubic);
+  --product-thumb-inactive-opacity: 0.5;
+
   /* Cart */
-  --cart-max-width: 900px;
+  --cart-max-width: var(--container-max-width);
 }
 
 /* ===================
@@ -307,6 +314,9 @@
   --grid-toggle-bg-active-hover: rgba(184, 134, 11, .4);
   --grid-toggle-pill-bg: #fafafa;
   --grid-toggle-text-color: #fafafa;
+
+  /* Carousel - Dark Mode */
+  --product-carousel-arrow-bg: rgba(23, 23, 23, 0.85);
 
   /* Gallery Colors - Dark Mode */
   --gallery-filter-bg: var(--bg-secondary);

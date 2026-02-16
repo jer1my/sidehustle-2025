@@ -22,6 +22,7 @@ class ThemeManager {
 
     setTheme(theme, save = true) {
         document.body.setAttribute('data-theme', theme);
+        document.documentElement.style.backgroundColor = theme === 'dark' ? '#171717' : '#fafafa';
 
         if (save) {
             localStorage.setItem(this.themeKey, theme);
