@@ -4,6 +4,7 @@
  */
 
 import { galleryItems, categories, getSubCategories, getMainImagePath } from './gallery-data.js';
+import { createProductCard } from './product-card.js';
 
 // State
 let currentFilter = {
@@ -269,30 +270,12 @@ function sortItems(items) {
 
 /**
  * Create a gallery card element
+ * Uses the shared product card component
  */
 function createGalleryCard(item) {
-    const card = document.createElement('a');
-    card.href = `product/${item.slug}.html`;
-    card.className = 'gallery-card';
-    card.setAttribute('aria-label', `View ${item.title}`);
-
-    // Get category display name
-    const category = categories.find(c => c.id === item.type);
-    const subCategory = category?.subCategories.find(s => s.id === item.subCategory);
-    const categoryLabel = subCategory ? subCategory.name : item.subCategory;
-
-    // Get main image path
-    const imagePath = getMainImagePath(item.slug);
-
-    card.innerHTML = `
-        <div class="gallery-thumbnail" style="background-image: url('${imagePath}'); background-size: cover; background-position: center;"></div>
-        <div class="gallery-card-info">
-            <h3 class="gallery-card-title">${item.title}</h3>
-            <p class="gallery-card-category">${categoryLabel}</p>
-        </div>
-    `;
-
-    return card;
+    return createProductCard(item, {
+        basePath: 'assets/images/gallery'
+    });
 }
 
 /**

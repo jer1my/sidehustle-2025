@@ -277,6 +277,9 @@
   --product-image-max-height: 70vh;
   --print-option-border: var(--color-neutral-200);
   --frame-option-size: 120px;
+
+  /* Cart */
+  --cart-max-width: 900px;
 }
 
 /* ===================

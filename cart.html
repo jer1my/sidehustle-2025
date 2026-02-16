@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Side Hustle</title>
+
+    <!-- Meta Tags -->
+    <meta name="description" content="Review your shopping cart and checkout.">
+    <meta name="author" content="Jerimy Brown">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Shopping Cart - Side Hustle">
+    <meta property="og:description" content="Review your shopping cart and checkout.">
+
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts: Montserrat + Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <!-- Critical inline styles to prevent flash -->
+    <style>
+        .nav {
+            background: linear-gradient(to bottom, rgba(250, 250, 250, 1) 0%, rgba(250, 250, 250, 1) 60%, rgba(250, 250, 250, 0) 100%) !important;
+        }
+        body[data-theme="dark"] .nav {
+            background: linear-gradient(to bottom, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 1) 60%, rgba(23, 23, 23, 0) 100%) !important;
+        }
+
+        /* Use regular (non-accent) logo */
+        .logo {
+            color: var(--color-text-primary) !important;
+        }
+
+        .logo .logo-text {
+            color: var(--color-text-primary) !important;
+        }
+
+        .logo .logo-svg {
+            background-image: url('assets/icons/logo-sh-light-mode.svg') !important;
+        }
+
+        body[data-theme="dark"] .logo .logo-svg {
+            background-image: url('assets/icons/logo-sh-dark-mode.svg') !important;
+        }
+    </style>
+
+    <noscript>
+        <style>
+            body {
+                opacity: 1 !important;
+            }
+        </style>
+    </noscript>
+</head>
+<body>
+    <script>
+        // Apply theme immediately to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
+    <!-- Navigation Component Placeholder -->
+    <div id="nav-placeholder"></div>
+    <script src="assets/js/components/navigation-component.js?v=1737060000"></script>
+
+    <!-- Main Content -->
+    <main style="min-height: 100vh; padding-top: 100px;">
+        <div class="cart-container">
+            <header class="cart-header">
+                <h1>Shopping Cart</h1>
+            </header>
+
+            <!-- Empty Cart State -->
+            <div id="cart-empty" class="cart-empty" style="display: none;">
+                <h2>Your cart is empty</h2>
+                <p>Looks like you haven't added any items yet.</p>
+                <a href="shop-all.html" class="button btn-primary">Browse Gallery</a>
+            </div>
+
+            <!-- Cart Content -->
+            <div id="cart-content" style="display: none;">
+                <!-- Cart Items -->
+                <ul id="cart-items" class="cart-items" role="list" aria-label="Cart items">
+                    <!-- Cart items will be rendered here by JavaScript -->
+                </ul>
+
+                <!-- Cart Summary -->
+                <div id="cart-summary" class="cart-summary">
+                    <!-- Summary will be rendered here by JavaScript -->
+                </div>
+
+                <!-- PayPal Checkout -->
+                <div class="paypal-container">
+                    <div id="paypal-button-container">
+                        <!-- PayPal buttons will render here -->
+                    </div>
+                    <p class="paypal-container__note">
+                        Secure checkout powered by PayPal. You can pay with PayPal or credit/debit card.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <!-- Core modules -->
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/theme-system.js"></script>
+
+    <!-- Utilities -->
+    <script src="assets/js/utils/helpers.js"></script>
+    <script src="assets/js/utils/animations.js"></script>
+
+    <!-- Components -->
+    <script src="assets/js/components/navigation.js"></script>
+    <script src="assets/js/components/mobile-menu.js"></script>
+    <script src="assets/js/components/logo-animation.js"></script>
+
+    <!-- Cart Page Module -->
+    <script type="module" src="assets/js/cart/cart-page.js"></script>
+
+    <!-- PayPal SDK -->
+    <!-- IMPORTANT: Replace YOUR_PAYPAL_CLIENT_ID with your actual PayPal Client ID -->
+    <!-- Get your Client ID from: https://developer.paypal.com/dashboard/applications -->
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD" data-sdk-integration-source="button-factory"></script>
+
+    <!-- PayPal Checkout Integration -->
+    <script type="module" src="assets/js/cart/paypal-checkout.js"></script>
+
+    <!-- Main initialization -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - Side Hustle</title>
+
+    <!-- Meta Tags -->
+    <meta name="description" content="Thank you for your order.">
+    <meta name="author" content="Jerimy Brown">
+    <meta name="robots" content="noindex">
+
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts: Montserrat + Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <!-- Critical inline styles to prevent flash -->
+    <style>
+        .nav {
+            background: linear-gradient(to bottom, rgba(250, 250, 250, 1) 0%, rgba(250, 250, 250, 1) 60%, rgba(250, 250, 250, 0) 100%) !important;
+        }
+        body[data-theme="dark"] .nav {
+            background: linear-gradient(to bottom, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 1) 60%, rgba(23, 23, 23, 0) 100%) !important;
+        }
+
+        .logo {
+            color: var(--color-text-primary) !important;
+        }
+
+        .logo .logo-text {
+            color: var(--color-text-primary) !important;
+        }
+
+        .logo .logo-svg {
+            background-image: url('assets/icons/logo-sh-light-mode.svg') !important;
+        }
+
+        body[data-theme="dark"] .logo .logo-svg {
+            background-image: url('assets/icons/logo-sh-dark-mode.svg') !important;
+        }
+    </style>
+
+    <noscript>
+        <style>
+            body {
+                opacity: 1 !important;
+            }
+        </style>
+    </noscript>
+</head>
+<body>
+    <script>
+        // Apply theme immediately to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
+    <!-- Navigation Component Placeholder -->
+    <div id="nav-placeholder"></div>
+    <script src="assets/js/components/navigation-component.js?v=1737060000"></script>
+
+    <!-- Main Content -->
+    <main style="min-height: 100vh; padding-top: 100px;">
+        <div class="cart-container">
+            <div class="checkout-success">
+                <div class="checkout-success__icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h1>Thank You!</h1>
+                <p>Your order has been confirmed.</p>
+                <p id="customer-greeting"></p>
+                <div id="order-id-display" class="checkout-success__order-id"></div>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-8);">
+                    You will receive an email confirmation shortly with your order details.
+                </p>
+                <a href="shop-all.html" class="button btn-primary">Continue Shopping</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/theme-system.js"></script>
+    <script src="assets/js/utils/helpers.js"></script>
+    <script src="assets/js/utils/animations.js"></script>
+    <script src="assets/js/components/navigation.js"></script>
+    <script src="assets/js/components/mobile-menu.js"></script>
+    <script src="assets/js/components/logo-animation.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <!-- Order details script -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('order');
+            const customerName = urlParams.get('name');
+
+            if (customerName) {
+                const greeting = document.getElementById('customer-greeting');
+                if (greeting) {
+                    greeting.textContent = `Thanks for your purchase, ${decodeURIComponent(customerName)}!`;
+                }
+            }
+
+            if (orderId) {
+                const orderDisplay = document.getElementById('order-id-display');
+                if (orderDisplay) {
+                    orderDisplay.textContent = `Order ID: ${orderId}`;
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

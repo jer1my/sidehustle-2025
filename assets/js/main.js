@@ -16,6 +16,37 @@
  */
 
 // ==========================================
+// Cart Badge Update (works with localStorage cart)
+// ==========================================
+
+function updateCartBadges() {
+    try {
+        const cartData = localStorage.getItem('sidehustle_cart');
+        const cart = cartData ? JSON.parse(cartData) : [];
+        const count = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+
+        const badges = document.querySelectorAll('.cart-icon__badge');
+        badges.forEach(badge => {
+            badge.textContent = count > 0 ? count : '';
+            badge.dataset.count = count;
+        });
+    } catch (e) {
+        console.warn('Could not update cart badges:', e);
+    }
+}
+
+// Listen for cart updates from cart module
+window.addEventListener('cart:updated', updateCartBadges);
+window.addEventListener('cart:cleared', updateCartBadges);
+
+// Also update when storage changes (for cross-tab sync)
+window.addEventListener('storage', function(e) {
+    if (e.key === 'sidehustle_cart') {
+        updateCartBadges();
+    }
+});
+
+// ==========================================
 // Main Initialization Sequence
 // ==========================================
 
@@ -24,6 +55,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (typeof initTheme === 'function') initTheme();
     if (typeof initGridLines === 'function') initGridLines();
     if (typeof initLogoLetterAnimation === 'function') initLogoLetterAnimation();
+
+    // Update cart badge with current count
+    updateCartBadges();
 
     // Dynamic content generation - must run BEFORE scroll animations
     if (typeof initAboutCarousel === 'function') {

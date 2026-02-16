@@ -1,9 +1,11 @@
 /**
  * Hero Gallery Module
  * Populates the home page hero gallery with the latest gallery items
+ * Uses the shared product card component with gallery-frame sizing
  */
 
-import { galleryItems, getMainImagePath } from './gallery-data.js';
+import { galleryItems } from './gallery-data.js';
+import { createProductCard } from './product-card.js';
 
 // Configuration
 const HERO_GALLERY_COUNT = 6;
@@ -20,29 +22,8 @@ function getRecentItems(count = HERO_GALLERY_COUNT) {
 }
 
 /**
- * Create a gallery frame element
- * @param {Object} item - Gallery item
- * @returns {HTMLElement} The gallery frame element
- */
-function createGalleryFrame(item) {
-    const link = document.createElement('a');
-    link.href = `product/${item.slug}.html`;
-    link.className = 'gallery-frame';
-    link.setAttribute('aria-label', `View ${item.title}`);
-    link.dataset.slug = item.slug;
-
-    // Set background image using the main image
-    const imagePath = getMainImagePath(item.slug);
-    link.style.backgroundImage = `url('${imagePath}')`;
-    link.style.backgroundSize = 'cover';
-    link.style.backgroundPosition = 'center';
-
-    return link;
-}
-
-/**
  * Initialize the hero gallery
- * Replaces static gallery frames with dynamic ones from gallery data
+ * Replaces static gallery frames with dynamic product cards
  */
 export function initHeroGallery() {
     const scrollTrack = document.querySelector('.hero-scroll-track');
@@ -55,16 +36,16 @@ export function initHeroGallery() {
     // Get recent items
     const recentItems = getRecentItems();
 
-    // Replace existing frames with dynamic ones
+    // Replace existing frames with product cards
     existingFrames.forEach((frame, index) => {
         if (index < recentItems.length) {
             const item = recentItems[index];
-            const newFrame = createGalleryFrame(item);
-            frame.replaceWith(newFrame);
+            const card = createProductCard(item, {
+                extraClass: 'gallery-frame'
+            });
+            frame.replaceWith(card);
         }
     });
-
-    console.log(`Hero gallery populated with ${recentItems.length} items`);
 }
 
 // Auto-initialize when DOM is ready
