@@ -673,7 +673,9 @@ function initPurchaseInteractions(item) {
     updateInCartState();
     updateFrameNote();
     updateFrameColors();
-    highlightSecondaryChoice();
+
+    // Wait for page fade-in (300ms) to complete before drawing the border
+    setTimeout(highlightSecondaryChoice, 600);
 }
 
 // Auto-initialize if product-detail element exists
