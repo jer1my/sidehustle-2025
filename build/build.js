@@ -372,7 +372,8 @@ export function formatPrice(cents) {
         const html = template
             .replace(/\{\{TITLE\}\}/g, item.title)
             .replace(/\{\{DESCRIPTION\}\}/g, item.description)
-            .replace(/\{\{SLUG\}\}/g, item.slug);
+            .replace(/\{\{SLUG\}\}/g, item.slug)
+            .replace(/\{\{CACHE_VERSION\}\}/g, Date.now());
 
         const outputPath = path.join(PRODUCT_DIR, `${item.slug}.html`);
         fs.writeFileSync(outputPath, html, 'utf-8');

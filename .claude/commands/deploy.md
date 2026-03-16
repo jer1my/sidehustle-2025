@@ -4,11 +4,11 @@ description: Commit changes, merge to main, push both branches, return to dev
 
 Please follow these steps:
 
-1. **Auto-update cache busting version**: Generate a Unix timestamp and update index.html to use `?v={timestamp}` for main.css.
+1. **Auto-update cache busting version**: Generate a Unix timestamp and update ALL root HTML files to use the new `?v={timestamp}` on every local `.js` and `.css` asset reference. Then rebuild product pages (which get their own cache version via the build script).
 
    Use this bash command:
    ```bash
-   TIMESTAMP=$(date +%s) && sed -i '' "s|main\.css?v=[0-9]*\"|main.css?v=$TIMESTAMP\"|g" index.html && echo "Cache version updated to: $TIMESTAMP"
+   TIMESTAMP=$(date +%s) && for f in index.html shop-all.html cart.html checkout-success.html lab.html art.html digital.html; do sed -i '' -E "s|(\\.js)\?v=[0-9]+\"|\1?v=$TIMESTAMP\"|g" "$f" && sed -i '' -E "s|(\\.css)\?v=[0-9]+\"|\1?v=$TIMESTAMP\"|g" "$f"; done && npm run build && echo "Cache version updated to: $TIMESTAMP"
    ```
 
 2. Review the current changes with git status and git diff
