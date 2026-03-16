@@ -1356,6 +1356,42 @@ body[data-theme="dark"] .card {
     margin-top: var(--space-2);
 }
 
+/* Frame Theme Hint */
+.purchase-frame-theme-hint {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+}
+
+.purchase-frame-theme-hint__text {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.purchase-frame-theme-hint__toggle {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: border-color var(--transition-base), background-color var(--transition-base);
+}
+
+.purchase-frame-theme-hint__toggle:hover {
+    border-color: var(--color-accent);
+    background: var(--bg-primary);
+}
+
 /* In-cart notice */
 .purchase-options__in-cart-notice {
     text-align: center;

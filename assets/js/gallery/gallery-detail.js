@@ -135,7 +135,7 @@ function renderProductDetail(item) {
     initCarousel();
     initPurchaseInteractions(item);
 
-    // Update carousel images when theme changes
+    // Update carousel images and frame hint when theme changes
     window.addEventListener('themechange', (e) => {
         const themeImages = getAllImagePathsForTheme(item.slug, e.detail.theme, IMAGE_BASE_PATH);
         const themeSrcs = [themeImages.main, ...themeImages.alts];
@@ -145,6 +145,22 @@ function renderProductDetail(item) {
         document.querySelectorAll('.product-thumbnail-strip__bg').forEach((el, i) => {
             if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
         });
+
+        // Update frame theme hint text and icon
+        const hint = document.querySelector('.purchase-frame-theme-hint');
+        if (hint) {
+            const isDark = e.detail.theme === 'dark';
+            const otherMode = isDark ? 'light' : 'dark';
+            const hintText = hint.querySelector('.purchase-frame-theme-hint__text');
+            const hintToggle = hint.querySelector('.purchase-frame-theme-hint__toggle');
+            if (hintText) hintText.textContent = `To see the other frame color and matte, switch to ${otherMode} mode`;
+            if (hintToggle) {
+                hintToggle.setAttribute('aria-label', `Switch to ${otherMode} mode`);
+                hintToggle.innerHTML = isDark
+                    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.375 12C5.375 8.341 8.341 5.375 12 5.375s6.625 2.966 6.625 6.625-2.966 6.625-6.625 6.625S5.375 15.659 5.375 12ZM12 7.375a4.625 4.625 0 100 9.25 4.625 4.625 0 000-9.25Z" fill="currentColor"/><path d="M12 .5a1 1 0 011 1v1.875a1 1 0 11-2 0V1.5a1 1 0 011-1ZM5.282 3.868a1 1 0 00-1.414 0 1 1 0 000 1.414l1.326 1.326a1 1 0 001.414-1.414L5.282 3.868ZM.5 12a1 1 0 011-1h1.875a1 1 0 110 2H1.5a1 1 0 01-1-1ZM6.608 17.392a1 1 0 010 1.414l-1.326 1.326a1 1 0 01-1.414-1.414l1.326-1.326a1 1 0 011.414 0ZM12 19.625a1 1 0 011 1V22.5a1 1 0 11-2 0v-1.875a1 1 0 011-1ZM17.392 17.392a1 1 0 011.414 0l1.326 1.325a1 1 0 01-1.414 1.415l-1.326-1.326a1 1 0 010-1.414ZM19.625 12a1 1 0 011-1H22.5a1 1 0 110 2h-1.875a1 1 0 01-1-1ZM20.132 5.282a1 1 0 000-1.414 1 1 0 00-1.414 0l-1.326 1.326a1 1 0 001.414 1.414l1.326-1.326Z" fill="currentColor"/></svg>`
+                    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.98 2.731a1 1 0 00-.576-.002C7.79 3.182 6.323 4.047 5.146 5.24A9.003 9.003 0 0010.01 19.36a9.003 9.003 0 008.749-4.507 9.003 9.003 0 01-8.78-12.122ZM6.57 6.645a7.003 7.003 0 0011.154 10.785 7.003 7.003 0 01-11.154-10.785Z" fill="currentColor"/></svg>`;
+            }
+        }
     });
 }
 
@@ -449,10 +465,22 @@ function renderFrameColors(option) {
                 data-frame-color-id="${fc.id}">${fc.label}</button>
     `).join('');
 
+    const isDark = getCurrentTheme() === 'dark';
+    const otherMode = isDark ? 'light' : 'dark';
+    const toggleIcon = isDark
+        ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.375 12C5.375 8.341 8.341 5.375 12 5.375s6.625 2.966 6.625 6.625-2.966 6.625-6.625 6.625S5.375 15.659 5.375 12ZM12 7.375a4.625 4.625 0 100 9.25 4.625 4.625 0 000-9.25Z" fill="currentColor"/><path d="M12 .5a1 1 0 011 1v1.875a1 1 0 11-2 0V1.5a1 1 0 011-1ZM5.282 3.868a1 1 0 00-1.414 0 1 1 0 000 1.414l1.326 1.326a1 1 0 001.414-1.414L5.282 3.868ZM.5 12a1 1 0 011-1h1.875a1 1 0 110 2H1.5a1 1 0 01-1-1ZM6.608 17.392a1 1 0 010 1.414l-1.326 1.326a1 1 0 01-1.414-1.414l1.326-1.326a1 1 0 011.414 0ZM12 19.625a1 1 0 011 1V22.5a1 1 0 11-2 0v-1.875a1 1 0 011-1ZM17.392 17.392a1 1 0 011.414 0l1.326 1.325a1 1 0 01-1.414 1.415l-1.326-1.326a1 1 0 010-1.414ZM19.625 12a1 1 0 011-1H22.5a1 1 0 110 2h-1.875a1 1 0 01-1-1ZM20.132 5.282a1 1 0 000-1.414 1 1 0 00-1.414 0l-1.326 1.326a1 1 0 001.414 1.414l1.326-1.326Z" fill="currentColor"/></svg>`
+        : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.98 2.731a1 1 0 00-.576-.002C7.79 3.182 6.323 4.047 5.146 5.24A9.003 9.003 0 0010.01 19.36a9.003 9.003 0 008.749-4.507 9.003 9.003 0 01-8.78-12.122ZM6.57 6.645a7.003 7.003 0 0011.154 10.785 7.003 7.003 0 01-11.154-10.785Z" fill="currentColor"/></svg>`;
+
     return `
         <div class="purchase-sub-options">
             <span class="purchase-sub-options__label">Frame Color</span>
             ${pills}
+        </div>
+        <div class="purchase-frame-theme-hint">
+            <span class="purchase-frame-theme-hint__text">To see the other frame color and matte, switch to ${otherMode} mode</span>
+            <button class="purchase-frame-theme-hint__toggle" onclick="toggleTheme()" aria-label="Switch to ${otherMode} mode">
+                ${toggleIcon}
+            </button>
         </div>
     `;
 }
@@ -574,7 +602,7 @@ function initPurchaseInteractions(item) {
 
             setTimeout(() => {
                 const box = secondaryChoicesBox.getBoundingClientRect();
-                const perimeter = 2 * (box.width + box.height) + 20;
+                const perimeter = 2 * (box.width + box.height) + 40;
                 secondaryChoicesBox.style.setProperty('--border-length', perimeter);
 
                 const rect = secondaryChoicesBox.querySelector('rect');
@@ -645,6 +673,7 @@ function initPurchaseInteractions(item) {
     updateInCartState();
     updateFrameNote();
     updateFrameColors();
+    highlightSecondaryChoice();
 }
 
 // Auto-initialize if product-detail element exists

@@ -128,7 +128,7 @@ For spec-driven development:
 
 ### Deployment
 - **Automatic:** Push to `main` triggers FTP deployment
-- **Manual:** Use `/deploy` slash command
+- **Manual:** Use `/deploy` slash command (updates cache busting on all assets, rebuilds product pages, commits, merges to main, pushes)
 - **Configuration:** `.github/workflows/deploy.yml`
 
 ## Important Guidelines
@@ -154,16 +154,18 @@ The site uses a page transition system where `body` starts with `opacity: 0` and
 **Minimum required scripts for any new page:**
 ```html
 <!-- Core modules -->
-<script src="assets/js/core/config.js"></script>
-<script src="assets/js/core/theme-system.js"></script>
+<script src="assets/js/core/config.js?v=TIMESTAMP"></script>
+<script src="assets/js/core/theme-system.js?v=TIMESTAMP"></script>
 
 <!-- Utilities (animations.js triggers the page fade-in) -->
-<script src="assets/js/utils/helpers.js"></script>
-<script src="assets/js/utils/animations.js"></script>
+<script src="assets/js/utils/helpers.js?v=TIMESTAMP"></script>
+<script src="assets/js/utils/animations.js?v=TIMESTAMP"></script>
 
 <!-- Main initialization (calls initPageTransitions) -->
-<script src="assets/js/main.js"></script>
+<script src="assets/js/main.js?v=TIMESTAMP"></script>
 ```
+
+**IMPORTANT:** All `<script src>` and `<link rel="stylesheet" href>` tags for local assets MUST include a `?v=TIMESTAMP` query parameter for cache busting. The `/deploy` command automatically updates these values across all root HTML files. For product pages, use `?v={{CACHE_VERSION}}` in the template — the build script replaces it with `Date.now()`.
 
 **For subpages (in subdirectories like `product/`):** Add `../` prefix to all script paths.
 
@@ -210,28 +212,28 @@ All gallery images use a standardized folder structure. Each gallery item is ful
 assets/images/gallery/
   {slug}/
     item.json         # All metadata (title, description, category, etc.)
-    main.jpg          # Primary image — dark/default theme
-    main-light.jpg    # Primary image — light theme variant (optional)
-    alt-1.jpg         # Carousel slide 2 (dark/default)
-    alt-1-light.jpg   # Carousel slide 2 — light variant (optional)
-    alt-2.jpg         # Carousel slide 3
+    main.png          # Primary image — dark/default theme
+    main-light.png    # Primary image — light theme variant (optional)
+    alt-1.png         # Carousel slide 2 (dark/default)
+    alt-1-light.png   # Carousel slide 2 — light variant (optional)
+    alt-2.png         # Carousel slide 3
     ...
-    alt-11.jpg        # Carousel slide 12
+    alt-11.png        # Carousel slide 12
 ```
 
 The carousel supports up to 12 slides (main + 11 alts). If a `-light` variant exists, it is shown when the site is in light mode; otherwise the base image is used for both themes.
 
 **Aspect Ratio Images** control which purchase options appear:
-- `main-square.jpg` → enables "Square" option
-- `main-portrait.jpg` → enables "Portrait" option
-- `main-landscape.jpg` → enables "Landscape" option
+- `main-square.png` → enables "Square" option
+- `main-portrait.png` → enables "Portrait" option
+- `main-landscape.png` → enables "Landscape" option
 - If none are provided, all three ratios show by default
 
 **Image Specifications:**
 - **Aspect ratio:** 3:4 (portrait) for all images
 - **Main image:** 1200×1600px recommended
 - **Alternate images:** 600×800px recommended
-- **Format:** JPG (configured in `build/shared-config.json`)
+- **Format:** PNG (configured in `build/shared-config.json`)
 
 **item.json structure:**
 ```json
@@ -256,10 +258,10 @@ The carousel supports up to 12 slides (main + 11 alts). If a `-light` variant ex
 
 **Adding a new gallery item:**
 1. Create folder: `assets/images/gallery/{slug}/`
-2. Add images: `main.jpg`, `alt-1.jpg` through `alt-11.jpg` (carousel uses all that exist)
-3. Optionally add light variants: `main-light.jpg`, `alt-1-light.jpg`, etc.
+2. Add images: `main.png`, `alt-1.png` through `alt-11.png` (carousel uses all that exist)
+3. Optionally add light variants: `main-light.png`, `alt-1-light.png`, etc.
 4. Create `item.json` with the metadata above
-5. Optionally add aspect ratio images: `main-square.jpg`, `main-portrait.jpg`, `main-landscape.jpg`
+5. Optionally add aspect ratio images: `main-square.png`, `main-portrait.png`, `main-landscape.png`
 6. Run `npm run build`
 7. Done — `gallery-data.js` and `product/{slug}.html` are auto-generated
 
@@ -297,8 +299,10 @@ The product detail page (`product/{slug}.html`) features:
 - Static JSON data file for gallery items (no server/database) (001-shop-gallery-viewer)
 
 ## Recent Changes
+- **Cache busting:** All local JS/CSS asset references across every page now include `?v=TIMESTAMP` query params, updated automatically by `/deploy`. Product pages use `{{CACHE_VERSION}}` in the template, replaced by `build.js`
+- **Image format:** Gallery images switched from `.jpg` to `.png` (configured in `build/shared-config.json`)
 - **Build system:** Gallery data and product pages are now auto-generated from `item.json` files via `npm run build`
-- **Light/dark image variants:** Add `-light` suffix images for theme-aware display (e.g., `main-light.jpg`)
+- **Light/dark image variants:** Add `-light` suffix images for theme-aware display (e.g., `main-light.png`)
 - **`themechange` event:** `theme-system.js` now dispatches a custom event when theme toggles, used by gallery components
 - Added 12-slide image carousel with synced thumbnail strip to product detail pages
 - Added cart UX flow: "Added!" confirmation → "This item is in your cart" notice → "Add Another" / "Go to Cart" buttons
