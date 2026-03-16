@@ -4,7 +4,21 @@
  * Image-only card with hover overlay showing name, type, category, and CTA.
  */
 
-import { getMainImagePath, categories } from './gallery-data.js';
+import { getMainImagePath, getMainImagePathForTheme, categories } from './gallery-data.js';
+
+function getCurrentTheme() {
+    return document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+}
+
+// Update all product card images when theme changes
+window.addEventListener('themechange', (e) => {
+    document.querySelectorAll('.product-card__image[data-slug]').forEach(el => {
+        const slug = el.dataset.slug;
+        const basePath = el.dataset.basePath || 'assets/images/gallery';
+        const newPath = getMainImagePathForTheme(slug, e.detail.theme, basePath);
+        el.style.backgroundImage = `url('${newPath}')`;
+    });
+});
 
 /**
  * Get the display name for a category/subcategory
@@ -36,7 +50,7 @@ export function createProductCard(item, options = {}) {
     } = options;
 
     const { typeName, categoryName } = getCategoryInfo(item);
-    const imagePath = getMainImagePath(item.slug, basePath);
+    const imagePath = getMainImagePathForTheme(item.slug, getCurrentTheme(), basePath);
 
     // Create card as an <a> tag for the whole clickable area
     const card = document.createElement('a');
@@ -47,7 +61,7 @@ export function createProductCard(item, options = {}) {
     card.dataset.slug = item.slug;
 
     card.innerHTML = `
-        <div class="product-card__image" style="background-image: url('${imagePath}');"></div>
+        <div class="product-card__image" data-slug="${item.slug}" data-base-path="${basePath}" style="background-image: url('${imagePath}');"></div>
         <div class="product-card__overlay">
             <h3 class="product-card__title">${item.title}</h3>
             <p class="product-card__meta">${typeName} · ${categoryName}</p>

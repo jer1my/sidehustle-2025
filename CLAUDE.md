@@ -93,8 +93,14 @@ assets/css/
 assets/js/
   main.js                  # Core functionality
   theme.js                 # Theme switching system
+  gallery/
+    gallery-data.js          # AUTO-GENERATED — do not edit
   components/
     navigation-component.js  # Single source of truth for navigation
+
+build/
+  build.js                 # Build script — generates gallery-data.js + product pages
+  shared-config.json       # Categories, purchase options, IMAGE_CONFIG
 
 docs/
   design-system.md         # Detailed design system documentation
@@ -197,39 +203,70 @@ The dark background is set first (before localStorage check) since dark is the d
 
 ## Gallery Image System
 
-All gallery images use a standardized folder structure. Images are served from a single location per item, eliminating duplication.
+All gallery images use a standardized folder structure. Each gallery item is fully self-contained in its own folder with an `item.json` file alongside its images.
 
 **Folder Structure:**
 ```
 assets/images/gallery/
   {slug}/
-    main.jpg      # Primary image (hero, grid thumbnail, detail carousel slide 1)
-    alt-1.jpg     # Carousel slide 2
-    alt-2.jpg     # Carousel slide 3
+    item.json         # All metadata (title, description, category, etc.)
+    main.jpg          # Primary image — dark/default theme
+    main-light.jpg    # Primary image — light theme variant (optional)
+    alt-1.jpg         # Carousel slide 2 (dark/default)
+    alt-1-light.jpg   # Carousel slide 2 — light variant (optional)
+    alt-2.jpg         # Carousel slide 3
     ...
-    alt-11.jpg    # Carousel slide 12
+    alt-11.jpg        # Carousel slide 12
 ```
 
-The carousel supports up to 12 slides (main + 11 alts). `IMAGE_CONFIG.altImages` in `gallery-data.js` defines which alt filenames to look for. The carousel dynamically adapts to however many images exist.
+The carousel supports up to 12 slides (main + 11 alts). If a `-light` variant exists, it is shown when the site is in light mode; otherwise the base image is used for both themes.
+
+**Aspect Ratio Images** control which purchase options appear:
+- `main-square.jpg` → enables "Square" option
+- `main-portrait.jpg` → enables "Portrait" option
+- `main-landscape.jpg` → enables "Landscape" option
+- If none are provided, all three ratios show by default
 
 **Image Specifications:**
 - **Aspect ratio:** 3:4 (portrait) for all images
 - **Main image:** 1200×1600px recommended
 - **Alternate images:** 600×800px recommended
-- **Format:** JPG (configured in `gallery-data.js`)
+- **Format:** JPG (configured in `build/shared-config.json`)
 
-**How it works:**
-- Image paths are generated from the item's `slug` field in `gallery-data.js`
-- Helper functions: `getMainImagePath(slug)`, `getAltImagePaths(slug)`, `getAllImagePaths(slug)`
-- No hardcoded image paths in gallery item data
+**item.json structure:**
+```json
+{
+  "id": "gal-001",
+  "title": "Sunset Over Mountains",
+  "slug": "sunset-mountains",
+  "type": "photography",
+  "subCategory": "landscape",
+  "dateCreated": "2024-12-15",
+  "description": "Short description for cards.",
+  "longDescription": "Longer description for the detail page.",
+  "featured": true
+}
+```
+
+**Build System:**
+- `gallery-data.js` and `product/*.html` are auto-generated — **DO NOT EDIT** them directly
+- Source of truth: `assets/images/gallery/*/item.json` + `build/shared-config.json`
+- Build script: `build/build.js` (run via `npm run build`)
+- Categories, purchase options, and image config live in `build/shared-config.json`
 
 **Adding a new gallery item:**
 1. Create folder: `assets/images/gallery/{slug}/`
 2. Add images: `main.jpg`, `alt-1.jpg` through `alt-11.jpg` (carousel uses all that exist)
-3. Add item to `galleryItems` array in `gallery-data.js` (only needs slug, no image paths)
-4. Create product page: Copy `product/_template.html` to `product/{slug}.html`
+3. Optionally add light variants: `main-light.jpg`, `alt-1-light.jpg`, etc.
+4. Create `item.json` with the metadata above
+5. Optionally add aspect ratio images: `main-square.jpg`, `main-portrait.jpg`, `main-landscape.jpg`
+6. Run `npm run build`
+7. Done — `gallery-data.js` and `product/{slug}.html` are auto-generated
 
-**Configuration:** `assets/js/gallery/gallery-data.js` → `IMAGE_CONFIG` object
+**Theme-aware image helpers:**
+- `getMainImagePath(slug)` / `getAllImagePaths(slug)` — returns dark/default images (backward compatible)
+- `getMainImagePathForTheme(slug, theme)` / `getAllImagePathsForTheme(slug, theme)` — returns theme-appropriate images
+- Frontend components listen for `themechange` event to swap images live
 
 ## Product Detail Page
 
@@ -260,9 +297,11 @@ The product detail page (`product/{slug}.html`) features:
 - Static JSON data file for gallery items (no server/database) (001-shop-gallery-viewer)
 
 ## Recent Changes
+- **Build system:** Gallery data and product pages are now auto-generated from `item.json` files via `npm run build`
+- **Light/dark image variants:** Add `-light` suffix images for theme-aware display (e.g., `main-light.jpg`)
+- **`themechange` event:** `theme-system.js` now dispatches a custom event when theme toggles, used by gallery components
 - Added 12-slide image carousel with synced thumbnail strip to product detail pages
 - Added cart UX flow: "Added!" confirmation → "This item is in your cart" notice → "Add Another" / "Go to Cart" buttons
 - Fixed white flash on page transitions by setting `<html>` background in inline theme script (dark-first default)
 - Added cart page active state to navigation component (desktop icon + mobile link)
 - All pages use `--container-max-width` for consistent widths
-- 001-shop-gallery-viewer: Added HTML5, CSS3, Vanilla JavaScript (ES6+) + None (static site using existing CSS architecture)

@@ -1,0 +1,78 @@
+{
+  "IMAGE_CONFIG": {
+    "basePath": "assets/images/gallery",
+    "mainImage": "main",
+    "extension": "png"
+  },
+  "categories": [
+    {
+      "id": "art",
+      "name": "Art",
+      "subCategories": [
+        { "id": "digital", "name": "Digital", "parentCategory": "art" },
+        { "id": "traditional", "name": "Traditional", "parentCategory": "art" }
+      ]
+    },
+    {
+      "id": "photography",
+      "name": "Photography",
+      "subCategories": [
+        { "id": "wildlife", "name": "Wildlife", "parentCategory": "photography" },
+        { "id": "macro", "name": "Macro", "parentCategory": "photography" },
+        { "id": "landscape", "name": "Landscape", "parentCategory": "photography" },
+        { "id": "nature", "name": "Nature", "parentCategory": "photography" }
+      ]
+    }
+  ],
+  "purchaseOptions": [
+    {
+      "id": "digital",
+      "label": "Digital File",
+      "price": 2000,
+      "subType": "aspect-ratio",
+      "subOptions": [
+        { "id": "square", "label": "Square" },
+        { "id": "portrait", "label": "Portrait" },
+        { "id": "landscape", "label": "Landscape" }
+      ]
+    },
+    {
+      "id": "print",
+      "label": "Print Only",
+      "price": 5000,
+      "subType": "aspect-ratio",
+      "subOptions": [
+        { "id": "square", "label": "Square" },
+        { "id": "portrait", "label": "Portrait" },
+        { "id": "landscape", "label": "Landscape" }
+      ]
+    },
+    {
+      "id": "framed-square",
+      "label": "Framed Print (Square)",
+      "price": 17500,
+      "sizeNote": "13×13",
+      "subType": null,
+      "subOptions": [],
+      "frameColors": [
+        { "id": "white", "label": "White Frame / White Mat" },
+        { "id": "black", "label": "Black Frame / Black Mat" }
+      ]
+    },
+    {
+      "id": "framed-rect",
+      "label": "Framed Print (Portrait/Landscape)",
+      "price": 22500,
+      "subType": "orientation",
+      "subOptions": [
+        { "id": "portrait", "label": "Portrait", "sizeNote": "13×19" },
+        { "id": "landscape", "label": "Landscape", "sizeNote": "19×13" }
+      ],
+      "frameColors": [
+        { "id": "white", "label": "White Frame / White Mat" },
+        { "id": "black", "label": "Black Frame / Black Mat" }
+      ]
+    }
+  ],
+  "frameNote": "Frames made in USA with 99% UV protection cover."
+}

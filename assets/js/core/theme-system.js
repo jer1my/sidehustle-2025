@@ -135,6 +135,10 @@ function toggleTheme() {
     // Update theme responsive images
     updateThemeResponsiveImages();
 
+    // Dispatch custom event for theme-aware components (e.g., gallery images)
+    const currentTheme = body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: currentTheme } }));
+
     // Re-enable transitions after a brief delay
     setTimeout(() => {
         body.classList.remove('disable-transitions');

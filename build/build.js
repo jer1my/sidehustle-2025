@@ -1,0 +1,394 @@
+#!/usr/bin/env node
+
+/**
+ * Gallery Build Script
+ *
+ * Scans each gallery folder's item.json to generate:
+ *   1. assets/js/gallery/gallery-data.js (preserves existing export interface)
+ *   2. product/[slug].html pages from product/_template.html
+ *
+ * Usage: npm run build
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const ROOT = path.resolve(__dirname, '..');
+const GALLERY_DIR = path.join(ROOT, 'assets', 'images', 'gallery');
+const OUTPUT_JS = path.join(ROOT, 'assets', 'js', 'gallery', 'gallery-data.js');
+const TEMPLATE_PATH = path.join(ROOT, 'product', '_template.html');
+const PRODUCT_DIR = path.join(ROOT, 'product');
+const CONFIG_PATH = path.join(__dirname, 'shared-config.json');
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function readJSON(filePath) {
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+}
+
+/**
+ * Scan a gallery folder for images and detect light/dark variants.
+ *
+ * Picks up ALL image files in the folder automatically. A file is a
+ * "light variant" if its name (without extension) ends with "-light".
+ * Light variants are paired with their base file and not shown as
+ * separate slides.
+ *
+ * Slide order: main first, then all other non-light images sorted
+ * alphabetically. Prefix filenames with numbers to control order
+ * (e.g., 01-detail.png, 02-closeup.png).
+ *
+ * Aspect ratio detection: any file named main-square, main-portrait,
+ * or main-landscape controls which purchase options appear.
+ */
+function detectImages(folderPath, extension) {
+    const files = fs.readdirSync(folderPath);
+    const ext = `.${extension}`;
+
+    // Separate image files from non-images and light variants
+    const allImages = files.filter(f => f.endsWith(ext));
+    const lightFiles = new Set(allImages.filter(f => {
+        const name = f.slice(0, -ext.length);
+        return name.endsWith('-light');
+    }));
+    const darkFiles = allImages.filter(f => !lightFiles.has(f));
+
+    // Main image
+    const main = darkFiles.includes(`main${ext}`) ? `main${ext}` : null;
+    const mainLight = lightFiles.has(`main-light${ext}`) ? `main-light${ext}` : null;
+
+    // Aspect ratio detection — any dark image file containing "square",
+    // "portrait", or "landscape" in its name enables that purchase option
+    const ASPECT_RATIOS = ['square', 'portrait', 'landscape'];
+    const aspectRatios = ASPECT_RATIOS.filter(ratio =>
+        darkFiles.some(f => f.includes(ratio))
+    );
+    const aspectRatioFiles = {};
+    for (const ratio of aspectRatios) {
+        // Use the first matching file as the preview image for that ratio
+        aspectRatioFiles[ratio] = darkFiles.find(f => f.includes(ratio));
+    }
+
+    // Build carousel slides: main first, then everything else sorted alphabetically
+    // Each slide has a dark (default) file and an optional light variant
+    const slides = [];
+    const slidesLight = [];
+
+    // 1. Main image is always first slide
+    if (main) {
+        slides.push(main);
+        slidesLight.push(mainLight || null);
+    }
+
+    // 2. All other dark images, sorted alphabetically
+    const otherImages = darkFiles
+        .filter(f => f !== `main${ext}`)
+        .sort();
+
+    for (const file of otherImages) {
+        slides.push(file);
+        // Find matching light variant: "name-light.ext"
+        const name = file.slice(0, -ext.length);
+        const lightFile = `${name}-light${ext}`;
+        slidesLight.push(lightFiles.has(lightFile) ? lightFile : null);
+    }
+
+    const hasLightVariants = slidesLight.some(f => f !== null);
+
+    return { main, mainLight, slides, slidesLight, hasLightVariants, aspectRatios, aspectRatioFiles };
+}
+
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
+
+function build() {
+    // Read shared config
+    const config = readJSON(CONFIG_PATH);
+    const ext = config.IMAGE_CONFIG.extension;
+
+    // Discover gallery folders with item.json
+    const folders = fs.readdirSync(GALLERY_DIR, { withFileTypes: true })
+        .filter(d => d.isDirectory())
+        .map(d => d.name)
+        .filter(name => {
+            if (name.startsWith('_')) return false; // Skip template/utility folders
+            const itemPath = path.join(GALLERY_DIR, name, 'item.json');
+            return fs.existsSync(itemPath);
+        })
+        .sort();
+
+    if (folders.length === 0) {
+        console.error('No gallery items found (no item.json files in gallery folders).');
+        process.exit(1);
+    }
+
+    // Read all items and detect images
+    const items = [];
+    const errors = [];
+
+    for (const folder of folders) {
+        const itemPath = path.join(GALLERY_DIR, folder, 'item.json');
+        let item;
+        try {
+            item = readJSON(itemPath);
+        } catch (e) {
+            errors.push(`${folder}/item.json: Invalid JSON — ${e.message}`);
+            continue;
+        }
+
+        // Validate required fields
+        const required = ['id', 'title', 'slug', 'type', 'subCategory', 'dateCreated', 'description'];
+        const missing = required.filter(f => !item[f]);
+        if (missing.length > 0) {
+            errors.push(`${folder}/item.json: Missing fields: ${missing.join(', ')}`);
+            continue;
+        }
+
+        // Verify slug matches folder name
+        if (item.slug !== folder) {
+            errors.push(`${folder}/item.json: slug "${item.slug}" does not match folder name "${folder}"`);
+            continue;
+        }
+
+        // Detect images
+        const images = detectImages(path.join(GALLERY_DIR, folder), ext);
+        if (!images.main) {
+            errors.push(`${folder}: Missing main.${ext}`);
+            continue;
+        }
+
+        item.images = images;
+        items.push(item);
+    }
+
+    if (errors.length > 0) {
+        console.error('Build errors:');
+        errors.forEach(e => console.error(`  - ${e}`));
+        process.exit(1);
+    }
+
+    // Sort items by id for consistent output
+    items.sort((a, b) => a.id.localeCompare(b.id));
+
+    // -----------------------------------------------------------------------
+    // Generate gallery-data.js
+    // -----------------------------------------------------------------------
+
+    const galleryItemsForExport = items.map(item => ({
+        id: item.id,
+        title: item.title,
+        slug: item.slug,
+        type: item.type,
+        subCategory: item.subCategory,
+        dateCreated: item.dateCreated,
+        description: item.description,
+        featured: item.featured || false,
+        images: item.images
+    }));
+
+    const longDescriptions = {};
+    for (const item of items) {
+        if (item.longDescription) {
+            longDescriptions[item.id] = item.longDescription;
+        }
+    }
+
+    const js = `// AUTO-GENERATED by build/build.js — DO NOT EDIT
+// Source: assets/images/gallery/*/item.json + build/shared-config.json
+// Generated: ${new Date().toISOString()}
+
+/**
+ * Gallery Data Module
+ * Static data for the shop gallery viewer
+ */
+
+// ===========================================
+// Image Path Configuration
+// ===========================================
+
+const IMAGE_CONFIG = ${JSON.stringify(config.IMAGE_CONFIG, null, 2)};
+
+/**
+ * Get the main image path for a gallery item
+ * @param {string} slug - The item's slug
+ * @param {string} basePath - Optional base path override (e.g., '../assets/...' for subpages)
+ * @returns {string} Full path to main image
+ */
+export function getMainImagePath(slug, basePath = IMAGE_CONFIG.basePath) {
+    return \`\${basePath}/\${slug}/main.\${IMAGE_CONFIG.extension}\`;
+}
+
+/**
+ * Get all carousel slide paths for a gallery item
+ * Includes main, aspect ratio images, and alt images (in that order)
+ * @param {string} slug - The item's slug
+ * @param {string} basePath - Optional base path override
+ * @returns {string[]} Array of paths to all carousel slides
+ */
+export function getSlideImagePaths(slug, basePath = IMAGE_CONFIG.basePath) {
+    const item = galleryItems.find(i => i.slug === slug);
+    if (!item) return [];
+    return item.images.slides.map(filename => \`\${basePath}/\${slug}/\${filename}\`);
+}
+
+/**
+ * Get all image paths for a gallery item (main + all carousel slides)
+ * @param {string} slug - The item's slug
+ * @param {string} basePath - Optional base path override
+ * @returns {Object} Object with main and alts arrays
+ */
+export function getAllImagePaths(slug, basePath = IMAGE_CONFIG.basePath) {
+    const item = galleryItems.find(i => i.slug === slug);
+    if (!item) return { main: getMainImagePath(slug, basePath), alts: [] };
+    return {
+        main: getMainImagePath(slug, basePath),
+        alts: item.images.slides.slice(1).map(f => \`\${basePath}/\${slug}/\${f}\`)
+    };
+}
+
+/**
+ * Get the main image path for a specific theme
+ * @param {string} slug - The item's slug
+ * @param {string} theme - 'dark' or 'light'
+ * @param {string} basePath - Optional base path override
+ * @returns {string} Full path to theme-appropriate main image
+ */
+export function getMainImagePathForTheme(slug, theme = 'dark', basePath = IMAGE_CONFIG.basePath) {
+    const item = galleryItems.find(i => i.slug === slug);
+    if (!item) return getMainImagePath(slug, basePath);
+    if (theme === 'light' && item.images.mainLight) {
+        return \`\${basePath}/\${slug}/\${item.images.mainLight}\`;
+    }
+    return \`\${basePath}/\${slug}/\${item.images.main}\`;
+}
+
+/**
+ * Get all image paths for a specific theme
+ * @param {string} slug - The item's slug
+ * @param {string} theme - 'dark' or 'light'
+ * @param {string} basePath - Optional base path override
+ * @returns {Object} Object with main and alts paths for the given theme
+ */
+export function getAllImagePathsForTheme(slug, theme = 'dark', basePath = IMAGE_CONFIG.basePath) {
+    const item = galleryItems.find(i => i.slug === slug);
+    if (!item) return getAllImagePaths(slug, basePath);
+    const slideFiles = item.images.slides.map((dark, i) => {
+        const light = item.images.slidesLight[i];
+        return (theme === 'light' && light) ? light : dark;
+    });
+    return {
+        main: \`\${basePath}/\${slug}/\${slideFiles[0]}\`,
+        alts: slideFiles.slice(1).map(f => \`\${basePath}/\${slug}/\${f}\`)
+    };
+}
+
+/**
+ * Get available aspect ratios for a gallery item
+ * @param {string} slug - The item's slug
+ * @returns {string[]} Array of available ratios (e.g., ['square', 'portrait', 'landscape'])
+ */
+export function getAvailableAspectRatios(slug) {
+    const item = galleryItems.find(i => i.slug === slug);
+    if (!item || !item.images.aspectRatios.length) return ['square', 'portrait', 'landscape'];
+    return item.images.aspectRatios;
+}
+
+/**
+ * Get the aspect ratio preview image path
+ * @param {string} slug - The item's slug
+ * @param {string} ratio - 'square', 'portrait', or 'landscape'
+ * @param {string} basePath - Optional base path override
+ * @returns {string|null} Path to the aspect ratio image, or null if not available
+ */
+export function getAspectRatioImagePath(slug, ratio, basePath = IMAGE_CONFIG.basePath) {
+    const item = galleryItems.find(i => i.slug === slug);
+    if (!item || !item.images.aspectRatioFiles[ratio]) return null;
+    return \`\${basePath}/\${slug}/\${item.images.aspectRatioFiles[ratio]}\`;
+}
+
+// Categories and Sub-categories
+export const categories = ${JSON.stringify(config.categories, null, 2)};
+
+// Gallery Items
+export const galleryItems = ${JSON.stringify(galleryItemsForExport, null, 2)};
+
+// ===========================================
+// Purchase Options (shared across all items)
+// ===========================================
+export const purchaseOptions = ${JSON.stringify(config.purchaseOptions, null, 2)};
+
+export const frameNote = ${JSON.stringify(config.frameNote)};
+
+// Long descriptions for detail pages
+export const longDescriptions = ${JSON.stringify(longDescriptions, null, 2)};
+
+// Helper function to get all subcategories for a category
+export function getSubCategories(categoryId) {
+  const category = categories.find(c => c.id === categoryId);
+  return category ? category.subCategories : [];
+}
+
+// Helper function to get gallery item by slug
+export function getItemBySlug(slug) {
+  return galleryItems.find(item => item.slug === slug);
+}
+
+// Helper function to get long description by gallery item ID
+export function getLongDescription(galleryItemId) {
+  return longDescriptions[galleryItemId] || '';
+}
+
+// Helper function to get a purchase option by ID
+export function getPurchaseOption(optionId) {
+  return purchaseOptions.find(opt => opt.id === optionId);
+}
+
+// Helper function to format price (cents to dollars)
+export function formatPrice(cents) {
+  return '$' + (cents / 100).toFixed(2);
+}
+`;
+
+    fs.writeFileSync(OUTPUT_JS, js, 'utf-8');
+    console.log(`  Generated: ${path.relative(ROOT, OUTPUT_JS)} (${items.length} items)`);
+
+    // -----------------------------------------------------------------------
+    // Generate product pages from template
+    // -----------------------------------------------------------------------
+
+    let template;
+    try {
+        template = fs.readFileSync(TEMPLATE_PATH, 'utf-8');
+    } catch (e) {
+        console.error(`Could not read template: ${TEMPLATE_PATH}`);
+        process.exit(1);
+    }
+
+    let pagesGenerated = 0;
+    for (const item of items) {
+        const html = template
+            .replace(/\{\{TITLE\}\}/g, item.title)
+            .replace(/\{\{DESCRIPTION\}\}/g, item.description)
+            .replace(/\{\{SLUG\}\}/g, item.slug);
+
+        const outputPath = path.join(PRODUCT_DIR, `${item.slug}.html`);
+        fs.writeFileSync(outputPath, html, 'utf-8');
+        pagesGenerated++;
+    }
+
+    console.log(`  Generated: ${pagesGenerated} product pages in product/`);
+
+    // Summary
+    const withLightVariants = items.filter(i => i.images.hasLightVariants).length;
+    console.log('');
+    console.log('Gallery Build Complete');
+    console.log(`  Items: ${items.length}`);
+    if (withLightVariants > 0) {
+        console.log(`  Items with light variants: ${withLightVariants}`);
+    }
+}
+
+build();

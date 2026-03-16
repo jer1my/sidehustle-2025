@@ -13,7 +13,20 @@ import {
     getItemSubtotal,
     CART_EVENTS
 } from './cart.js';
-import { getMainImagePath } from '../gallery/gallery-data.js';
+import { getMainImagePath, getMainImagePathForTheme } from '../gallery/gallery-data.js';
+
+function getCurrentTheme() {
+    return document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+}
+
+// Update cart item images when theme changes
+window.addEventListener('themechange', (e) => {
+    document.querySelectorAll('.cart-item__image[data-slug]').forEach(el => {
+        const slug = el.dataset.slug;
+        const newPath = getMainImagePathForTheme(slug, e.detail.theme);
+        el.style.backgroundImage = `url('${newPath}')`;
+    });
+});
 
 // DOM Elements
 let cartItemsContainer = null;
@@ -109,7 +122,7 @@ function renderCartItems(cart) {
  * @returns {string} HTML string
  */
 function createCartItemHTML(item) {
-    const imagePath = getMainImagePath(item.slug);
+    const imagePath = getMainImagePathForTheme(item.slug, getCurrentTheme());
     const subtotal = getItemSubtotal(item);
 
     // Build option description line
@@ -126,7 +139,7 @@ function createCartItemHTML(item) {
 
     return `
         <li class="cart-item" data-cart-item-id="${item.id}">
-            <div class="cart-item__image" style="background-image: url('${imagePath}');" aria-hidden="true"></div>
+            <div class="cart-item__image" data-slug="${item.slug}" style="background-image: url('${imagePath}');" aria-hidden="true"></div>
             <div class="cart-item__details">
                 <h3 class="cart-item__title">${item.title}</h3>
                 <p class="cart-item__options">

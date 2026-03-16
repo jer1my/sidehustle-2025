@@ -10,13 +10,20 @@ import {
     getItemBySlug,
     getLongDescription,
     formatPrice,
-    getAllImagePaths
+    getAllImagePaths,
+    getAllImagePathsForTheme,
+    getAvailableAspectRatios,
+    getAspectRatioImagePath
 } from './gallery-data.js';
 
 import { addItem, isInCart } from '../cart/cart.js';
 
 // Base path for images (relative to product/ directory)
 const IMAGE_BASE_PATH = '../assets/images/gallery';
+
+function getCurrentTheme() {
+    return document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+}
 
 /**
  * Initialize the detail page
@@ -72,8 +79,8 @@ function renderProductDetail(item) {
     // Get description
     const description = getLongDescription(item.id) || item.description || '';
 
-    // Get all image paths
-    const images = getAllImagePaths(item.slug, IMAGE_BASE_PATH);
+    // Get all image paths (theme-aware)
+    const images = getAllImagePathsForTheme(item.slug, getCurrentTheme(), IMAGE_BASE_PATH);
     const allSlides = [images.main, ...images.alts];
 
     // Arrow SVGs
@@ -120,13 +127,25 @@ function renderProductDetail(item) {
 
                 ${description ? `<p class="product-description">${description}</p>` : ''}
 
-                ${renderPurchaseOptions()}
+                ${renderPurchaseOptions(item.slug)}
             </div>
         </div>
     `;
 
     initCarousel();
     initPurchaseInteractions(item);
+
+    // Update carousel images when theme changes
+    window.addEventListener('themechange', (e) => {
+        const themeImages = getAllImagePathsForTheme(item.slug, e.detail.theme, IMAGE_BASE_PATH);
+        const themeSrcs = [themeImages.main, ...themeImages.alts];
+        document.querySelectorAll('.product-carousel__slide-bg').forEach((el, i) => {
+            if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
+        });
+        document.querySelectorAll('.product-thumbnail-strip__bg').forEach((el, i) => {
+            if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
+        });
+    });
 }
 
 /**
@@ -323,9 +342,11 @@ function initCarousel() {
 
 /**
  * Render purchase options section
+ * @param {string} slug - The product slug (used to determine available aspect ratios)
  * @returns {string} HTML string
  */
-function renderPurchaseOptions() {
+function renderPurchaseOptions(slug) {
+    const availableRatios = getAvailableAspectRatios(slug);
     const defaultOption = purchaseOptions[0];
 
     // Type cards
@@ -337,8 +358,8 @@ function renderPurchaseOptions() {
         </div>
     `).join('');
 
-    // Default sub-options (for the first option)
-    const subOptionsHTML = renderSubOptions(defaultOption);
+    // Default sub-options (for the first option), filtered by available ratios
+    const subOptionsHTML = renderSubOptions(defaultOption, availableRatios);
 
     return `
         <div class="purchase-options">
@@ -348,11 +369,18 @@ function renderPurchaseOptions() {
                 ${typeCards}
             </div>
 
-            <div class="purchase-sub-options__container">
-                ${subOptionsHTML}
-            </div>
+            <div class="purchase-secondary-choices">
+                <svg class="purchase-secondary-choices__border" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <rect rx="8" ry="8" />
+                </svg>
+                <div class="purchase-secondary-choices__content">
+                    <div class="purchase-sub-options__container">
+                        ${subOptionsHTML}
+                    </div>
 
-            <div class="purchase-frame-color__container"></div>
+                    <div class="purchase-frame-color__container"></div>
+                </div>
+            </div>
 
             <div class="purchase-options__frame-note-container" style="display: none;">
                 <p class="purchase-options__frame-note">${frameNote}</p>
@@ -376,15 +404,24 @@ function renderPurchaseOptions() {
 /**
  * Render sub-option pills for a given purchase option
  * @param {Object} option - Purchase option
+ * @param {string[]} availableRatios - Available aspect ratios for this item
  * @returns {string} HTML string
  */
-function renderSubOptions(option) {
+function renderSubOptions(option, availableRatios) {
     if (!option.subOptions || option.subOptions.length === 0) {
         return '';
     }
 
+    // Filter sub-options by available aspect ratios when the option type is aspect-ratio
+    let filteredSubs = option.subOptions;
+    if (option.subType === 'aspect-ratio' && availableRatios) {
+        filteredSubs = option.subOptions.filter(sub => availableRatios.includes(sub.id));
+    }
+
+    if (filteredSubs.length === 0) return '';
+
     const label = option.subType === 'aspect-ratio' ? 'Aspect Ratio' : 'Orientation';
-    const pills = option.subOptions.map((sub, i) => `
+    const pills = filteredSubs.map((sub, i) => `
         <button class="purchase-pill${i === 0 ? ' purchase-pill--selected' : ''}"
                 data-sub-id="${sub.id}">${sub.label}</button>
     `).join('');
@@ -497,10 +534,17 @@ function initPurchaseInteractions(item) {
         });
     }
 
+    const availableRatios = getAvailableAspectRatios(item.slug);
+
     function updateSubOptions() {
         const opt = getSelectedOption();
-        selectedSubId = opt.subOptions?.[0]?.id || '';
-        subContainer.innerHTML = renderSubOptions(opt);
+        // Filter sub-options by available ratios for aspect-ratio types
+        let subs = opt.subOptions || [];
+        if (opt.subType === 'aspect-ratio' && availableRatios) {
+            subs = subs.filter(s => availableRatios.includes(s.id));
+        }
+        selectedSubId = subs[0]?.id || '';
+        subContainer.innerHTML = renderSubOptions(opt, availableRatios);
         bindPillClicks(subContainer, 'subId', id => { selectedSubId = id; });
     }
 
@@ -509,6 +553,40 @@ function initPurchaseInteractions(item) {
         selectedFrameColorId = opt.frameColors?.[0]?.id || '';
         frameColorContainer.innerHTML = renderFrameColors(opt);
         bindPillClicks(frameColorContainer, 'frameColorId', id => { selectedFrameColorId = id; });
+    }
+
+    const secondaryChoicesBox = container.querySelector('.purchase-secondary-choices');
+
+    function highlightSecondaryChoice() {
+        if (!secondaryChoicesBox) return;
+
+        const hasContent = subContainer.innerHTML.trim() || frameColorContainer.innerHTML.trim();
+
+        // Reset: remove drawing class and active state
+        secondaryChoicesBox.classList.remove('purchase-secondary-choices--drawing');
+        secondaryChoicesBox.classList.remove('purchase-secondary-choices--active');
+
+        if (hasContent) {
+            // Add active to expand padding, then wait for padding transition
+            // to finish before measuring. This prevents the first click from
+            // measuring the smaller pre-padding size.
+            secondaryChoicesBox.classList.add('purchase-secondary-choices--active');
+
+            setTimeout(() => {
+                const box = secondaryChoicesBox.getBoundingClientRect();
+                const perimeter = 2 * (box.width + box.height) + 20;
+                secondaryChoicesBox.style.setProperty('--border-length', perimeter);
+
+                const rect = secondaryChoicesBox.querySelector('rect');
+                if (rect) {
+                    rect.style.strokeDashoffset = perimeter + 'px';
+                    void rect.offsetWidth;
+                    rect.style.strokeDashoffset = '';
+                }
+
+                secondaryChoicesBox.classList.add('purchase-secondary-choices--drawing');
+            }, 320);
+        }
     }
 
     // Type card clicks
@@ -522,6 +600,7 @@ function initPurchaseInteractions(item) {
             updateFrameColors();
             updatePrice();
             updateFrameNote();
+            highlightSecondaryChoice();
         });
     });
 

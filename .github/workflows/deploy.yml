@@ -14,6 +14,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Build gallery data
+      run: npm run build
+
     - name: Deploy to FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
@@ -26,6 +34,7 @@ jobs:
           **/.git*
           **/.git*/**
           **/node_modules/**
+          **/build/**
           **/.DS_Store
           **/Thumbs.db
           **/.env*
@@ -33,6 +42,9 @@ jobs:
           **/.claude/**
           **/README.md
           **/LICENSE
+          **/package.json
+          **/product/_template.html
+          **/assets/images/gallery/*/item.json
 
 # ==========================================
 # SETUP INSTRUCTIONS:

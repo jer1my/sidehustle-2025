@@ -1,0 +1,11 @@
+{
+  "id": "gal-XXX",
+  "title": "Your Title Here",
+  "slug": "_template",
+  "type": "photography",
+  "subCategory": "landscape",
+  "dateCreated": "2025-01-01",
+  "description": "Short description for cards and grid view.",
+  "longDescription": "Longer, more detailed description for the product detail page.",
+  "featured": false
+}
