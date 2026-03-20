@@ -21,8 +21,31 @@ import { addItem, isInCart } from '../cart/cart.js';
 // Base path for images (relative to product/ directory)
 const IMAGE_BASE_PATH = '../assets/images/gallery';
 
+// Carousel control functions — set by initCarousel, used by purchase interactions
+let carouselGoToSlide = null;
+let carouselStopAutoAdvance = null;
+let carouselStartAutoAdvance = null;
+let carouselPauseAndResume = null;
+
 function getCurrentTheme() {
     return document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+}
+
+/**
+ * Get available framed orientations for a gallery item by checking slide filenames.
+ * Looks for slides containing "frame-portrait" or "frame-landscape".
+ * @param {string} slug - The item's slug
+ * @returns {string[]} Array of available orientations (e.g., ['portrait'] or ['portrait', 'landscape'])
+ */
+function getAvailableFrameOrientations(slug) {
+    const item = getItemBySlug(slug);
+    if (!item) return ['portrait', 'landscape'];
+    const slides = item.images.slides;
+    const orientations = [];
+    if (slides.some(f => f.includes('frame') && f.includes('portrait'))) orientations.push('portrait');
+    if (slides.some(f => f.includes('frame') && f.includes('landscape'))) orientations.push('landscape');
+    // If no frame-specific slides found, show all orientations (fallback)
+    return orientations.length ? orientations : ['portrait', 'landscape'];
 }
 
 /**
@@ -139,21 +162,48 @@ function renderProductDetail(item) {
     window.addEventListener('themechange', (e) => {
         const themeImages = getAllImagePathsForTheme(item.slug, e.detail.theme, IMAGE_BASE_PATH);
         const themeSrcs = [themeImages.main, ...themeImages.alts];
-        document.querySelectorAll('.product-carousel__slide-bg').forEach((el, i) => {
-            if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
-        });
-        document.querySelectorAll('.product-thumbnail-strip__bg').forEach((el, i) => {
-            if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
-        });
 
-        // Update frame theme hint text and icon
+        const slideBgs = document.querySelectorAll('.product-carousel__slide-bg');
+        const thumbBgs = document.querySelectorAll('.product-thumbnail-strip__bg');
+
+        // Crossfade: fade out → swap images → fade in
+        const imagesColumn = document.querySelector('.product-images-column');
+        if (imagesColumn) {
+            imagesColumn.style.transition = 'opacity 0.25s ease';
+            imagesColumn.style.opacity = '0';
+            setTimeout(() => {
+                slideBgs.forEach((el, i) => {
+                    if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
+                });
+                thumbBgs.forEach((el, i) => {
+                    if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
+                });
+                imagesColumn.style.opacity = '1';
+            }, 250);
+        } else {
+            slideBgs.forEach((el, i) => {
+                if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
+            });
+            thumbBgs.forEach((el, i) => {
+                if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
+            });
+        }
+
+        // Sync frame color pills to match new theme
+        const frameColorPills = document.querySelectorAll('.purchase-frame-color__container .purchase-pill');
+        if (frameColorPills.length) {
+            const matchingId = e.detail.theme === 'dark' ? 'black' : 'white';
+            frameColorPills.forEach(pill => {
+                pill.classList.toggle('purchase-pill--selected', pill.dataset.frameColorId === matchingId);
+            });
+        }
+
+        // Update frame theme hint icon
         const hint = document.querySelector('.purchase-frame-theme-hint');
         if (hint) {
             const isDark = e.detail.theme === 'dark';
             const otherMode = isDark ? 'light' : 'dark';
-            const hintText = hint.querySelector('.purchase-frame-theme-hint__text');
             const hintToggle = hint.querySelector('.purchase-frame-theme-hint__toggle');
-            if (hintText) hintText.textContent = `To see the other frame color and matte, switch to ${otherMode} mode`;
             if (hintToggle) {
                 hintToggle.setAttribute('aria-label', `Switch to ${otherMode} mode`);
                 hintToggle.innerHTML = isDark
@@ -354,6 +404,12 @@ function initCarousel() {
     });
 
     startAutoAdvance();
+
+    // Expose controls for purchase interactions
+    carouselGoToSlide = goToSlide;
+    carouselStopAutoAdvance = stopAutoAdvance;
+    carouselStartAutoAdvance = startAutoAdvance;
+    carouselPauseAndResume = pauseAndResume;
 }
 
 /**
@@ -363,6 +419,7 @@ function initCarousel() {
  */
 function renderPurchaseOptions(slug) {
     const availableRatios = getAvailableAspectRatios(slug);
+    const frameOrientations = getAvailableFrameOrientations(slug);
     const defaultOption = purchaseOptions[0];
 
     // Type cards
@@ -375,7 +432,7 @@ function renderPurchaseOptions(slug) {
     `).join('');
 
     // Default sub-options (for the first option), filtered by available ratios
-    const subOptionsHTML = renderSubOptions(defaultOption, availableRatios);
+    const subOptionsHTML = renderSubOptions(defaultOption, availableRatios, frameOrientations);
 
     return `
         <div class="purchase-options">
@@ -423,15 +480,17 @@ function renderPurchaseOptions(slug) {
  * @param {string[]} availableRatios - Available aspect ratios for this item
  * @returns {string} HTML string
  */
-function renderSubOptions(option, availableRatios) {
+function renderSubOptions(option, availableRatios, availableFrameOrientations) {
     if (!option.subOptions || option.subOptions.length === 0) {
         return '';
     }
 
-    // Filter sub-options by available aspect ratios when the option type is aspect-ratio
+    // Filter sub-options by available aspect ratios or frame orientations
     let filteredSubs = option.subOptions;
     if (option.subType === 'aspect-ratio' && availableRatios) {
         filteredSubs = option.subOptions.filter(sub => availableRatios.includes(sub.id));
+    } else if (option.subType === 'orientation' && availableFrameOrientations) {
+        filteredSubs = option.subOptions.filter(sub => availableFrameOrientations.includes(sub.id));
     }
 
     if (filteredSubs.length === 0) return '';
@@ -460,8 +519,10 @@ function renderFrameColors(option) {
         return '';
     }
 
-    const pills = option.frameColors.map((fc, i) => `
-        <button class="purchase-pill${i === 0 ? ' purchase-pill--selected' : ''}"
+    // Default frame color matches current theme: dark → black, light → white
+    const themeDefault = getCurrentTheme() === 'dark' ? 'black' : 'white';
+    const pills = option.frameColors.map(fc => `
+        <button class="purchase-pill${fc.id === themeDefault ? ' purchase-pill--selected' : ''}"
                 data-frame-color-id="${fc.id}">${fc.label}</button>
     `).join('');
 
@@ -477,7 +538,7 @@ function renderFrameColors(option) {
             ${pills}
         </div>
         <div class="purchase-frame-theme-hint">
-            <span class="purchase-frame-theme-hint__text">To see the other frame color and matte, switch to ${otherMode} mode</span>
+            <span class="purchase-frame-theme-hint__text">Preview updates automatically with frame selection</span>
             <button class="purchase-frame-theme-hint__toggle" onclick="toggleTheme()" aria-label="Switch to ${otherMode} mode">
                 ${toggleIcon}
             </button>
@@ -563,24 +624,120 @@ function initPurchaseInteractions(item) {
     }
 
     const availableRatios = getAvailableAspectRatios(item.slug);
+    const frameOrientations = getAvailableFrameOrientations(item.slug);
 
     function updateSubOptions() {
         const opt = getSelectedOption();
-        // Filter sub-options by available ratios for aspect-ratio types
+        // Filter sub-options by available ratios or frame orientations
         let subs = opt.subOptions || [];
         if (opt.subType === 'aspect-ratio' && availableRatios) {
             subs = subs.filter(s => availableRatios.includes(s.id));
+        } else if (opt.subType === 'orientation' && frameOrientations) {
+            subs = subs.filter(s => frameOrientations.includes(s.id));
         }
         selectedSubId = subs[0]?.id || '';
-        subContainer.innerHTML = renderSubOptions(opt, availableRatios);
-        bindPillClicks(subContainer, 'subId', id => { selectedSubId = id; });
+        subContainer.innerHTML = renderSubOptions(opt, availableRatios, frameOrientations);
+        bindPillClicks(subContainer, 'subId', id => {
+            selectedSubId = id;
+            navigateCarouselToSelection();
+        });
     }
 
     function updateFrameColors() {
         const opt = getSelectedOption();
-        selectedFrameColorId = opt.frameColors?.[0]?.id || '';
+        // Default frame color matches theme: dark → black, light → white
+        const themeDefault = getCurrentTheme() === 'dark' ? 'black' : 'white';
+        selectedFrameColorId = opt.frameColors?.find(fc => fc.id === themeDefault)?.id
+            || opt.frameColors?.[0]?.id || '';
         frameColorContainer.innerHTML = renderFrameColors(opt);
-        bindPillClicks(frameColorContainer, 'frameColorId', id => { selectedFrameColorId = id; });
+        bindPillClicks(frameColorContainer, 'frameColorId', id => {
+            selectedFrameColorId = id;
+            // Switch theme to match frame color selection
+            syncThemeToFrameColor(id);
+        });
+    }
+
+    /**
+     * Switch the site theme to match the selected frame color.
+     * White frame → light mode, Black frame → dark mode.
+     * Uses smooth crossfade transition.
+     */
+    function syncThemeToFrameColor(frameColorId) {
+        const currentTheme = getCurrentTheme();
+        const needsSwitch =
+            (frameColorId === 'white' && currentTheme === 'dark') ||
+            (frameColorId === 'black' && currentTheme === 'light');
+        if (needsSwitch) {
+            window.__smoothThemeTransition = true;
+            toggleTheme();
+        }
+    }
+
+    /**
+     * Find the carousel slide index that best matches the current framed option.
+     * Looks for slides with "frame" in the filename + the option shape keyword.
+     */
+    function findFrameSlideIndex() {
+        const opt = getSelectedOption();
+        if (!opt.frameColors?.length) return -1;
+
+        const itemData = getItemBySlug(item.slug);
+        if (!itemData) return -1;
+        const slides = itemData.images.slides;
+
+        // Determine shape keyword from option id + sub-option
+        let shapeKeyword = '';
+        if (opt.id === 'framed-square') {
+            shapeKeyword = 'square';
+        } else if (opt.id === 'framed-rect') {
+            // Use the selected sub-option orientation (portrait/landscape)
+            shapeKeyword = selectedSubId || 'portrait';
+        }
+
+        // Find first slide whose filename contains both "frame" and the shape keyword
+        const idx = slides.findIndex(filename =>
+            filename.includes('frame') && filename.includes(shapeKeyword)
+        );
+        return idx;
+    }
+
+    /**
+     * Find the carousel slide index for the selected aspect ratio (digital/print).
+     * Looks for non-frame slides matching the ratio keyword.
+     * Falls back to main (slide 0) for portrait since main is inherently portrait.
+     */
+    function findAspectRatioSlideIndex() {
+        const itemData = getItemBySlug(item.slug);
+        if (!itemData) return 0;
+        const slides = itemData.images.slides;
+        const ratio = selectedSubId || 'portrait';
+
+        // Find a slide matching the ratio but NOT a frame image
+        const idx = slides.findIndex(filename =>
+            filename.includes(ratio) && !filename.includes('frame')
+        );
+
+        // If no dedicated slide found, default to main (slide 0)
+        return idx >= 0 ? idx : 0;
+    }
+
+    /**
+     * Navigate carousel to the matching slide for the current selection and pause auto-advance
+     */
+    function navigateCarouselToSelection() {
+        const opt = getSelectedOption();
+        let slideIdx = -1;
+
+        if (opt.frameColors?.length) {
+            slideIdx = findFrameSlideIndex();
+        } else if (opt.subType === 'aspect-ratio') {
+            slideIdx = findAspectRatioSlideIndex();
+        }
+
+        if (slideIdx >= 0 && carouselGoToSlide) {
+            carouselGoToSlide(slideIdx);
+            if (carouselStopAutoAdvance) carouselStopAutoAdvance();
+        }
     }
 
     const secondaryChoicesBox = container.querySelector('.purchase-secondary-choices');
@@ -629,6 +786,9 @@ function initPurchaseInteractions(item) {
             updatePrice();
             updateFrameNote();
             highlightSecondaryChoice();
+
+            // Navigate carousel to matching slide and pause auto-advance
+            navigateCarouselToSelection();
         });
     });
 

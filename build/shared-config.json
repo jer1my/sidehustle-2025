@@ -28,7 +28,7 @@
     {
       "id": "digital",
       "label": "Digital File",
-      "price": 2000,
+      "price": 5000,
       "subType": "aspect-ratio",
       "subOptions": [
         { "id": "square", "label": "Square" },
@@ -39,7 +39,7 @@
     {
       "id": "print",
       "label": "Print Only",
-      "price": 5000,
+      "price": 7500,
       "subType": "aspect-ratio",
       "subOptions": [
         { "id": "square", "label": "Square" },

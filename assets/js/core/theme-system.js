@@ -108,13 +108,23 @@ function initTheme() {
 function toggleTheme() {
     const body = document.body;
 
-    // Disable ALL transitions during theme change to prevent flash
-    body.classList.add('disable-transitions');
+    // Allow smooth crossfade when triggered by frame color selection
+    const smooth = window.__smoothThemeTransition;
+    window.__smoothThemeTransition = false;
+
+    if (!smooth) {
+        // Disable ALL transitions during theme change to prevent flash
+        body.classList.add('disable-transitions');
+    }
 
     // Get all theme toggle buttons
     const navToggle = document.querySelector('nav .nav-theme-toggle');
     const styleGuideToggle = document.querySelector('#styleGuideThemeToggle');
     const mobileToggle = document.querySelector('.mobile-theme-toggle');
+
+    if (smooth) {
+        document.documentElement.style.transition = 'background-color 0.3s ease';
+    }
 
     if (body.getAttribute('data-theme') === 'dark') {
         body.removeAttribute('data-theme');
@@ -139,8 +149,10 @@ function toggleTheme() {
     const currentTheme = body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
     window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: currentTheme } }));
 
-    // Re-enable transitions after a brief delay
-    setTimeout(() => {
-        body.classList.remove('disable-transitions');
-    }, 50);
+    if (!smooth) {
+        // Re-enable transitions after a brief delay
+        setTimeout(() => {
+            body.classList.remove('disable-transitions');
+        }, 50);
+    }
 }

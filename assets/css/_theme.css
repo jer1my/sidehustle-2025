@@ -60,7 +60,14 @@ body,
 .btn,
 .form-input,
 .form-textarea,
-.form-select {
+.form-select,
+.product-detail,
+.product-info,
+.purchase-options,
+.purchase-type-card,
+.purchase-pill,
+.purchase-secondary-choices,
+.purchase-frame-theme-hint {
     transition: background-color var(--transition-base),
                 color var(--transition-base),
                 border-color var(--transition-base);
