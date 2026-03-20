@@ -4,7 +4,7 @@
  * Image-only card with hover overlay showing name, type, category, and CTA.
  */
 
-import { getMainImagePath, getMainImagePathForTheme, categories } from './gallery-data.js';
+import { getMainImagePath, getMainImagePathForTheme, getThumbImagePathForTheme, categories } from './gallery-data.js';
 
 function getCurrentTheme() {
     return document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
@@ -15,7 +15,7 @@ window.addEventListener('themechange', (e) => {
     document.querySelectorAll('.product-card__image[data-slug]').forEach(el => {
         const slug = el.dataset.slug;
         const basePath = el.dataset.basePath || 'assets/images/gallery';
-        const newPath = getMainImagePathForTheme(slug, e.detail.theme, basePath);
+        const newPath = getThumbImagePathForTheme(slug, e.detail.theme, basePath);
         el.style.backgroundImage = `url('${newPath}')`;
     });
 });
@@ -50,7 +50,7 @@ export function createProductCard(item, options = {}) {
     } = options;
 
     const { typeName, categoryName } = getCategoryInfo(item);
-    const imagePath = getMainImagePathForTheme(item.slug, getCurrentTheme(), basePath);
+    const imagePath = getThumbImagePathForTheme(item.slug, getCurrentTheme(), basePath);
 
     // Create card as an <a> tag for the whole clickable area
     const card = document.createElement('a');

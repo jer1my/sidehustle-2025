@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "convert": "node build/convert-to-webp.js",
     "build": "node build/build.js"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
   }
 }

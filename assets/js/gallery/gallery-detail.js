@@ -13,7 +13,8 @@ import {
     getAllImagePaths,
     getAllImagePathsForTheme,
     getAvailableAspectRatios,
-    getAspectRatioImagePath
+    getAspectRatioImagePath,
+    getThumbSlidePathsForTheme
 } from './gallery-data.js';
 
 import { addItem, isInCart } from '../cart/cart.js';
@@ -105,6 +106,7 @@ function renderProductDetail(item) {
     // Get all image paths (theme-aware)
     const images = getAllImagePathsForTheme(item.slug, getCurrentTheme(), IMAGE_BASE_PATH);
     const allSlides = [images.main, ...images.alts];
+    const allThumbs = getThumbSlidePathsForTheme(item.slug, getCurrentTheme(), IMAGE_BASE_PATH);
 
     // Arrow SVGs
     const prevArrowSVG = `<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
@@ -133,7 +135,7 @@ function renderProductDetail(item) {
                     <button class="product-thumbnail-strip__arrow product-thumbnail-strip__arrow--prev" aria-label="Previous thumbnails">${prevArrowSVG}</button>
                     <div class="product-thumbnail-strip__viewport">
                         <div class="product-thumbnail-strip__track">
-                            ${allSlides.map((src, i) => `
+                            ${allThumbs.map((src, i) => `
                                 <div class="product-thumbnail-strip__item${i === 0 ? ' product-thumbnail-strip__item--active' : ''}" data-slide="${i}">
                                     <div class="product-thumbnail-strip__bg" style="background-image: url('${src}');"></div>
                                 </div>
@@ -162,6 +164,7 @@ function renderProductDetail(item) {
     window.addEventListener('themechange', (e) => {
         const themeImages = getAllImagePathsForTheme(item.slug, e.detail.theme, IMAGE_BASE_PATH);
         const themeSrcs = [themeImages.main, ...themeImages.alts];
+        const themeThumbSrcs = getThumbSlidePathsForTheme(item.slug, e.detail.theme, IMAGE_BASE_PATH);
 
         const slideBgs = document.querySelectorAll('.product-carousel__slide-bg');
         const thumbBgs = document.querySelectorAll('.product-thumbnail-strip__bg');
@@ -176,7 +179,7 @@ function renderProductDetail(item) {
                     if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
                 });
                 thumbBgs.forEach((el, i) => {
-                    if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
+                    if (themeThumbSrcs[i]) el.style.backgroundImage = `url('${themeThumbSrcs[i]}')`;
                 });
                 imagesColumn.style.opacity = '1';
             }, 250);
@@ -185,7 +188,7 @@ function renderProductDetail(item) {
                 if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
             });
             thumbBgs.forEach((el, i) => {
-                if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
+                if (themeThumbSrcs[i]) el.style.backgroundImage = `url('${themeThumbSrcs[i]}')`;
             });
         }
 

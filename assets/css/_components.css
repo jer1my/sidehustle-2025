@@ -1008,6 +1008,7 @@ body[data-theme="dark"] .card {
 
 .product-thumbnail-strip__item {
     flex-shrink: 0;
+    max-width: 300px;
     aspect-ratio: 3 / 4;
     opacity: var(--product-thumb-inactive-opacity);
     border: 2px solid transparent;
