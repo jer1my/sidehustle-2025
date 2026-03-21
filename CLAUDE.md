@@ -19,8 +19,8 @@ Project documentation for AI assistants (like Claude Code) to understand and mai
 
 ## Site Architecture & Page History
 
-**Current Homepage (January 2025):**
-The index page features a horizontal scroll hero gallery with products, about, and contact sections on a single page.
+**Current Homepage:**
+The index page features a horizontal scroll hero gallery (6 slots, fills with placeholders if fewer items exist) with about and contact sections below. The Info/products section was removed — scroll arrow points directly to #about.
 
 **Previous Split-Screen Homepage:**
 The original design featured a split-screen landing page where users could swipe/click left for "Art & Photography" (`art.html`) or right for "Digital Assets" (`digital.html`). Each side had separate landing pages with their own product galleries.
@@ -53,29 +53,27 @@ The site navigation is managed by a single component that serves as the source o
 const NAV_CONFIG = {
     links: [
         { text: 'Home', href: 'index.html', id: 'home' },
-        { text: 'Info', href: '#products', id: 'products' },
         { text: 'About', href: '#about', id: 'about' },
         { text: 'Contact', href: '#contact', id: 'contact' },
-        { text: 'Shop', href: 'shop-all.html', id: 'shop-all' }
+        { text: 'Shop', href: 'shop-all.html', id: 'shop-all' },
+        { text: 'Blog', href: 'blog.html', id: 'blog' }
         // { text: 'Lab', href: 'lab.html', id: 'lab' }
     ]
 };
 ```
 
 **Hidden Links:**
-- **Lab** - Currently commented out. To restore, uncomment the Lab line and add a comma after the Shop line.
-
-**To Restore Lab Link:**
-```javascript
-{ text: 'Shop', href: 'shop-all.html', id: 'shop-all' },
-{ text: 'Lab', href: 'lab.html', id: 'lab' }
-```
+- **Lab** - Currently commented out. To restore, uncomment the Lab line and add a comma after the Blog line.
 
 **Page Detection:**
 The component auto-detects the current page and:
 - Sets the active state on the appropriate nav link (or cart icon on the cart page)
 - Adjusts hash links (e.g., `#about`) to point back to index.html when on subpages
-- Supports pages: index, lab, shop-all, cart, art, digital
+- Supports pages: index, lab, shop-all, blog, blog-post, cart, art, digital
+- **Blog post pages** (`blog/*.html`) are detected as `blog-post` — all nav links get `../` prefix so they resolve correctly from the subdirectory. The Blog link stays active and points to `../blog.html`.
+
+**Nav pointer-events fix:**
+The `.nav` element uses `pointer-events: none` with `pointer-events: auto` on `.nav-container`. This prevents the nav's transparent gradient tail from blocking clicks on content below it.
 
 ## File Organization
 
@@ -86,20 +84,34 @@ assets/css/
   _base.css                # Reset & base styles
   _typography.css          # Text styles and utilities
   _grid.css                # Grid system and layout
-  _components.css          # Buttons, cards, forms
+  _components.css          # Buttons, cards, forms, blog styles
+  _hero.css                # Hero scroller and placeholder frames
+  _navigation.css          # Nav bar (fixed, gradient, pointer-events fix)
   _theme.css               # Light/dark mode styles
   _utilities.css           # Helper classes (loads last)
 
 assets/js/
   main.js                  # Core functionality
-  theme.js                 # Theme switching system
   gallery/
     gallery-data.js          # AUTO-GENERATED — do not edit
+    gallery-detail.js        # Product detail page (carousel, purchase, cart UX)
+    gallery-grid.js          # Shop grid (filtering, sorting, placeholders)
+    hero-gallery.js          # Homepage hero scroller (fills placeholders)
+    product-card.js          # Shared product card component
+  blog/
+    blog-data.js             # AUTO-GENERATED — do not edit
+    blog-detail.js           # Blog post page (carousel, related item)
+    blog-grid.js             # Blog listing (filtering, sorting)
+    blog-card.js             # Blog card component
   components/
     navigation-component.js  # Single source of truth for navigation
 
+assets/content/blog/         # Blog post content (folder per post)
+assets/images/gallery/       # Gallery images (folder per item)
+
 build/
-  build.js                 # Build script — generates gallery-data.js + product pages
+  build.js                 # Gallery build — generates gallery-data.js + product pages
+  build-blog.js            # Blog build — generates blog-data.js + blog post pages
   convert-to-webp.js       # Converts PNGs → WebP + generates Lanczos thumbnails
   shared-config.json       # Categories, purchase options, IMAGE_CONFIG
 
@@ -126,6 +138,14 @@ For spec-driven development:
 - `/speckit.plan` - Create implementation plan
 - `/speckit.tasks` - Generate actionable tasks
 - `/speckit.implement` - Execute implementation
+
+### npm Scripts
+```
+npm run convert     # PNG → WebP + Lanczos thumbnails (gallery + blog images)
+npm run build       # Generate gallery-data.js + product pages
+npm run build:blog  # Generate blog-data.js + blog post pages
+npm run build:all   # Run build + build:blog together
+```
 
 ### Deployment
 - **Automatic:** Push to `main` triggers FTP deployment
@@ -168,7 +188,7 @@ The site uses a page transition system where `body` starts with `opacity: 0` and
 
 **IMPORTANT:** All `<script src>` and `<link rel="stylesheet" href>` tags for local assets MUST include a `?v=TIMESTAMP` query parameter for cache busting. The `/deploy` command automatically updates these values across all root HTML files. For product pages, use `?v={{CACHE_VERSION}}` in the template — the build script replaces it with `Date.now()`.
 
-**For subpages (in subdirectories like `product/`):** Add `../` prefix to all script paths.
+**For subpages (in subdirectories like `product/` or `blog/`):** Add `../` prefix to all script and asset paths.
 
 **Inline theme script (REQUIRED in every page):**
 Every page must include this script immediately after `<body>` to prevent theme flash during navigation:
@@ -201,7 +221,8 @@ The dark background is set first (before localStorage check) since dark is the d
 - CSS includes `@media (prefers-reduced-motion: reduce)` fallback that sets `opacity: 1`
 
 **Reference templates:**
-- Full page with navigation: See `index.html` or `shop-all.html`
+- Full page with navigation: See `index.html`, `shop-all.html`, or `blog.html`
+- Subpage with navigation: See `blog/_template.html`
 - Minimal page (no navigation): See `product/_template.html`
 
 ## Gallery Image System
@@ -248,16 +269,19 @@ The carousel supports up to 12 slides (main + 11 alts). If a `-light` variant ex
 ```json
 {
   "id": "gal-001",
-  "title": "Sunset Over Mountains",
-  "slug": "sunset-mountains",
-  "type": "photography",
-  "subCategory": "landscape",
-  "dateCreated": "2024-12-15",
+  "title": "Piece Title",
+  "slug": "piece-slug",
+  "type": "art",
+  "subCategory": "digital",
+  "dateCreated": "2025-03-15",
   "description": "Short description for cards.",
   "longDescription": "Longer description for the detail page.",
-  "featured": true
+  "featured": true,
+  "aiAssisted": true
 }
 ```
+
+- `aiAssisted` (optional, default `false`) — when `true`, displays a pill-shaped badge ("AI Assisted") in the accent color on the product card (upper-right corner) and inline next to the category label on the detail page. Use this to transparently label any work that utilized AI in its creation.
 
 **Build System:**
 - `gallery-data.js` and `product/*.html` are auto-generated — **DO NOT EDIT** them directly
@@ -290,10 +314,17 @@ The product detail page (`product/{slug}.html`) features:
 **Image Carousel:**
 - Auto-advancing carousel (4.5s interval) with all available images (main + alts)
 - Synced thumbnail strip below with active highlight always centered
-- Prev/next arrows on thumbnail strip navigate the carousel
 - Touch swipe support on mobile; auto-advance pauses on interaction (resumes after 8s)
 - Pauses when page is hidden (Visibility API)
 - Crossfade transition (0.25s) when theme changes — all slides and thumbnails swap simultaneously
+
+**Carousel Arrow Styling (shared across product detail and blog):**
+- Half-moon positioned — arrow circle center aligns with the image edge, half overlapping the image and half outside. Uses `position: absolute` with negative offset so no layout shift occurs
+- Solid opaque background matching page color (`var(--bg-primary)`) — no transparency
+- On hover: background changes to `var(--color-accent)`, arrow stroke inverts to `var(--bg-primary)`
+- Thumbnail strip arrows use the same style but smaller (28px vs 40px), also half-moon positioned on the strip edges
+- Arrows hidden on mobile (touch swipe used instead)
+- Blog carousel hides arrows entirely when only 1 image exists
 
 **Frame Color ↔ Theme Sync:**
 - Selecting **White Frame** automatically switches the site to light mode
@@ -312,7 +343,7 @@ The product detail page (`product/{slug}.html`) features:
 - After adding: button briefly shows "Added!" (1.5s), then transitions to persistent state:
   - "This item is in your cart" bold notice appears above the button
   - Button changes to "Add Another" with `btn-secondary` (outlined) styling
-  - "Go to Cart" button appears below as `btn-accent` (primary)
+  - **"Checkout"** button (bold) appears below as `btn-accent` (primary), links to cart
 - State persists on page load via `isInCart()` check against localStorage
 
 **Key files:**
@@ -320,20 +351,162 @@ The product detail page (`product/{slug}.html`) features:
 - `assets/js/gallery/gallery-data.js` — Item data, purchase options, image path helpers
 - `assets/js/cart/cart.js` — Cart state management (localStorage)
 
+## Cart Page
+
+The cart page (`cart.html`) shows all items added to the cart with option-specific images.
+
+**Cart item images:**
+- Images match the selected purchase option — framed items show the frame slide, digital/print show the aspect ratio variant
+- Uses pre-rendered thumbnails (not full-size images) for crisp display at cart image size
+- Aspect ratio of the image adapts: square selections show 1:1, landscape 4:3, portrait 3:4
+- Theme-aware — images swap on theme toggle
+
+**Cart summary:**
+- "Shipping & Tax" line with **"Calculated at checkout"** in bold accent color, pulsing indefinitely (3s cycle) to draw attention
+- Subtotal shows item count and total price
+
+**Payment notice (temporary):**
+- Below the summary, a notice explains that online payments are coming soon
+- "Email Your Order" button opens the user's email client with a pre-filled mailto link to `sidehustle.purchases@gmail.com` containing all order details (items, options, sizes, frame colors, quantities, prices, subtotal)
+- Notes that payment can be arranged through PayPal, Venmo, or Zelle
+- This section should be removed once payment processing is integrated
+
+**Key files:**
+- `assets/js/cart/cart-page.js` — Cart page rendering, order mailto builder
+- `assets/js/cart/cart.js` — Cart state management (localStorage)
+- `cart.html` — Cart page HTML
+
+## Blog System
+
+The blog follows the same folder-based, template-driven pattern as the gallery. Each post is a folder with metadata JSON + content HTML.
+
+**Folder Structure:**
+```
+assets/content/blog/
+  _template/              # Example post for reference (skipped by build)
+    post.json
+    content.html
+  {slug}/                 # One folder per blog post
+    post.json             # Post metadata
+    content.html          # Post body (raw HTML, no page wrapper)
+    cover.png             # Featured image (optional, SOURCE)
+    cover-light.png       # Light theme variant (optional SOURCE)
+    img-1.png             # Additional carousel image (optional SOURCE)
+    img-2.png             # ...more images
+    *.webp / thumb-*.webp # AUTO-GENERATED by npm run convert
+```
+
+**post.json structure:**
+```json
+{
+  "id": "blog-001",
+  "title": "Post Title",
+  "slug": "post-slug",
+  "datePublished": "2026-03-20",
+  "category": "process",
+  "excerpt": "Summary for listing page.",
+  "relatedItem": "hairy-styles",
+  "coverPosition": "center 25%"
+}
+```
+
+- `relatedItem` (optional) — slug of a gallery item. When images exist, shows a full-width "View in Shop" button below the carousel. When no images, shows a related card in the content column
+- `category` — for filtering (e.g., "process", "inspiration", "technique")
+- `coverPosition` (optional, default `"center"`) — controls `background-position` of the cover image on the blog listing card. Use this to frame the important part of the image within the card's 16:9 crop. Values:
+  - `"center 0%"` — shows the very top of the image
+  - `"center 25%"` — shows upper quarter (good for faces/subjects near top)
+  - `"center"` or `"center 50%"` — centered (default)
+  - `"center 75%"` — shows lower portion
+  - `"center 100%"` — shows the very bottom
+  - Any valid CSS `background-position` value works (e.g., `"left top"`, `"right center"`)
+- `content.html` — raw HTML body content, inlined into the generated page at build time (no fetch, SEO-friendly)
+
+**Build System:**
+- `blog-data.js` and `blog/*.html` are auto-generated — **DO NOT EDIT** them directly
+- Build script: `build/build-blog.js` (run via `npm run build:blog`)
+- Content is inlined at build time (no runtime fetch)
+
+**Adding a new blog post:**
+1. Create folder: `assets/content/blog/{slug}/`
+2. Add `post.json` with metadata
+3. Add `content.html` with article body (h2/h3 for sections, no h1)
+4. Optionally add `cover.png` and `img-*.png` for carousel
+5. Run `npm run convert` (if images added)
+6. Run `npm run build:blog`
+
+**Blog post page layout:**
+- Full-width header (title, category pill, date) at top
+- Two-column layout when images exist: article content on left, sticky carousel on right (380px max)
+- Single column when no images — carousel column hidden entirely
+- Carousel reuses the same product carousel component (auto-advance, thumbnails, swipe, theme switching)
+- Carousel arrows hidden when only 1 image (no prev/next needed)
+- Thumbnail strip only appears when 2+ images exist
+- Thumbnail strip height constrained within blog posts (80px max)
+- "View in Shop" button appears below carousel when `relatedItem` is set
+
+**Blog listing page (`blog.html`):**
+- Card grid using `.gallery-grid` (2/3/4 column responsive)
+- Category filter + sort (newest/oldest)
+- Cards: cover image (if exists) + category pill + title + excerpt + date
+- Cards have subtle background (`--color-neutral-100` light / `--color-neutral-800` dark), no border until hover
+- Equal height cards (flexbox column, date pushed to bottom)
+- Filter state persisted in sessionStorage
+
+**Key files:**
+- `build/build-blog.js` — Blog build script
+- `blog/_template.html` — Post page template
+- `blog.html` — Blog listing page
+- `assets/js/blog/blog-data.js` — AUTO-GENERATED post data
+- `assets/js/blog/blog-grid.js` — Listing page (cards, filters, sort)
+- `assets/js/blog/blog-card.js` — Blog card component
+- `assets/js/blog/blog-detail.js` — Post page (header, carousel, related item)
+
+## Placeholder System (Hero & Shop Grid)
+
+When fewer than 6 gallery items exist, both the homepage hero scroller and shop grid fill remaining slots with placeholder frames.
+
+- **Placeholder appearance:** Subtle background color offset from page background (`--color-neutral-200` light / `--color-neutral-800` dark)
+- **"More Coming Soon"** text centered in each placeholder, colored `--color-neutral-400` (light) / `--color-neutral-600` (dark)
+- **Hero scroller** always shows 6 slots (real items + placeholders)
+- **Shop grid** always shows at least 6 slots
+- **Hero uses full-size images** (`useFullImage: true` on product cards) — not thumbnails, since the scroller displays them large
+- Placeholders automatically disappear as real gallery items are added
+
+## AI Assisted Badge
+
+Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge for transparency.
+
+- **Product cards:** Badge appears in upper-right corner, absolutely positioned
+- **Detail page:** Badge appears inline next to the category label (e.g., "Digital Art `AI Assisted`")
+- **Styling:** Uses `--color-accent` (emerald green in light mode, gold in dark mode), `--bg-primary` text, fully rounded (`border-radius: var(--radius-full)`)
+- **CSS class:** `.ai-assisted-badge` (card), `.ai-assisted-badge--inline` (detail page)
+
 ## Active Technologies
 - HTML5, CSS3, Vanilla JavaScript (ES6+) + None (static site using existing CSS architecture) (001-shop-gallery-viewer)
 - Static JSON data file for gallery items (no server/database) (001-shop-gallery-viewer)
 
 ## Recent Changes
-- **WebP image format:** Gallery images now served as WebP (converted from PNG sources via `npm run convert`). ~90% filesize reduction. Source PNGs are preserved — configured in `build/shared-config.json`
-- **Pre-rendered thumbnails:** All gallery images get 300×400px Lanczos3-resampled thumbnails (`thumb-*.webp`), eliminating browser downscaling artifacts. Used by shop grid cards and carousel thumbnail strip. Carousel thumbnails capped at 300px max-width to prevent upscaling
-- **Two-step build pipeline:** `npm run convert` (PNG → WebP + thumbnails) then `npm run build` (generate gallery-data.js + product pages). Both steps needed when adding new images
-- **Cache busting:** All local JS/CSS asset references across every page now include `?v=TIMESTAMP` query params, updated automatically by `/deploy`. Product pages use `{{CACHE_VERSION}}` in the template, replaced by `build.js`
-- **Build system:** Gallery data and product pages are now auto-generated from `item.json` files via `npm run build`. Requires `sharp` npm dependency for image conversion
-- **Light/dark image variants:** Add `-light` suffix images for theme-aware display (e.g., `main-light.png`)
-- **`themechange` event:** `theme-system.js` now dispatches a custom event when theme toggles, used by gallery components
-- Added 12-slide image carousel with synced thumbnail strip to product detail pages
-- Added cart UX flow: "Added!" confirmation → "This item is in your cart" notice → "Add Another" / "Go to Cart" buttons
-- Fixed white flash on page transitions by setting `<html>` background in inline theme script (dark-first default)
-- Added cart page active state to navigation component (desktop icon + mobile link)
-- All pages use `--container-max-width` for consistent widths
+- **Carousel arrows redesigned:** Solid opaque background matching page color, half-moon positioned on image edges (no layout shift). Hover turns accent color with inverted stroke. Thumbnail strip arrows match but smaller (28px). Applies to both product detail and blog carousels
+- **Blog system:** Full blog with folder-per-post pattern, build-time content inlining, category filtering, optional carousel (right column), related item links. See Blog System section above
+- **Blog cover position:** `coverPosition` field in post.json controls how the cover image is framed within the 16:9 card crop on the listing page (e.g., `"center 25%"` to show more of the top)
+- **Blog carousel:** Single-image posts hide carousel arrows; "View in Shop" button appears below carousel when `relatedItem` is set
+- **AI Assisted badge:** Pill-shaped accent-colored badge on product cards and detail pages for items with `"aiAssisted": true`. Transparent labeling of AI-created work
+- **Cart page images:** Cart now shows the correct image for each purchase option (framed, square, portrait, landscape) using thumbnails, with proper aspect ratios
+- **Cart payment notice:** Temporary "Email Your Order" mailto button with pre-filled order details, Venmo/Zelle/PayPal messaging. Remove once payment processing is live
+- **Cart "Calculated at checkout":** Shipping & Tax line pulses indefinitely in accent color to highlight additional costs
+- **Contact email:** Updated to `sidehustle.purchases@gmail.com` site-wide
+- **Placeholder system:** Hero scroller and shop grid fill remaining slots (up to 6) with "More Coming Soon" placeholder frames when fewer gallery items exist
+- **Hero uses full-size images:** Hero scroller product cards use `getMainImagePathForTheme` (not thumbnails) for crisp display at large sizes
+- **Nav pointer-events fix:** `.nav` uses `pointer-events: none` with `auto` on `.nav-container` so the gradient tail doesn't block clicks on content below
+- **Blog post nav routing:** Blog posts in `blog/` subdirectory get `../` prefix on all nav links (Home, Shop, Cart, etc.) so they resolve correctly
+- **Removed Info section:** Info nav link and products section removed from index page; scroll arrow now points to #about
+- **Removed placeholder gallery items:** All 10 placeholder items deleted; only real artwork (hairy-styles) remains
+- **Hairy Styles recategorized:** Changed from photography → art (type: "art", subCategory: "digital")
+- **Checkout button:** "Go to Cart" renamed to bold "Checkout" on product detail page after adding to cart
+- **Convert script:** Now scans both `assets/images/gallery/` and `assets/content/blog/` for PNGs to convert
+- **WebP image format:** Gallery images served as WebP (~90% filesize reduction). Source PNGs preserved
+- **Pre-rendered thumbnails:** 300×400px Lanczos3 thumbnails for shop grid, carousel strip, and cart. Blog carousel thumbnails capped at 80px height
+- **Build pipeline:** `npm run convert` → `npm run build` → `npm run build:blog`. All three needed for full rebuild
+- **Cache busting:** `?v=TIMESTAMP` on all assets, auto-updated by `/deploy`
+- **Light/dark image variants:** `-light` suffix images for theme-aware display
+- **`themechange` event:** Custom event dispatched on theme toggle, used by all image components

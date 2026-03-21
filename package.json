@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "convert": "node build/convert-to-webp.js",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "build:blog": "node build/build-blog.js",
+    "build:all": "npm run build && npm run build:blog"
   },
   "dependencies": {
     "sharp": "^0.34.5"

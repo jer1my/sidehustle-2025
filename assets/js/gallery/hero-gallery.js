@@ -1,7 +1,7 @@
 /**
  * Hero Gallery Module
- * Populates the home page hero gallery with the latest gallery items
- * Uses the shared product card component with gallery-frame sizing
+ * Populates the home page hero gallery with the latest gallery items.
+ * Fills remaining slots with placeholder frames when fewer than 6 items exist.
  */
 
 import { galleryItems } from './gallery-data.js';
@@ -22,8 +22,20 @@ function getRecentItems(count = HERO_GALLERY_COUNT) {
 }
 
 /**
+ * Create a placeholder gallery frame with "More Coming Soon" text
+ * @returns {HTMLElement} Placeholder div
+ */
+function createPlaceholderFrame() {
+    const frame = document.createElement('div');
+    frame.className = 'gallery-frame gallery-frame--placeholder';
+    frame.innerHTML = '<span class="placeholder-text">More Coming Soon</span>';
+    return frame;
+}
+
+/**
  * Initialize the hero gallery
- * Replaces static gallery frames with dynamic product cards
+ * Replaces static gallery frames with dynamic product cards,
+ * filling remaining slots with placeholders if needed.
  */
 export function initHeroGallery() {
     const scrollTrack = document.querySelector('.hero-scroll-track');
@@ -36,14 +48,18 @@ export function initHeroGallery() {
     // Get recent items
     const recentItems = getRecentItems();
 
-    // Replace existing frames with product cards
+    // Replace existing frames with product cards or placeholders
     existingFrames.forEach((frame, index) => {
         if (index < recentItems.length) {
             const item = recentItems[index];
             const card = createProductCard(item, {
-                extraClass: 'gallery-frame'
+                extraClass: 'gallery-frame',
+                useFullImage: true
             });
             frame.replaceWith(card);
+        } else {
+            const placeholder = createPlaceholderFrame();
+            frame.replaceWith(placeholder);
         }
     });
 }

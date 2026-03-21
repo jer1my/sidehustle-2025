@@ -205,6 +205,7 @@ function build() {
         dateCreated: item.dateCreated,
         description: item.description,
         featured: item.featured || false,
+        aiAssisted: item.aiAssisted || false,
         images: item.images
     }));
 

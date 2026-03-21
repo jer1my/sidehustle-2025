@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Side Hustle</title>
+    <title>Blog - Side Hustle</title>
 
     <!-- Meta Tags -->
-    <meta name="description" content="Review your shopping cart and checkout.">
+    <meta name="description" content="Behind the scenes — stories, process, and inspiration behind the art.">
     <meta name="author" content="Jerimy Brown">
 
     <!-- Open Graph / Social -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Shopping Cart - Side Hustle">
-    <meta property="og:description" content="Review your shopping cart and checkout.">
+    <meta property="og:title" content="Blog - Side Hustle">
+    <meta property="og:description" content="Behind the scenes — stories, process, and inspiration behind the art.">
 
     <!-- Favicon -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -81,42 +81,44 @@
 
     <!-- Main Content -->
     <main style="min-height: 100vh; padding-top: 100px;">
-        <div class="cart-container">
-            <header class="cart-header">
-                <h1>Shopping Cart</h1>
-            </header>
+        <!-- Filter Bar -->
+        <div class="gallery-filter-bar" role="toolbar" aria-label="Blog filters">
+            <div class="gallery-controls">
+                <div>
+                    <label for="category-filter">Category:</label>
+                    <select id="category-filter" aria-label="Filter by category">
+                        <option value="all">All Categories</option>
+                    </select>
+                </div>
 
-            <!-- Empty Cart State -->
-            <div id="cart-empty" class="cart-empty" style="display: none;">
-                <h2>Your cart is empty</h2>
-                <p>Looks like you haven't added any items yet.</p>
-                <a href="shop-all.html" class="button btn-primary">Browse Gallery</a>
+                <div>
+                    <label for="sort-select">Sort:</label>
+                    <select id="sort-select" aria-label="Sort posts">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
+                </div>
+
+                <button id="clear-filters" class="btn-accent button" style="display: none;">
+                    Clear Filters
+                </button>
             </div>
+        </div>
 
-            <!-- Cart Content -->
-            <div id="cart-content" style="display: none;">
-                <!-- Cart Items -->
-                <ul id="cart-items" class="cart-items" role="list" aria-label="Cart items">
-                    <!-- Cart items will be rendered here by JavaScript -->
-                </ul>
-
-                <!-- Cart Summary -->
-                <div id="cart-summary" class="cart-summary">
-                    <!-- Summary will be rendered here by JavaScript -->
-                </div>
-
-                <!-- PayPal Checkout -->
-                <div class="paypal-container">
-                    <div id="paypal-button-container">
-                        <!-- PayPal buttons will render here -->
-                    </div>
-                    <p class="paypal-container__note">
-                        Secure checkout powered by PayPal. You can pay with PayPal or credit/debit card.
-                    </p>
-                </div>
+        <!-- Blog Grid -->
+        <div class="gallery-container">
+            <div id="blog-grid" class="gallery-grid" role="list" aria-label="Blog posts">
+                <!-- Blog cards will be rendered here by JavaScript -->
             </div>
         </div>
     </main>
+
+    <!-- Back to Top Button -->
+    <button class="btn-arrow btn-arrow-md btn-arrow-filled back-to-top" id="backToTop" onclick="scrollToTop()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 18L12 6M8 10L12 6L16 10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
 
     <!-- Scripts -->
     <!-- Core modules -->
@@ -132,16 +134,8 @@
     <script src="assets/js/components/mobile-menu.js?v=1774051897"></script>
     <script src="assets/js/components/logo-animation.js?v=1774051897"></script>
 
-    <!-- Cart Page Module -->
-    <script type="module" src="assets/js/cart/cart-page.js?v=1774051897"></script>
-
-    <!-- PayPal SDK -->
-    <!-- IMPORTANT: Replace YOUR_PAYPAL_CLIENT_ID with your actual PayPal Client ID -->
-    <!-- Get your Client ID from: https://developer.paypal.com/dashboard/applications -->
-    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD" data-sdk-integration-source="button-factory"></script>
-
-    <!-- PayPal Checkout Integration -->
-    <script type="module" src="assets/js/cart/paypal-checkout.js?v=1774051897"></script>
+    <!-- Blog Module -->
+    <script type="module" src="assets/js/blog/blog-grid.js?v=1774051897"></script>
 
     <!-- Main initialization -->
     <script src="assets/js/main.js?v=1774051897"></script>

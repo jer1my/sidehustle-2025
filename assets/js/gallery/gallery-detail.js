@@ -148,7 +148,7 @@ function renderProductDetail(item) {
 
             <div class="product-info">
                 <h1 class="product-title">${item.title}</h1>
-                <p class="product-category">${categoryLabel}</p>
+                <p class="product-category">${categoryLabel}${item.aiAssisted ? ' <span class="ai-assisted-badge ai-assisted-badge--inline">AI Assisted</span>' : ''}</p>
 
                 ${description ? `<p class="product-description">${description}</p>` : ''}
 
@@ -472,7 +472,7 @@ function renderPurchaseOptions(slug) {
 
             <div class="purchase-options__in-cart-notice"></div>
             <button class="btn-accent button purchase-options__add-btn">Add to Cart</button>
-            <a href="../cart.html" class="btn-accent button purchase-options__go-to-cart-btn">Go to Cart</a>
+            <a href="../cart.html" class="btn-accent button purchase-options__go-to-cart-btn"><strong>Checkout</strong></a>
         </div>
     `;
 }

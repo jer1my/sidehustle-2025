@@ -268,6 +268,9 @@ function sortItems(items) {
     return sorted;
 }
 
+// Minimum number of grid slots to show
+const MIN_GRID_SLOTS = 6;
+
 /**
  * Create a gallery card element
  * Uses the shared product card component
@@ -276,6 +279,20 @@ function createGalleryCard(item) {
     return createProductCard(item, {
         basePath: 'assets/images/gallery'
     });
+}
+
+/**
+ * Create a placeholder card with "More Coming Soon" text
+ * @returns {HTMLElement} Placeholder div
+ */
+function createPlaceholderCard() {
+    const card = document.createElement('div');
+    card.className = 'product-card product-card--placeholder';
+    card.innerHTML = `
+        <div class="product-card__image product-card__image--placeholder"></div>
+        <span class="placeholder-text">More Coming Soon</span>
+    `;
+    return card;
 }
 
 /**
@@ -306,8 +323,8 @@ export function renderGallery() {
     // Clear the grid
     galleryGrid.innerHTML = '';
 
-    // Check for empty state
-    if (items.length === 0) {
+    // Check for empty state (only when filters are active and return nothing)
+    if (items.length === 0 && (currentFilter.type !== 'all' || currentFilter.subCategory !== 'all')) {
         renderEmptyState();
         return;
     }
@@ -317,6 +334,12 @@ export function renderGallery() {
         const card = createGalleryCard(item);
         galleryGrid.appendChild(card);
     });
+
+    // Fill remaining slots with placeholders up to minimum
+    const remaining = MIN_GRID_SLOTS - items.length;
+    for (let i = 0; i < remaining; i++) {
+        galleryGrid.appendChild(createPlaceholderCard());
+    }
 }
 
 // Expose clearFilters globally for the empty state button

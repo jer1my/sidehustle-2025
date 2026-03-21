@@ -220,6 +220,18 @@ body[data-theme="dark"] .gallery-frame {
     background: rgba(30, 30, 30, 0.6); /* Darker grey for dark mode */
 }
 
+/* Placeholder frames when fewer than 6 gallery items exist */
+.gallery-frame--placeholder {
+    background-color: var(--color-neutral-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body[data-theme="dark"] .gallery-frame--placeholder {
+    background-color: var(--color-neutral-800);
+}
+
 /* Gallery frame as link (hover handled by product-card component) */
 a.gallery-frame {
     display: block;

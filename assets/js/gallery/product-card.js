@@ -15,7 +15,9 @@ window.addEventListener('themechange', (e) => {
     document.querySelectorAll('.product-card__image[data-slug]').forEach(el => {
         const slug = el.dataset.slug;
         const basePath = el.dataset.basePath || 'assets/images/gallery';
-        const newPath = getThumbImagePathForTheme(slug, e.detail.theme, basePath);
+        const useFullImage = el.dataset.fullImage === 'true';
+        const getPath = useFullImage ? getMainImagePathForTheme : getThumbImagePathForTheme;
+        const newPath = getPath(slug, e.detail.theme, basePath);
         el.style.backgroundImage = `url('${newPath}')`;
     });
 });
@@ -41,16 +43,19 @@ function getCategoryInfo(item) {
  * @param {Object} options - Card options
  * @param {string} [options.basePath='assets/images/gallery'] - Base path for images
  * @param {string} [options.extraClass=''] - Additional CSS class(es) to add
+ * @param {boolean} [options.useFullImage=false] - Use full-size image instead of thumbnail
  * @returns {HTMLElement} The product card element
  */
 export function createProductCard(item, options = {}) {
     const {
         basePath = 'assets/images/gallery',
-        extraClass = ''
+        extraClass = '',
+        useFullImage = false
     } = options;
 
     const { typeName, categoryName } = getCategoryInfo(item);
-    const imagePath = getThumbImagePathForTheme(item.slug, getCurrentTheme(), basePath);
+    const getPath = useFullImage ? getMainImagePathForTheme : getThumbImagePathForTheme;
+    const imagePath = getPath(item.slug, getCurrentTheme(), basePath);
 
     // Create card as an <a> tag for the whole clickable area
     const card = document.createElement('a');
@@ -60,8 +65,11 @@ export function createProductCard(item, options = {}) {
     card.dataset.productId = item.id;
     card.dataset.slug = item.slug;
 
+    const aiBadgeHTML = item.aiAssisted ? '<span class="ai-assisted-badge">AI Assisted</span>' : '';
+
     card.innerHTML = `
-        <div class="product-card__image" data-slug="${item.slug}" data-base-path="${basePath}" style="background-image: url('${imagePath}');"></div>
+        ${aiBadgeHTML}
+        <div class="product-card__image" data-slug="${item.slug}" data-base-path="${basePath}"${useFullImage ? ' data-full-image="true"' : ''} style="background-image: url('${imagePath}');"></div>
         <div class="product-card__overlay">
             <h3 class="product-card__title">${item.title}</h3>
             <p class="product-card__meta">${typeName} · ${categoryName}</p>

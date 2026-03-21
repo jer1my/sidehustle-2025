@@ -48,6 +48,7 @@ body[data-theme="dark"] .theme-toggle:hover {
     min-height: 120px;
     padding: var(--space-5) 0 0 0;
     isolation: isolate;
+    pointer-events: none;
 }
 
 /* Dark mode navigation gradient */
@@ -56,6 +57,7 @@ body[data-theme="dark"] .nav {
 }
 
 .nav-container {
+    pointer-events: auto;
     max-width: var(--container-max-width);
     margin: 0 auto;
     padding: 0 var(--container-padding-desktop);

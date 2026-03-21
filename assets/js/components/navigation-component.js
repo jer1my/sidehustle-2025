@@ -7,10 +7,10 @@
 const NAV_CONFIG = {
     links: [
         { text: 'Home', href: 'index.html', id: 'home' },
-        { text: 'Info', href: '#products', id: 'products' },
         { text: 'About', href: '#about', id: 'about' },
         { text: 'Contact', href: '#contact', id: 'contact' },
-        { text: 'Shop', href: 'shop-all.html', id: 'shop-all' }
+        { text: 'Shop', href: 'shop-all.html', id: 'shop-all' },
+        { text: 'Blog', href: 'blog.html', id: 'blog' }
         // { text: 'Lab', href: 'lab.html', id: 'lab' }
     ]
 };
@@ -23,10 +23,12 @@ const NAV_CONFIG = {
 function generateNavigation(currentPage = 'index') {
     const isLab = currentPage === 'lab';
     const isShopAll = currentPage === 'shop-all';
+    const isBlog = currentPage === 'blog';
+    const isBlogPost = currentPage === 'blog-post';
     const isCart = currentPage === 'cart';
     const isArt = currentPage === 'art';
     const isDigital = currentPage === 'digital';
-    const logoHref = 'index.html';
+    const logoHref = isBlogPost ? '../index.html' : 'index.html';
 
     // Check if we're on lab page and determine referrer
     let labReferrer = 'index';
@@ -59,7 +61,23 @@ function generateNavigation(currentPage = 'index') {
             if (link.id === 'shop-all') {
                 isActive = true;
             } else if (link.href.startsWith('#')) {
-                // Point hash links back to index
+                href = `index.html${link.href}`;
+            }
+        } else if (isBlogPost) {
+            // On a blog post page (inside blog/ subdirectory)
+            if (link.id === 'blog') {
+                isActive = true;
+                href = '../blog.html';
+            } else if (link.href.startsWith('#')) {
+                href = `../index.html${link.href}`;
+            } else {
+                href = `../${link.href}`;
+            }
+        } else if (isBlog) {
+            // On blog listing page
+            if (link.id === 'blog') {
+                isActive = true;
+            } else if (link.href.startsWith('#')) {
                 href = `index.html${link.href}`;
             }
         } else if (isCart) {
@@ -131,7 +149,7 @@ function generateNavigation(currentPage = 'index') {
                 <ul class="nav-links">
                     ${desktopLinks}
                 </ul>
-                <a href="cart.html" class="cart-icon${isCart ? ' active' : ''}" aria-label="Shopping cart">
+                <a href="${isBlogPost ? '../cart.html' : 'cart.html'}" class="cart-icon${isCart ? ' active' : ''}" aria-label="Shopping cart">
                     ${cartIconSVG}
                     <span class="cart-icon__badge" data-count="0"></span>
                 </a>
@@ -154,7 +172,7 @@ function generateNavigation(currentPage = 'index') {
         <div class="mobile-menu-content">
             <nav class="mobile-nav">
                 ${mobileLinks}
-                <a href="cart.html" class="mobile-cart-link${isCart ? ' active' : ''}">
+                <a href="${isBlogPost ? '../cart.html' : 'cart.html'}" class="mobile-cart-link${isCart ? ' active' : ''}">
                     <span class="mobile-link-text">Cart</span>
                     <span class="cart-icon__badge cart-icon__badge--mobile" data-count="0"></span>
                 </a>
@@ -179,6 +197,12 @@ function initNavigation() {
         currentPage = 'lab';
     } else if (pathname.includes('shop-all')) {
         currentPage = 'shop-all';
+    } else if (pathname.includes('/blog/')) {
+        // Inside blog/ subdirectory — individual post page
+        currentPage = 'blog-post';
+    } else if (pathname.includes('blog')) {
+        // Blog listing page (blog.html)
+        currentPage = 'blog';
     } else if (pathname.includes('cart')) {
         currentPage = 'cart';
     } else if (pathname.includes('art')) {

@@ -11,6 +11,7 @@ const path = require('path');
 const sharp = require('sharp');
 
 const GALLERY_DIR = path.join(__dirname, '..', 'assets', 'images', 'gallery');
+const BLOG_DIR = path.join(__dirname, '..', 'assets', 'content', 'blog');
 const QUALITY = 82; // Good balance of quality and filesize
 const THUMB_WIDTH = 300;
 const THUMB_HEIGHT = 400;
@@ -59,28 +60,31 @@ function formatSize(bytes) {
     return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
 }
 
-async function main() {
-    const folders = fs.readdirSync(GALLERY_DIR, { withFileTypes: true })
-        .filter(d => d.isDirectory())
-        .map(d => d.name)
-        .sort();
+/**
+ * Scan a directory for subfolders containing PNGs, convert + generate thumbnails
+ */
+async function processDirectory(baseDir, label) {
+    let dirFolders;
+    try {
+        dirFolders = fs.readdirSync(baseDir, { withFileTypes: true })
+            .filter(d => d.isDirectory() && !d.name.startsWith('_'))
+            .map(d => d.name)
+            .sort();
+    } catch (e) {
+        return { png: 0, webp: 0, files: 0, thumbs: 0 };
+    }
 
-    console.log(`Converting PNG → WebP (quality: ${QUALITY})\n`);
+    let totalPng = 0, totalWebp = 0, totalFiles = 0, totalThumbs = 0;
 
-    let totalPng = 0;
-    let totalWebp = 0;
-    let totalFiles = 0;
-    let totalThumbs = 0;
-
-    for (const folder of folders) {
-        const folderPath = path.join(GALLERY_DIR, folder);
+    for (const folder of dirFolders) {
+        const folderPath = path.join(baseDir, folder);
         const pngFiles = fs.readdirSync(folderPath)
             .filter(f => f.endsWith('.png'))
             .sort();
 
         if (pngFiles.length === 0) continue;
 
-        console.log(`${folder}/`);
+        console.log(`${label}/${folder}/`);
 
         for (const file of pngFiles) {
             const result = await convertImage(path.join(folderPath, file));
@@ -91,8 +95,6 @@ async function main() {
             }
         }
 
-        // Generate thumbnails for ALL PNG images (high-quality Lanczos downscale)
-        // Thumbnails are prefixed with "thumb-" (e.g., main.png → thumb-main.webp)
         for (const file of pngFiles) {
             const baseName = file.replace(/\.png$/, '');
             const thumbPath = path.join(folderPath, `thumb-${baseName}.webp`);
@@ -102,9 +104,30 @@ async function main() {
         console.log('');
     }
 
-    const totalSavings = ((1 - totalWebp / totalPng) * 100).toFixed(1);
-    console.log(`Done! ${totalFiles} images converted, ${totalThumbs} thumbnails generated.`);
-    console.log(`Total: ${formatSize(totalPng)} → ${formatSize(totalWebp)} (${totalSavings}% smaller)`);
+    return { png: totalPng, webp: totalWebp, files: totalFiles, thumbs: totalThumbs };
+}
+
+async function main() {
+    console.log(`Converting PNG → WebP (quality: ${QUALITY})\n`);
+
+    // Process gallery images
+    const gallery = await processDirectory(GALLERY_DIR, 'gallery');
+
+    // Process blog images
+    const blog = await processDirectory(BLOG_DIR, 'blog');
+
+    const totalFiles = gallery.files + blog.files;
+    const totalThumbs = gallery.thumbs + blog.thumbs;
+    const totalPng = gallery.png + blog.png;
+    const totalWebp = gallery.webp + blog.webp;
+
+    if (totalPng > 0) {
+        const totalSavings = ((1 - totalWebp / totalPng) * 100).toFixed(1);
+        console.log(`Done! ${totalFiles} images converted, ${totalThumbs} thumbnails generated.`);
+        console.log(`Total: ${formatSize(totalPng)} → ${formatSize(totalWebp)} (${totalSavings}% smaller)`);
+    } else {
+        console.log('No PNG images found to convert.');
+    }
 }
 
 main().catch(err => {
