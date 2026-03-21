@@ -443,10 +443,15 @@ export function formatPrice(cents) {
 
     let pagesGenerated = 0;
     for (const item of items) {
+        const ogImage = item.images.main
+            ? `https://www.sidehustle.llc/assets/images/gallery/${item.slug}/${item.images.main}`
+            : 'https://www.sidehustle.llc/assets/images/og-preview.jpg';
+
         const html = template
             .replace(/\{\{TITLE\}\}/g, item.title)
             .replace(/\{\{DESCRIPTION\}\}/g, item.description)
             .replace(/\{\{SLUG\}\}/g, item.slug)
+            .replace(/\{\{OG_IMAGE\}\}/g, ogImage)
             .replace(/\{\{CACHE_VERSION\}\}/g, Date.now());
 
         const outputPath = path.join(PRODUCT_DIR, `${item.slug}.html`);
