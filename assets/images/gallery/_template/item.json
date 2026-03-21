@@ -7,5 +7,6 @@
   "dateCreated": "2025-01-01",
   "description": "Short description for cards and grid view.",
   "longDescription": "Longer, more detailed description for the product detail page.",
+  "order": 1,
   "featured": false
 }

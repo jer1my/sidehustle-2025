@@ -162,8 +162,12 @@ function build() {
         process.exit(1);
     }
 
-    // Sort posts by datePublished (newest first)
-    posts.sort((a, b) => new Date(b.datePublished) - new Date(a.datePublished));
+    // Sort posts by datePublished desc, then order asc as same-day tiebreaker
+    posts.sort((a, b) => {
+        const dateDiff = new Date(b.datePublished) - new Date(a.datePublished);
+        if (dateDiff !== 0) return dateDiff;
+        return (b.order || 0) - (a.order || 0);
+    });
 
     // Collect unique categories
     const categories = [...new Set(posts.map(p => p.category))].sort();
@@ -177,6 +181,7 @@ function build() {
         title: post.title,
         slug: post.slug,
         datePublished: post.datePublished,
+        order: post.order || 999,
         category: post.category,
         excerpt: post.excerpt,
         relatedItem: post.relatedItem || null,

@@ -247,11 +247,11 @@ function filterItems(items) {
 function sortItems(items) {
     const sorted = [...items];
 
-    // Tiebreaker: use dateAdded (item.json mtime from build) when dateCreated is the same day
+    // Tiebreaker: use order field when dateCreated is the same day
     function byDateCreated(a, b) {
         const dateDiff = new Date(b.dateCreated) - new Date(a.dateCreated);
         if (dateDiff !== 0) return dateDiff;
-        return new Date(b.dateAdded || 0) - new Date(a.dateAdded || 0);
+        return (b.order || 0) - (a.order || 0);
     }
 
     switch (currentSort) {
