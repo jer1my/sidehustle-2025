@@ -447,11 +447,30 @@ export function formatPrice(cents) {
             ? `https://www.sidehustle.llc/assets/images/gallery/${item.slug}/${item.images.main}`
             : 'https://www.sidehustle.llc/assets/images/og-preview.jpg';
 
+        const jsonLd = JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            'name': item.title,
+            'description': item.description,
+            'image': ogImage,
+            'url': `https://www.sidehustle.llc/product/${item.slug}.html`,
+            'brand': { '@type': 'Brand', 'name': 'Side Hustle' },
+            'offers': {
+                '@type': 'AggregateOffer',
+                'priceCurrency': 'USD',
+                'lowPrice': '50.00',
+                'highPrice': '225.00',
+                'availability': 'https://schema.org/InStock',
+                'seller': { '@type': 'Organization', 'name': 'Side Hustle' }
+            }
+        }, null, 2);
+
         const html = template
             .replace(/\{\{TITLE\}\}/g, item.title)
             .replace(/\{\{DESCRIPTION\}\}/g, item.description)
             .replace(/\{\{SLUG\}\}/g, item.slug)
             .replace(/\{\{OG_IMAGE\}\}/g, ogImage)
+            .replace(/\{\{JSON_LD\}\}/g, jsonLd)
             .replace(/\{\{CACHE_VERSION\}\}/g, Date.now());
 
         const outputPath = path.join(PRODUCT_DIR, `${item.slug}.html`);
