@@ -22,13 +22,13 @@ function getRecentItems(count = HERO_GALLERY_COUNT) {
 }
 
 /**
- * Create a placeholder gallery frame with "More Coming Soon" text
+ * Create a placeholder gallery frame with "More on the way" text
  * @returns {HTMLElement} Placeholder div
  */
 function createPlaceholderFrame() {
     const frame = document.createElement('div');
     frame.className = 'gallery-frame gallery-frame--placeholder';
-    frame.innerHTML = '<span class="placeholder-text">More Coming Soon</span>';
+    frame.innerHTML = '<span class="placeholder-text">More on the way</span>';
     return frame;
 }
 

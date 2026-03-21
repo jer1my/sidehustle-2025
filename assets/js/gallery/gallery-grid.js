@@ -282,7 +282,7 @@ function createGalleryCard(item) {
 }
 
 /**
- * Create a placeholder card with "More Coming Soon" text
+ * Create a placeholder card with "More on the way" text
  * @returns {HTMLElement} Placeholder div
  */
 function createPlaceholderCard() {
@@ -290,7 +290,7 @@ function createPlaceholderCard() {
     card.className = 'product-card product-card--placeholder';
     card.innerHTML = `
         <div class="product-card__image product-card__image--placeholder"></div>
-        <span class="placeholder-text">More Coming Soon</span>
+        <span class="placeholder-text">More on the way</span>
     `;
     return card;
 }
