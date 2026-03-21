@@ -317,10 +317,15 @@ export function formatDate(dateString) {
         const contentPath = path.join(BLOG_DIR, post.slug, 'content.html');
         const content = fs.readFileSync(contentPath, 'utf-8');
 
+        const ogImage = post.images.cover
+            ? `https://www.sidehustle.llc/assets/images/blog/${post.slug}/${post.images.cover}`
+            : 'https://www.sidehustle.llc/assets/images/og-preview.jpg';
+
         const html = template
             .replace(/\{\{TITLE\}\}/g, post.title)
             .replace(/\{\{DESCRIPTION\}\}/g, post.excerpt)
             .replace(/\{\{SLUG\}\}/g, post.slug)
+            .replace(/\{\{OG_IMAGE\}\}/g, ogImage)
             .replace(/\{\{CONTENT\}\}/g, content)
             .replace(/\{\{CACHE_VERSION\}\}/g, Date.now());
 
