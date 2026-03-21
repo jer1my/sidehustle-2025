@@ -11,7 +11,7 @@ import {
     getThumbSlidePathsForTheme
 } from './blog-data.js';
 
-const IMAGE_BASE_PATH = '../assets/content/blog';
+const IMAGE_BASE_PATH = '../assets/images/blog';
 
 function getCurrentTheme() {
     return document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';

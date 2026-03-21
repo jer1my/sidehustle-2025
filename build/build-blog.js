@@ -15,6 +15,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const BLOG_DIR = path.join(ROOT, 'assets', 'content', 'blog');
+const BLOG_IMAGES_DIR = path.join(ROOT, 'assets', 'images', 'blog');
 const OUTPUT_JS = path.join(ROOT, 'assets', 'js', 'blog', 'blog-data.js');
 const TEMPLATE_PATH = path.join(ROOT, 'blog', '_template.html');
 const BLOG_OUTPUT_DIR = path.join(ROOT, 'blog');
@@ -146,8 +147,11 @@ function build() {
             continue;
         }
 
-        // Detect images (cover + carousel slides)
-        post.images = detectImages(path.join(BLOG_DIR, folder));
+        // Detect images from assets/images/blog/{slug}/ (separate from content)
+        const imagesFolderPath = path.join(BLOG_IMAGES_DIR, folder);
+        post.images = fs.existsSync(imagesFolderPath)
+            ? detectImages(imagesFolderPath)
+            : { cover: null, coverLight: null, slides: [], slidesLight: [], hasLightVariants: false, thumb: null, thumbLight: null, thumbSlides: [], thumbSlidesLight: [] };
 
         posts.push(post);
     }
@@ -189,7 +193,7 @@ function build() {
  * Static data for blog posts
  */
 
-const BLOG_IMAGE_BASE = 'assets/content/blog';
+const BLOG_IMAGE_BASE = 'assets/images/blog';
 
 // Blog Categories
 export const blogCategories = ${JSON.stringify(categories, null, 2)};

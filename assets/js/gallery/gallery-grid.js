@@ -247,12 +247,19 @@ function filterItems(items) {
 function sortItems(items) {
     const sorted = [...items];
 
+    // Tiebreaker: use dateAdded (item.json mtime from build) when dateCreated is the same day
+    function byDateCreated(a, b) {
+        const dateDiff = new Date(b.dateCreated) - new Date(a.dateCreated);
+        if (dateDiff !== 0) return dateDiff;
+        return new Date(b.dateAdded || 0) - new Date(a.dateAdded || 0);
+    }
+
     switch (currentSort) {
         case 'newest':
-            sorted.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+            sorted.sort(byDateCreated);
             break;
         case 'oldest':
-            sorted.sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated));
+            sorted.sort((a, b) => -byDateCreated(a, b));
             break;
         case 'title-asc':
             sorted.sort((a, b) => a.title.localeCompare(b.title));
@@ -261,8 +268,7 @@ function sortItems(items) {
             sorted.sort((a, b) => b.title.localeCompare(a.title));
             break;
         default:
-            // Default to newest
-            sorted.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+            sorted.sort(byDateCreated);
     }
 
     return sorted;

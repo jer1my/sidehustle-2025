@@ -180,6 +180,7 @@ function build() {
         }
 
         item.images = images;
+        item.dateAdded = fs.statSync(itemPath).mtime.toISOString();
         items.push(item);
     }
 
@@ -189,8 +190,12 @@ function build() {
         process.exit(1);
     }
 
-    // Sort items by id for consistent output
-    items.sort((a, b) => a.id.localeCompare(b.id));
+    // Sort by dateCreated desc, then dateAdded (mtime) desc as same-day tiebreaker
+    items.sort((a, b) => {
+        const dateDiff = new Date(b.dateCreated) - new Date(a.dateCreated);
+        if (dateDiff !== 0) return dateDiff;
+        return new Date(b.dateAdded) - new Date(a.dateAdded);
+    });
 
     // -----------------------------------------------------------------------
     // Generate gallery-data.js
@@ -203,6 +208,7 @@ function build() {
         type: item.type,
         subCategory: item.subCategory,
         dateCreated: item.dateCreated,
+        dateAdded: item.dateAdded,
         description: item.description,
         featured: item.featured || false,
         aiAssisted: item.aiAssisted || false,

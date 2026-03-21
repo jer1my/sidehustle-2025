@@ -106,7 +106,8 @@ assets/js/
   components/
     navigation-component.js  # Single source of truth for navigation
 
-assets/content/blog/         # Blog post content (folder per post)
+assets/content/blog/         # Blog post content (folder per post) — text only
+assets/images/blog/          # Blog images (folder per post, mirrors gallery structure)
 assets/images/gallery/       # Gallery images (folder per item)
 
 build/
@@ -251,11 +252,16 @@ assets/images/gallery/
 
 The carousel supports up to 12 slides (main + 11 alts). If a `-light` variant exists, it is shown when the site is in light mode; otherwise the base image is used for both themes.
 
-**Aspect Ratio Images** control which purchase options appear:
-- `main-square.png` → enables "Square" option
-- `main-portrait.png` → enables "Portrait" option
-- `main-landscape.png` → enables "Landscape" option
-- If none are provided, all three ratios show by default
+**Aspect Ratio Images** control which purchase options appear. The build detects available ratios by scanning all dark image filenames for the keywords `square`, `portrait`, or `landscape`:
+- Any file containing `square` (e.g., `01-print-square.png`) → enables Square options
+- Any file containing `portrait` → enables Portrait options
+- Any file containing `landscape` → enables Landscape options
+- If no such filenames exist, all three ratios show by default
+
+**Purchase option cards are filtered at render time** based on what's detected:
+- `framed-square` card is hidden unless `square` is in the available ratios
+- `framed-rect` card is hidden if no frame orientations are available
+- Digital/print sub-option pills are filtered to only available ratios
 
 **Image Specifications:**
 - **Aspect ratio:** 3:4 (portrait) for all images
@@ -397,9 +403,12 @@ assets/content/blog/
   _template/              # Example post for reference (skipped by build)
     post.json
     content.html
-  {slug}/                 # One folder per blog post
+  {slug}/                 # One folder per blog post — TEXT ONLY
     post.json             # Post metadata
     content.html          # Post body (raw HTML, no page wrapper)
+
+assets/images/blog/
+  {slug}/                 # One folder per blog post — IMAGES ONLY (mirrors gallery)
     cover.png             # Featured image (optional, SOURCE)
     cover-light.png       # Light theme variant (optional SOURCE)
     img-1.png             # Additional carousel image (optional SOURCE)
@@ -438,12 +447,13 @@ assets/content/blog/
 - Content is inlined at build time (no runtime fetch)
 
 **Adding a new blog post:**
-1. Create folder: `assets/content/blog/{slug}/`
+1. Create content folder: `assets/content/blog/{slug}/`
 2. Add `post.json` with metadata
 3. Add `content.html` with article body (h2/h3 for sections, no h1)
-4. Optionally add `cover.png` and `img-*.png` for carousel
-5. Run `npm run convert` (if images added)
-6. Run `npm run build:blog`
+4. Optionally create image folder: `assets/images/blog/{slug}/`
+5. Drop `cover.png` and any `img-*.png` into the image folder
+6. Run `npm run convert` (if images added)
+7. Run `npm run build:blog`
 
 **Blog post page layout:**
 - Full-width header (title, category pill, date) at top
@@ -497,6 +507,9 @@ Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge
 - Static JSON data file for gallery items (no server/database) (001-shop-gallery-viewer)
 
 ## Recent Changes
+- **Blog images separated from content:** Blog images now live in `assets/images/blog/{slug}/` (mirrors gallery structure). `assets/content/blog/{slug}/` holds only `post.json` and `content.html`. `npm run convert` and the build script both point to the new location.
+- **Purchase option filtering:** `framed-square` card is hidden when no square images exist for an item; `framed-rect` hidden when no frame orientations available. Detection is based on filenames containing `square`/`portrait`/`landscape` keywords — no separate `main-square.png` files required.
+- **Same-day gallery sort order:** Build script captures `item.json` mtime as `dateAdded` and stores it in `gallery-data.js`. Gallery grid uses it as a tiebreaker when two items share the same `dateCreated` date, preserving the order items were added even within a single day.
 - **Theme preview on all purchase options:** Digital/print options now include a light/dark mode toggle ("Preview in light/dark mode") alongside the aspect ratio pills, matching the existing frame color theme hint
 - **Aspect ratio slide matching:** Digital, print, and frame slides now correctly distinguished by filename keywords — digital excludes "print" and "frame", print requires "print", frame requires "frame"
 - **Default aspect ratio:** Portrait is now the default selection for digital/print (order: Portrait → Landscape → Square)
@@ -521,7 +534,7 @@ Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge
 - **Removed placeholder gallery items:** All 10 placeholder items deleted; only real artwork (hairy-styles) remains
 - **Hairy Styles recategorized:** Changed from photography → art (type: "art", subCategory: "digital")
 - **Checkout button:** "Go to Cart" renamed to bold "Checkout" on product detail page after adding to cart
-- **Convert script:** Now scans both `assets/images/gallery/` and `assets/content/blog/` for PNGs to convert
+- **Convert script:** Scans `assets/images/gallery/` and `assets/images/blog/` for PNGs to convert
 - **WebP image format:** Gallery images served as WebP (~90% filesize reduction). Source PNGs preserved
 - **Pre-rendered thumbnails:** 300×400px Lanczos3 thumbnails for shop grid, carousel strip, and cart. Blog carousel thumbnails capped at 80px height
 - **Build pipeline:** `npm run convert` → `npm run build` → `npm run build:blog`. All three needed for full rebuild
