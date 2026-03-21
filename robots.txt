@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /cart.html
+Disallow: /checkout-success.html
+Disallow: /lab.html
+
+Sitemap: https://www.sidehustle.llc/sitemap.xml

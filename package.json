@@ -6,7 +6,8 @@
     "convert": "node build/convert-to-webp.js",
     "build": "node build/build.js",
     "build:blog": "node build/build-blog.js",
-    "build:all": "npm run build && npm run build:blog"
+    "build:sitemap": "node build/build-sitemap.js",
+    "build:all": "npm run build && npm run build:blog && npm run build:sitemap"
   },
   "dependencies": {
     "sharp": "^0.34.5"

@@ -321,11 +321,29 @@ export function formatDate(dateString) {
             ? `https://www.sidehustle.llc/assets/images/blog/${post.slug}/${post.images.cover}`
             : 'https://www.sidehustle.llc/assets/images/og-preview.jpg';
 
+        const jsonLd = JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            'headline': post.title,
+            'description': post.excerpt,
+            'image': ogImage,
+            'url': `https://www.sidehustle.llc/blog/${post.slug}.html`,
+            'datePublished': post.datePublished,
+            'author': { '@type': 'Person', 'name': 'Jerimy Brown' },
+            'publisher': {
+                '@type': 'Organization',
+                'name': 'Side Hustle',
+                'url': 'https://www.sidehustle.llc',
+                'logo': { '@type': 'ImageObject', 'url': 'https://www.sidehustle.llc/assets/images/og-preview.jpg' }
+            }
+        }, null, 2);
+
         const html = template
             .replace(/\{\{TITLE\}\}/g, post.title)
             .replace(/\{\{DESCRIPTION\}\}/g, post.excerpt)
             .replace(/\{\{SLUG\}\}/g, post.slug)
             .replace(/\{\{OG_IMAGE\}\}/g, ogImage)
+            .replace(/\{\{JSON_LD\}\}/g, jsonLd)
             .replace(/\{\{CONTENT\}\}/g, content)
             .replace(/\{\{CACHE_VERSION\}\}/g, Date.now());
 
