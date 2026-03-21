@@ -333,10 +333,21 @@ The product detail page (`product/{slug}.html`) features:
 - All carousel images (slides + thumbnails) crossfade to the theme-appropriate variants
 - Carousel auto-navigates to the matching frame slide when a frame color is selected
 
+**Theme Preview Toggle:**
+- All purchase option types (digital, print, framed) include a light/dark mode toggle so users can preview the artwork in either theme
+- For framed options: text says "Preview updates automatically with frame selection" (since frame color auto-switches theme)
+- For digital/print: text says "Preview in light/dark mode" with a clickable sun/moon icon
+- Icon and text update dynamically when theme changes
+
 **Aspect Ratio ↔ Carousel Interaction:**
 - Selecting a purchase option (digital, print, framed) pauses auto-advance and navigates to the relevant carousel slide
+- Digital slides match by ratio keyword, excluding "print" and "frame" filenames
+- Print slides match by ratio keyword + "print" in filename, excluding "frame" filenames
+- Frame slides match by "frame" + shape keyword in filename
+- Default aspect ratio order: Portrait → Landscape → Square (portrait is default selection)
 - Framed orientation options (portrait/landscape) are filtered based on which aspect ratio images actually exist for that item
 - If an item has no aspect ratio images, all options show by default
+- Carousel navigates to matching slide on initial page load (not just on click)
 
 **Cart UX:**
 - "Add to Cart" button uses `btn-accent` (primary) styling
@@ -486,6 +497,13 @@ Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge
 - Static JSON data file for gallery items (no server/database) (001-shop-gallery-viewer)
 
 ## Recent Changes
+- **Theme preview on all purchase options:** Digital/print options now include a light/dark mode toggle ("Preview in light/dark mode") alongside the aspect ratio pills, matching the existing frame color theme hint
+- **Aspect ratio slide matching:** Digital, print, and frame slides now correctly distinguished by filename keywords — digital excludes "print" and "frame", print requires "print", frame requires "frame"
+- **Default aspect ratio:** Portrait is now the default selection for digital/print (order: Portrait → Landscape → Square)
+- **Initial carousel navigation:** Carousel now jumps to the correct slide on page load, not just on user interaction
+- **Image swap on theme change:** Removed crossfade opacity animation that caused white flash when switching themes on product detail; images now swap instantly
+- **White flash fix:** Added early `<script>` in `<head>` of all pages to set `<html>` background color before CSS loads. Fixed stray character before `<!DOCTYPE html>` in shop-all.html that caused quirks mode
+- **Dark-first critical CSS:** All pages' inline critical styles (nav gradient, logo SVG) now default to dark and override for light via `body:not([data-theme="dark"])`, matching the site's dark-first approach
 - **Carousel arrows redesigned:** Solid opaque background matching page color, half-moon positioned on image edges (no layout shift). Hover turns accent color with inverted stroke. Thumbnail strip arrows match but smaller (28px). Applies to both product detail and blog carousels
 - **Blog system:** Full blog with folder-per-post pattern, build-time content inlining, category filtering, optional carousel (right column), related item links. See Blog System section above
 - **Blog cover position:** `coverPosition` field in post.json controls how the cover image is framed within the 16:9 card crop on the listing page (e.g., `"center 25%"` to show more of the top)

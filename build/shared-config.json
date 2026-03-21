@@ -31,9 +31,9 @@
       "price": 5000,
       "subType": "aspect-ratio",
       "subOptions": [
-        { "id": "square", "label": "Square" },
         { "id": "portrait", "label": "Portrait" },
-        { "id": "landscape", "label": "Landscape" }
+        { "id": "landscape", "label": "Landscape" },
+        { "id": "square", "label": "Square" }
       ]
     },
     {
@@ -42,9 +42,9 @@
       "price": 7500,
       "subType": "aspect-ratio",
       "subOptions": [
-        { "id": "square", "label": "Square" },
         { "id": "portrait", "label": "Portrait" },
-        { "id": "landscape", "label": "Landscape" }
+        { "id": "landscape", "label": "Landscape" },
+        { "id": "square", "label": "Square" }
       ]
     },
     {

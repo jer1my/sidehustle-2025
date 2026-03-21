@@ -40,7 +40,15 @@ function getCartItemImagePath(item, theme) {
             : (item.subOption === 'landscape' ? 'landscape' : 'portrait');
         matchIdx = slides.findIndex(f => f.includes('frame') && f.includes(shapeKeyword));
     } else if (item.subOption && item.subOption !== 'none') {
-        matchIdx = slides.findIndex(f => f.includes(item.subOption) && !f.includes('frame'));
+        const isDigital = item.optionId === 'digital';
+        const isPrint = item.optionId === 'print';
+        matchIdx = slides.findIndex(f => {
+            if (!f.includes(item.subOption)) return false;
+            if (f.includes('frame')) return false;
+            if (isDigital && f.includes('print')) return false;
+            if (isPrint && !f.includes('print')) return false;
+            return true;
+        });
     }
 
     if (matchIdx >= 0) {

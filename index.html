@@ -23,15 +23,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="assets/css/main.css?v=1774054878">
+    <!-- Set background before CSS loads to prevent white flash on hard refresh -->
+    <script>document.documentElement.style.backgroundColor=localStorage.getItem('theme')==='light'?'#fafafa':'#171717'</script>
+
+    <link rel="stylesheet" href="assets/css/main.css?v=1774058488">
 
     <!-- Critical inline styles to prevent flash -->
     <style>
         .nav {
-            background: linear-gradient(to bottom, rgba(250, 250, 250, 1) 0%, rgba(250, 250, 250, 1) 60%, rgba(250, 250, 250, 0) 100%) !important;
-        }
-        body[data-theme="dark"] .nav {
             background: linear-gradient(to bottom, rgba(23, 23, 23, 1) 0%, rgba(23, 23, 23, 1) 60%, rgba(23, 23, 23, 0) 100%) !important;
+        }
+        body:not([data-theme="dark"]) .nav {
+            background: linear-gradient(to bottom, rgba(250, 250, 250, 1) 0%, rgba(250, 250, 250, 1) 60%, rgba(250, 250, 250, 0) 100%) !important;
         }
 
         /* Use regular (non-accent) logo on art page */
@@ -44,11 +47,11 @@
         }
 
         .logo .logo-svg {
-            background-image: url('assets/icons/logo-sh-light-mode.svg') !important;
+            background-image: url('assets/icons/logo-sh-dark-mode.svg') !important;
         }
 
-        body[data-theme="dark"] .logo .logo-svg {
-            background-image: url('assets/icons/logo-sh-dark-mode.svg') !important;
+        body:not([data-theme="dark"]) .logo .logo-svg {
+            background-image: url('assets/icons/logo-sh-light-mode.svg') !important;
         }
 
         /* Accent color for subtitle on art page */
@@ -82,7 +85,7 @@
 
     <!-- Navigation Component Placeholder -->
     <div id="nav-placeholder"></div>
-    <script src="assets/js/components/navigation-component.js?v=1774054878"></script>
+    <script src="assets/js/components/navigation-component.js?v=1774058488"></script>
 
     <!-- Hero Scroll Container (Tall container for scroll-driven animation) -->
     <div class="hero-scroll-container">
@@ -194,32 +197,32 @@
 
     <!-- Scripts -->
     <!-- Core modules -->
-    <script src="assets/js/core/config.js?v=1774054878"></script>
-    <script src="assets/js/core/data-loader.js?v=1774054878"></script>
-    <script src="assets/js/core/theme-system.js?v=1774054878"></script>
+    <script src="assets/js/core/config.js?v=1774058488"></script>
+    <script src="assets/js/core/data-loader.js?v=1774058488"></script>
+    <script src="assets/js/core/theme-system.js?v=1774058488"></script>
 
     <!-- Utilities -->
-    <script src="assets/js/utils/helpers.js?v=1774054878"></script>
-    <script src="assets/js/utils/animations.js?v=1774054878"></script>
-    <script src="assets/js/utils/image-preloader.js?v=1774054878"></script>
+    <script src="assets/js/utils/helpers.js?v=1774058488"></script>
+    <script src="assets/js/utils/animations.js?v=1774058488"></script>
+    <script src="assets/js/utils/image-preloader.js?v=1774058488"></script>
 
     <!-- Components -->
-    <script src="assets/js/components/navigation.js?v=1774054878"></script>
-    <script src="assets/js/components/mobile-menu.js?v=1774054878"></script>
-    <script src="assets/js/components/logo-animation.js?v=1774054878"></script>
-    <script src="assets/js/components/carousel-base.js?v=1774054878"></script>
-    <script src="assets/js/components/carousel-about.js?v=1774054878"></script>
+    <script src="assets/js/components/navigation.js?v=1774058488"></script>
+    <script src="assets/js/components/mobile-menu.js?v=1774058488"></script>
+    <script src="assets/js/components/logo-animation.js?v=1774058488"></script>
+    <script src="assets/js/components/carousel-base.js?v=1774058488"></script>
+    <script src="assets/js/components/carousel-about.js?v=1774058488"></script>
 
     <!-- Particle system (hero background) -->
-    <script src="assets/js/particle-system.js?v=1774054878"></script>
+    <script src="assets/js/particle-system.js?v=1774058488"></script>
 
     <!-- Hero gallery horizontal scroll -->
-    <script src="assets/js/hero-gallery-scroll.js?v=1774054878"></script>
+    <script src="assets/js/hero-gallery-scroll.js?v=1774058488"></script>
 
     <!-- Hero gallery dynamic content (loads latest items from gallery data) -->
-    <script type="module" src="assets/js/gallery/hero-gallery.js?v=1774054878"></script>
+    <script type="module" src="assets/js/gallery/hero-gallery.js?v=1774058488"></script>
 
     <!-- Main initialization -->
-    <script src="assets/js/main.js?v=1774054878"></script>
+    <script src="assets/js/main.js?v=1774058488"></script>
 </body>
 </html>

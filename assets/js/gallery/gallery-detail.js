@@ -169,28 +169,13 @@ function renderProductDetail(item) {
         const slideBgs = document.querySelectorAll('.product-carousel__slide-bg');
         const thumbBgs = document.querySelectorAll('.product-thumbnail-strip__bg');
 
-        // Crossfade: fade out → swap images → fade in
-        const imagesColumn = document.querySelector('.product-images-column');
-        if (imagesColumn) {
-            imagesColumn.style.transition = 'opacity 0.25s ease';
-            imagesColumn.style.opacity = '0';
-            setTimeout(() => {
-                slideBgs.forEach((el, i) => {
-                    if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
-                });
-                thumbBgs.forEach((el, i) => {
-                    if (themeThumbSrcs[i]) el.style.backgroundImage = `url('${themeThumbSrcs[i]}')`;
-                });
-                imagesColumn.style.opacity = '1';
-            }, 250);
-        } else {
-            slideBgs.forEach((el, i) => {
-                if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
-            });
-            thumbBgs.forEach((el, i) => {
-                if (themeThumbSrcs[i]) el.style.backgroundImage = `url('${themeThumbSrcs[i]}')`;
-            });
-        }
+        // Swap images immediately — the page theme transition provides the visual smoothness
+        slideBgs.forEach((el, i) => {
+            if (themeSrcs[i]) el.style.backgroundImage = `url('${themeSrcs[i]}')`;
+        });
+        thumbBgs.forEach((el, i) => {
+            if (themeThumbSrcs[i]) el.style.backgroundImage = `url('${themeThumbSrcs[i]}')`;
+        });
 
         // Sync frame color pills to match new theme
         const frameColorPills = document.querySelectorAll('.purchase-frame-color__container .purchase-pill');
@@ -201,19 +186,22 @@ function renderProductDetail(item) {
             });
         }
 
-        // Update frame theme hint icon
-        const hint = document.querySelector('.purchase-frame-theme-hint');
-        if (hint) {
-            const isDark = e.detail.theme === 'dark';
-            const otherMode = isDark ? 'light' : 'dark';
+        // Update all theme hint icons and text
+        const isDark = e.detail.theme === 'dark';
+        const otherMode = isDark ? 'light' : 'dark';
+        document.querySelectorAll('.purchase-frame-theme-hint').forEach(hint => {
             const hintToggle = hint.querySelector('.purchase-frame-theme-hint__toggle');
+            const hintText = hint.querySelector('.purchase-frame-theme-hint__text');
             if (hintToggle) {
                 hintToggle.setAttribute('aria-label', `Switch to ${otherMode} mode`);
                 hintToggle.innerHTML = isDark
                     ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.375 12C5.375 8.341 8.341 5.375 12 5.375s6.625 2.966 6.625 6.625-2.966 6.625-6.625 6.625S5.375 15.659 5.375 12ZM12 7.375a4.625 4.625 0 100 9.25 4.625 4.625 0 000-9.25Z" fill="currentColor"/><path d="M12 .5a1 1 0 011 1v1.875a1 1 0 11-2 0V1.5a1 1 0 011-1ZM5.282 3.868a1 1 0 00-1.414 0 1 1 0 000 1.414l1.326 1.326a1 1 0 001.414-1.414L5.282 3.868ZM.5 12a1 1 0 011-1h1.875a1 1 0 110 2H1.5a1 1 0 01-1-1ZM6.608 17.392a1 1 0 010 1.414l-1.326 1.326a1 1 0 01-1.414-1.414l1.326-1.326a1 1 0 011.414 0ZM12 19.625a1 1 0 011 1V22.5a1 1 0 11-2 0v-1.875a1 1 0 011-1ZM17.392 17.392a1 1 0 011.414 0l1.326 1.325a1 1 0 01-1.414 1.415l-1.326-1.326a1 1 0 010-1.414ZM19.625 12a1 1 0 011-1H22.5a1 1 0 110 2h-1.875a1 1 0 01-1-1ZM20.132 5.282a1 1 0 000-1.414 1 1 0 00-1.414 0l-1.326 1.326a1 1 0 001.414 1.414l1.326-1.326Z" fill="currentColor"/></svg>`
                     : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.98 2.731a1 1 0 00-.576-.002C7.79 3.182 6.323 4.047 5.146 5.24A9.003 9.003 0 0010.01 19.36a9.003 9.003 0 008.749-4.507 9.003 9.003 0 01-8.78-12.122ZM6.57 6.645a7.003 7.003 0 0011.154 10.785 7.003 7.003 0 01-11.154-10.785Z" fill="currentColor"/></svg>`;
             }
-        }
+            if (hintText && hint.classList.contains('purchase-theme-preview-hint')) {
+                hintText.textContent = `Preview in ${otherMode} mode`;
+            }
+        });
     });
 }
 
@@ -504,10 +492,35 @@ function renderSubOptions(option, availableRatios, availableFrameOrientations) {
                 data-sub-id="${sub.id}">${sub.label}</button>
     `).join('');
 
+    // Add theme toggle for aspect-ratio options (digital/print) so users can preview light vs dark
+    const themeHint = option.subType === 'aspect-ratio' ? renderThemePreviewHint() : '';
+
     return `
         <div class="purchase-sub-options">
             <span class="purchase-sub-options__label">${label}</span>
             ${pills}
+        </div>
+        ${themeHint}
+    `;
+}
+
+/**
+ * Render a theme preview toggle hint for digital/print options
+ * @returns {string} HTML string
+ */
+function renderThemePreviewHint() {
+    const isDark = getCurrentTheme() === 'dark';
+    const otherMode = isDark ? 'light' : 'dark';
+    const toggleIcon = isDark
+        ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.375 12C5.375 8.341 8.341 5.375 12 5.375s6.625 2.966 6.625 6.625-2.966 6.625-6.625 6.625S5.375 15.659 5.375 12ZM12 7.375a4.625 4.625 0 100 9.25 4.625 4.625 0 000-9.25Z" fill="currentColor"/><path d="M12 .5a1 1 0 011 1v1.875a1 1 0 11-2 0V1.5a1 1 0 011-1ZM5.282 3.868a1 1 0 00-1.414 0 1 1 0 000 1.414l1.326 1.326a1 1 0 001.414-1.414L5.282 3.868ZM.5 12a1 1 0 011-1h1.875a1 1 0 110 2H1.5a1 1 0 01-1-1ZM6.608 17.392a1 1 0 010 1.414l-1.326 1.326a1 1 0 01-1.414-1.414l1.326-1.326a1 1 0 011.414 0ZM12 19.625a1 1 0 011 1V22.5a1 1 0 11-2 0v-1.875a1 1 0 011-1ZM17.392 17.392a1 1 0 011.414 0l1.326 1.325a1 1 0 01-1.414 1.415l-1.326-1.326a1 1 0 010-1.414ZM19.625 12a1 1 0 011-1H22.5a1 1 0 110 2h-1.875a1 1 0 01-1-1ZM20.132 5.282a1 1 0 000-1.414 1 1 0 00-1.414 0l-1.326 1.326a1 1 0 001.414 1.414l1.326-1.326Z" fill="currentColor"/></svg>`
+        : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.98 2.731a1 1 0 00-.576-.002C7.79 3.182 6.323 4.047 5.146 5.24A9.003 9.003 0 0010.01 19.36a9.003 9.003 0 008.749-4.507 9.003 9.003 0 01-8.78-12.122ZM6.57 6.645a7.003 7.003 0 0011.154 10.785 7.003 7.003 0 01-11.154-10.785Z" fill="currentColor"/></svg>`;
+
+    return `
+        <div class="purchase-frame-theme-hint purchase-theme-preview-hint">
+            <span class="purchase-frame-theme-hint__text">Preview in ${otherMode} mode</span>
+            <button class="purchase-frame-theme-hint__toggle" onclick="toggleTheme()" aria-label="Switch to ${otherMode} mode">
+                ${toggleIcon}
+            </button>
         </div>
     `;
 }
@@ -714,13 +727,21 @@ function initPurchaseInteractions(item) {
         if (!itemData) return 0;
         const slides = itemData.images.slides;
         const ratio = selectedSubId || 'portrait';
+        const isDigital = selectedOptionId === 'digital';
+        const isPrint = selectedOptionId === 'print';
 
-        // Find a slide matching the ratio but NOT a frame image
-        const idx = slides.findIndex(filename =>
-            filename.includes(ratio) && !filename.includes('frame')
-        );
+        // For digital: match ratio keyword, exclude frame AND print slides
+        // For print: match ratio keyword + "print" in filename, exclude frame slides
+        const idx = slides.findIndex(filename => {
+            if (!filename.includes(ratio)) return false;
+            if (filename.includes('frame')) return false;
+            if (isDigital && filename.includes('print')) return false;
+            if (isPrint && !filename.includes('print')) return false;
+            return true;
+        });
 
         // If no dedicated slide found, default to main (slide 0)
+        // Main is inherently portrait, so this is correct for portrait fallback
         return idx >= 0 ? idx : 0;
     }
 
@@ -796,7 +817,10 @@ function initPurchaseInteractions(item) {
     });
 
     // Initial pill bindings
-    bindPillClicks(subContainer, 'subId', id => { selectedSubId = id; });
+    bindPillClicks(subContainer, 'subId', id => {
+        selectedSubId = id;
+        navigateCarouselToSelection();
+    });
 
     // Add to Cart
     addBtn.addEventListener('click', () => {
@@ -836,6 +860,7 @@ function initPurchaseInteractions(item) {
     updateInCartState();
     updateFrameNote();
     updateFrameColors();
+    navigateCarouselToSelection();
 
     // Wait for page fade-in (300ms) to complete before drawing the border
     setTimeout(highlightSecondaryChoice, 600);
