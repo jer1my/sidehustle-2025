@@ -118,9 +118,17 @@ function filterPosts(posts) {
 function sortPosts(posts) {
     const sorted = [...posts];
     if (currentSort === 'oldest') {
-        sorted.sort((a, b) => new Date(a.datePublished) - new Date(b.datePublished));
+        sorted.sort((a, b) => {
+            const dateDiff = new Date(a.datePublished) - new Date(b.datePublished);
+            if (dateDiff !== 0) return dateDiff;
+            return (a.order || 0) - (b.order || 0);
+        });
     } else {
-        sorted.sort((a, b) => new Date(b.datePublished) - new Date(a.datePublished));
+        sorted.sort((a, b) => {
+            const dateDiff = new Date(b.datePublished) - new Date(a.datePublished);
+            if (dateDiff !== 0) return dateDiff;
+            return (b.order || 0) - (a.order || 0);
+        });
     }
     return sorted;
 }
