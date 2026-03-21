@@ -11,7 +11,7 @@ const path = require('path');
 const sharp = require('sharp');
 
 const GALLERY_DIR = path.join(__dirname, '..', 'assets', 'images', 'gallery');
-const BLOG_DIR = path.join(__dirname, '..', 'assets', 'content', 'blog');
+const BLOG_DIR = path.join(__dirname, '..', 'assets', 'images', 'blog');
 const QUALITY = 82; // Good balance of quality and filesize
 const THUMB_WIDTH = 300;
 const THUMB_HEIGHT = 400;

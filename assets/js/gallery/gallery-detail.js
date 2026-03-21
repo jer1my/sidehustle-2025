@@ -411,10 +411,19 @@ function initCarousel() {
 function renderPurchaseOptions(slug) {
     const availableRatios = getAvailableAspectRatios(slug);
     const frameOrientations = getAvailableFrameOrientations(slug);
-    const defaultOption = purchaseOptions[0];
+
+    // Filter top-level options: framed-square requires 'square' in available ratios;
+    // framed-rect requires at least one available frame orientation
+    const visibleOptions = purchaseOptions.filter(opt => {
+        if (opt.id === 'framed-square') return availableRatios.includes('square');
+        if (opt.id === 'framed-rect') return frameOrientations.length > 0;
+        return true;
+    });
+
+    const defaultOption = visibleOptions[0] || purchaseOptions[0];
 
     // Type cards
-    const typeCards = purchaseOptions.map(opt => `
+    const typeCards = visibleOptions.map(opt => `
         <div class="purchase-type-card${opt.id === defaultOption.id ? ' purchase-type-card--selected' : ''}"
              data-option-id="${opt.id}">
             <div class="purchase-type-card__label">${opt.label}</div>
@@ -422,7 +431,7 @@ function renderPurchaseOptions(slug) {
         </div>
     `).join('');
 
-    // Default sub-options (for the first option), filtered by available ratios
+    // Default sub-options (for the first visible option), filtered by available ratios
     const subOptionsHTML = renderSubOptions(defaultOption, availableRatios, frameOrientations);
 
     return `
@@ -576,6 +585,15 @@ function initPurchaseInteractions(item) {
     let selectedFrameColorId = '';
 
     const typeCards = container.querySelectorAll('.purchase-type-card');
+
+    // Sync initial state to the first rendered card (filtered options may differ from purchaseOptions order)
+    const firstCard = typeCards[0];
+    if (firstCard) {
+        selectedOptionId = firstCard.dataset.optionId;
+        const firstOpt = purchaseOptions.find(o => o.id === selectedOptionId);
+        selectedSubId = firstOpt?.subOptions?.[0]?.id || '';
+    }
+
     const subContainer = container.querySelector('.purchase-sub-options__container');
     const frameColorContainer = container.querySelector('.purchase-frame-color__container');
     const frameNoteContainer = container.querySelector('.purchase-options__frame-note-container');
