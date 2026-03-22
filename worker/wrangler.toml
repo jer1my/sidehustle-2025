@@ -1,0 +1,12 @@
+name = "sidehustle-checkout"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://www.sidehustle.llc"
+
+# Development environment
+[env.dev]
+name = "sidehustle-checkout-dev"
+[env.dev.vars]
+ALLOWED_ORIGIN = "*"
