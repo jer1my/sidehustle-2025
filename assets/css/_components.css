@@ -1139,6 +1139,13 @@ body[data-theme="dark"] .card {
     margin-bottom: var(--space-6);
 }
 
+.product-tools {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: var(--space-6);
+}
+
 .product-description {
     font-size: var(--typo-body-size);
     line-height: var(--typo-body-line-height);
