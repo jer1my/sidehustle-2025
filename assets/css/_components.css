@@ -823,9 +823,21 @@ body[data-theme="dark"] .card {
     background: var(--bg-primary);
 }
 
+/* Fixed overlay — stable container that iOS won't displace during address bar animation */
+.product-close-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    overflow: visible;
+    z-index: 9999;
+    pointer-events: none;
+}
+
 /* Close button */
 .product-close-btn {
-    position: fixed;
+    position: absolute;
     top: var(--space-6, 24px);
     right: var(--space-6, 24px);
     width: 48px;
@@ -839,8 +851,8 @@ body[data-theme="dark"] .card {
     color: var(--text-primary);
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
-    z-index: 9999;
     text-decoration: none;
+    pointer-events: auto;
 }
 
 .product-close-btn:hover {
