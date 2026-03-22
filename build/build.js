@@ -458,7 +458,7 @@ export function formatPrice(cents) {
                 '@type': 'AggregateOffer',
                 'priceCurrency': 'USD',
                 'lowPrice': '50.00',
-                'highPrice': '225.00',
+                'highPrice': '245.00',
                 'availability': 'https://schema.org/InStock',
                 'seller': { '@type': 'Organization', 'name': 'Side Hustle' }
             }

@@ -241,8 +241,8 @@ function renderCartSummary() {
             <span class="cart-summary__value">${formatPrice(total)}</span>
         </div>
         <div class="cart-summary__row">
-            <span class="cart-summary__label">Shipping &amp; Tax</span>
-            <span class="cart-summary__value cart-summary__value--accent"><strong>Calculated at checkout</strong></span>
+            <span class="cart-summary__label">Shipping</span>
+            <span class="cart-summary__value"><strong>Free</strong></span>
         </div>
         <div class="cart-summary__row cart-summary__row--total">
             <span class="cart-summary__label">Subtotal</span>

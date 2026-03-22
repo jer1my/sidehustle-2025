@@ -39,7 +39,7 @@
     {
       "id": "print",
       "label": "Print Only",
-      "price": 7500,
+      "price": 8500,
       "subType": "aspect-ratio",
       "subOptions": [
         { "id": "portrait", "label": "Portrait" },
@@ -50,7 +50,7 @@
     {
       "id": "framed-square",
       "label": "Framed Print (Square)",
-      "price": 17500,
+      "price": 19500,
       "sizeNote": "13×13",
       "subType": null,
       "subOptions": [],
@@ -62,7 +62,7 @@
     {
       "id": "framed-rect",
       "label": "Framed Print (Portrait/Landscape)",
-      "price": 22500,
+      "price": 24500,
       "subType": "orientation",
       "subOptions": [
         { "id": "portrait", "label": "Portrait", "sizeNote": "13×19" },
