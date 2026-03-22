@@ -1924,34 +1924,24 @@ body[data-theme="dark"] .card {
 }
 
 /* Cart payment notice (temporary until payment processing is live) */
-.cart-payment-notice {
+.cart-checkout-btn {
+    width: 100%;
     margin-top: var(--space-6);
-    padding: var(--space-6);
-    border: 1px solid var(--color-neutral-200);
-    text-align: center;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-base);
 }
 
-[data-theme="dark"] .cart-payment-notice {
-    border-color: var(--color-neutral-700);
+.cart-checkout-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
-.cart-payment-notice__heading {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    margin-bottom: var(--space-3);
-}
-
-.cart-payment-notice__text {
+.cart-checkout-error {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    color: #dc2626;
     font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    line-height: var(--leading-relaxed);
-    margin-bottom: var(--space-4);
-}
-
-.cart-payment-notice__btn {
-    display: inline-block;
-    text-decoration: none;
+    text-align: center;
 }
 
 .cart-summary__value--accent {
@@ -2008,11 +1998,14 @@ body[data-theme="dark"] .card {
 .checkout-success__icon svg {
     width: 40px;
     height: 40px;
-    stroke: var(--text-inverse);
 }
 
-[data-theme="dark"] .checkout-success__icon svg {
-    stroke: var(--bg-primary);
+.checkout-success__icon svg path {
+    stroke: #ffffff;
+}
+
+[data-theme="dark"] .checkout-success__icon svg path {
+    stroke: #171717;
 }
 
 .checkout-success h1 {

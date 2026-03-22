@@ -11,9 +11,15 @@ import {
     getCartCount,
     formatPrice,
     getItemSubtotal,
+    clearCart,
     CART_EVENTS
 } from './cart.js';
 import { getMainImagePath, getMainImagePathForTheme, getThumbImagePathForTheme, getItemBySlug } from '../gallery/gallery-data.js';
+
+// Checkout endpoint (dev vs production)
+const CHECKOUT_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'https://sidehustle-checkout-dev.jerimybrown.workers.dev'
+    : 'https://sidehustle-checkout.jerimybrown.workers.dev';
 
 const IMAGE_CONFIG_BASE = 'assets/images/gallery';
 
@@ -87,8 +93,6 @@ let cartItemsContainer = null;
 let cartSummaryContainer = null;
 let cartEmptyContainer = null;
 let cartContentContainer = null;
-let paypalContainer = null;
-
 /**
  * Initialize the cart page
  */
@@ -97,7 +101,6 @@ export function init() {
     cartSummaryContainer = document.getElementById('cart-summary');
     cartEmptyContainer = document.getElementById('cart-empty');
     cartContentContainer = document.getElementById('cart-content');
-    paypalContainer = document.getElementById('paypal-button-container');
 
     if (!cartItemsContainer) {
         console.error('Cart items container not found');
@@ -226,40 +229,11 @@ function createCartItemHTML(item) {
 /**
  * Render cart summary
  */
-/**
- * Build a mailto link with cart details pre-filled
- */
-function buildOrderMailto() {
-    const cart = getCart();
-    const total = getCartTotal();
-
-    const lines = cart.map(item => {
-        let desc = `• ${item.title} — ${item.optionLabel}`;
-        if (item.subOptionLabel) desc += `, ${item.subOptionLabel}`;
-        if (item.sizeNote) desc += ` (${item.sizeNote})`;
-        if (item.frameColorLabel) desc += `, ${item.frameColorLabel}`;
-        desc += ` × ${item.quantity} — ${formatPrice(item.price * item.quantity)}`;
-        return desc;
-    });
-
-    const subject = encodeURIComponent(`Side Hustle Order — ${cart.length} item${cart.length > 1 ? 's' : ''}`);
-    const body = encodeURIComponent(
-        `Hi! I'd like to place an order for the following:\n\n` +
-        lines.join('\n') +
-        `\n\nSubtotal: ${formatPrice(total)}\n\n` +
-        `Please let me know how to arrange payment. Thanks!`
-    );
-
-    return `mailto:sidehustle.purchases@gmail.com?subject=${subject}&body=${body}`;
-}
-
 function renderCartSummary() {
     if (!cartSummaryContainer) return;
 
-    const cart = getCart();
     const itemCount = getCartCount();
     const total = getCartTotal();
-    const mailto = buildOrderMailto();
 
     cartSummaryContainer.innerHTML = `
         <div class="cart-summary__row">
@@ -275,13 +249,64 @@ function renderCartSummary() {
             <span class="cart-summary__value">${formatPrice(total)}</span>
         </div>
 
-        <div class="cart-payment-notice">
-            <p class="cart-payment-notice__heading">Online payments coming soon</p>
-            <p class="cart-payment-notice__text">We're still getting payment processing set up on the site.</p>
-            <p class="cart-payment-notice__text">Click below to email us — your order details will be included automatically. We can arrange payment through PayPal, Venmo, or Zelle.</p>
-            <a href="${mailto}" class="btn-accent button cart-payment-notice__btn">Email Your Order</a>
-        </div>
+        <button id="checkout-btn" class="btn-accent button cart-checkout-btn">Proceed to Checkout</button>
+        <div id="checkout-error" class="cart-checkout-error" style="display: none;"></div>
     `;
+
+    document.getElementById('checkout-btn').addEventListener('click', handleCheckout);
+}
+
+/**
+ * Handle Stripe Checkout redirect
+ */
+async function handleCheckout() {
+    const btn = document.getElementById('checkout-btn');
+    const errorEl = document.getElementById('checkout-error');
+
+    // Loading state
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+    errorEl.style.display = 'none';
+
+    const cart = getCart();
+
+    // Build items payload with image URLs for Stripe
+    const items = cart.map(item => ({
+        optionId: item.optionId,
+        optionLabel: item.optionLabel,
+        subOption: item.subOption || null,
+        subOptionLabel: item.subOptionLabel || null,
+        frameColor: item.frameColor || null,
+        frameColorLabel: item.frameColorLabel || null,
+        sizeNote: item.sizeNote || null,
+        price: item.price,
+        quantity: item.quantity,
+        title: item.title,
+        slug: item.slug,
+        image: `https://www.sidehustle.llc/${getMainImagePath(item.slug)}`,
+    }));
+
+    try {
+        const response = await fetch(CHECKOUT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Checkout failed');
+        }
+
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+    } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Proceed to Checkout';
+        errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+        errorEl.style.display = 'block';
+    }
 }
 
 /**
@@ -314,45 +339,6 @@ function handleQuantityChange(e) {
 function handleRemoveItem(e) {
     const itemId = e.currentTarget.dataset.itemId;
     removeItem(itemId);
-}
-
-/**
- * Get cart data for PayPal order
- * @returns {Object} Order data for PayPal
- */
-export function getPayPalOrderData() {
-    const cart = getCart();
-    const total = getCartTotal();
-
-    return {
-        purchase_units: [{
-            amount: {
-                currency_code: 'USD',
-                value: (total / 100).toFixed(2),
-                breakdown: {
-                    item_total: {
-                        currency_code: 'USD',
-                        value: (total / 100).toFixed(2)
-                    }
-                }
-            },
-            items: cart.map(item => {
-                let desc = item.optionLabel;
-                if (item.subOptionLabel) desc += ` - ${item.subOptionLabel}`;
-                if (item.sizeNote) desc += ` (${item.sizeNote})`;
-                if (item.frameColorLabel) desc += ` - ${item.frameColorLabel}`;
-                return {
-                    name: item.title,
-                    description: desc,
-                    unit_amount: {
-                        currency_code: 'USD',
-                        value: (item.price / 100).toFixed(2)
-                    },
-                    quantity: item.quantity.toString()
-                };
-            })
-        }]
-    };
 }
 
 // Initialize when DOM is ready
