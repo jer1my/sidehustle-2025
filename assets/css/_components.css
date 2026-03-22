@@ -1107,6 +1107,10 @@ body[data-theme="dark"] .card {
         display: none;
     }
 
+    .product-carousel__container {
+        max-height: 50svh;
+    }
+
     .product-thumbnail-strip {
         gap: var(--space-2);
     }
