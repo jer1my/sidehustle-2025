@@ -796,9 +796,12 @@ function initPurchaseInteractions(item) {
     }
 
     /**
-     * Navigate carousel to the matching slide for the current selection and pause auto-advance
+     * Navigate carousel to the matching slide for the current selection and stop auto-advance
      */
     function navigateCarouselToSelection() {
+        // Always stop auto-advance when user interacts with purchase options
+        if (carouselStopAutoAdvance) carouselStopAutoAdvance();
+
         const opt = getSelectedOption();
         let slideIdx = -1;
 
@@ -810,7 +813,6 @@ function initPurchaseInteractions(item) {
 
         if (slideIdx >= 0 && carouselGoToSlide) {
             carouselGoToSlide(slideIdx);
-            if (carouselStopAutoAdvance) carouselStopAutoAdvance();
         }
     }
 
