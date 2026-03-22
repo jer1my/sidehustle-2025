@@ -695,7 +695,7 @@ function initPurchaseInteractions(item) {
     /**
      * Switch the site theme to match the selected frame color.
      * White frame → light mode, Black frame → dark mode.
-     * Uses smooth crossfade transition.
+     * On mobile, scrolls to carousel so the user sees the change.
      */
     function syncThemeToFrameColor(frameColorId) {
         const currentTheme = getCurrentTheme();
@@ -705,6 +705,19 @@ function initPurchaseInteractions(item) {
         if (needsSwitch) {
             window.__smoothThemeTransition = true;
             toggleTheme();
+            scrollToCarouselOnMobile();
+        }
+    }
+
+    /**
+     * On mobile, scroll to the carousel so the user sees the frame change.
+     */
+    function scrollToCarouselOnMobile() {
+        if (!window.matchMedia('(hover: none)').matches) return;
+
+        const carousel = document.querySelector('.product-carousel');
+        if (carousel) {
+            carousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
 

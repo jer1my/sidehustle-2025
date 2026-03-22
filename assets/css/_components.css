@@ -1109,14 +1109,32 @@ body[data-theme="dark"] .card {
 
     .product-carousel__container {
         max-height: 50svh;
+        max-height: 50vh; /* fallback for older WebKit */
+    }
+
+    @supports (height: 1svh) {
+        .product-carousel__container {
+            max-height: 50svh;
+        }
     }
 
     .product-thumbnail-strip {
         gap: var(--space-2);
+        min-height: 70px;
+        overflow: visible;
+    }
+
+    .product-thumbnail-strip__viewport {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
     }
 
     .product-thumbnail-strip__item {
-        max-width: 60px;
+        width: 60px;
+        height: 80px;
+        max-width: none;
+        aspect-ratio: unset;
     }
 }
 
