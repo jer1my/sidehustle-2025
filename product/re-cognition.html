@@ -61,7 +61,7 @@
     <!-- Set background before CSS loads to prevent white flash on hard refresh -->
     <script>document.documentElement.style.backgroundColor=localStorage.getItem('theme')==='light'?'#fafafa':'#171717'</script>
 
-    <link rel="stylesheet" href="../assets/css/main.css?v=1774217848705">
+    <link rel="stylesheet" href="../assets/css/main.css?v=1774218108755">
 
     <noscript>
         <style>
@@ -86,15 +86,15 @@
         })();
     </script>
 
+    <!-- Close Button (outside main to avoid iOS stacking context issues) -->
+    <a href="../shop-all.html" class="product-close-btn" aria-label="Close and return to gallery">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </a>
+
     <!-- Fullpage Product Detail -->
     <main class="product-takeover">
-        <!-- Close Button -->
-        <a href="../shop-all.html" class="product-close-btn" aria-label="Close and return to gallery">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </a>
-
         <div id="product-detail" class="product-detail" data-product-slug="re-cognition">
             <!-- Content will be rendered by JavaScript -->
             <noscript>
@@ -106,17 +106,17 @@
 
     <!-- Scripts -->
     <!-- Core modules -->
-    <script src="../assets/js/core/config.js?v=1774217848705"></script>
-    <script src="../assets/js/core/theme-system.js?v=1774217848705"></script>
+    <script src="../assets/js/core/config.js?v=1774218108755"></script>
+    <script src="../assets/js/core/theme-system.js?v=1774218108755"></script>
 
     <!-- Utilities -->
-    <script src="../assets/js/utils/helpers.js?v=1774217848705"></script>
-    <script src="../assets/js/utils/animations.js?v=1774217848705"></script>
+    <script src="../assets/js/utils/helpers.js?v=1774218108755"></script>
+    <script src="../assets/js/utils/animations.js?v=1774218108755"></script>
 
     <!-- Gallery Detail Module -->
-    <script type="module" src="../assets/js/gallery/gallery-detail.js?v=1774217848705"></script>
+    <script type="module" src="../assets/js/gallery/gallery-detail.js?v=1774218108755"></script>
 
     <!-- Main initialization -->
-    <script src="../assets/js/main.js?v=1774217848705"></script>
+    <script src="../assets/js/main.js?v=1774218108755"></script>
 </body>
 </html>
