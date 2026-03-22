@@ -149,6 +149,7 @@ function renderProductDetail(item) {
             <div class="product-info">
                 <h1 class="product-title">${item.title}</h1>
                 <p class="product-category">${categoryLabel}${item.aiAssisted ? ' <span class="ai-assisted-badge ai-assisted-badge--inline">AI Assisted</span>' : ''}</p>
+                ${item.tools ? `<p class="product-tools">${item.tools}</p>` : ''}
 
                 ${description ? `<p class="product-description">${description}</p>` : ''}
 

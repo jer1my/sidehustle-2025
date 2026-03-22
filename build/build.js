@@ -211,6 +211,7 @@ function build() {
         description: item.description,
         featured: item.featured || false,
         aiAssisted: item.aiAssisted || false,
+        tools: item.tools || null,
         images: item.images
     }));
 
