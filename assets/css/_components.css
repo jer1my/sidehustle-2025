@@ -1101,7 +1101,7 @@ body[data-theme="dark"] .card {
     }
 }
 
-/* Mobile: hide carousel arrows, tighter thumbnail gaps */
+/* Mobile: hide carousel arrows, constrain thumbnails */
 @media (max-width: 768px) {
     .product-carousel__arrow {
         display: none;
@@ -1109,6 +1109,10 @@ body[data-theme="dark"] .card {
 
     .product-thumbnail-strip {
         gap: var(--space-2);
+    }
+
+    .product-thumbnail-strip__item {
+        max-width: 60px;
     }
 }
 
@@ -1562,15 +1566,14 @@ body[data-theme="dark"] .card {
     letter-spacing: 0.05em;
 }
 
-/* Mobile: always show overlay since there is no hover */
+/* Mobile: hide overlay — no hover hint needed */
 @media (hover: none) {
     .product-card__overlay {
-        transform: translateY(0);
-        background: linear-gradient(to top, rgba(250, 250, 250, 0.92) 80%, transparent 100%);
+        display: none;
     }
 
-    [data-theme="dark"] .product-card__overlay {
-        background: linear-gradient(to top, rgba(23, 23, 23, 0.92) 80%, transparent 100%);
+    .product-card:hover .product-card__image {
+        opacity: 1;
     }
 }
 
