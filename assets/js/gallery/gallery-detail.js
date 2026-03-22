@@ -67,6 +67,24 @@ export function init(slug) {
     }
 
     renderProductDetail(item);
+    initCloseButtonScroll();
+}
+
+/**
+ * Toggle close button style on scroll — adds accent circle when scrolled
+ */
+function initCloseButtonScroll() {
+    const btn = document.querySelector('.product-close-btn');
+    if (!btn) return;
+
+    let scrolled = false;
+    window.addEventListener('scroll', () => {
+        const isScrolled = window.scrollY > 20;
+        if (isScrolled !== scrolled) {
+            scrolled = isScrolled;
+            btn.classList.toggle('product-close-btn--scrolled', scrolled);
+        }
+    }, { passive: true });
 }
 
 /**

@@ -835,15 +835,22 @@ body[data-theme="dark"] .card {
     justify-content: center;
     background: transparent;
     border: none;
+    border-radius: var(--radius-full);
     color: var(--text-primary);
     cursor: pointer;
-    transition: opacity var(--transition-fast, 0.15s ease);
+    transition: background-color 0.3s ease, color 0.3s ease;
     z-index: calc(var(--z-modal, 400) + 1);
     text-decoration: none;
 }
 
 .product-close-btn:hover {
-    opacity: 0.5;
+    opacity: 0.7;
+}
+
+/* Scrolled state: accent circle with inverted X */
+.product-close-btn--scrolled {
+    background-color: var(--color-accent);
+    color: var(--bg-primary);
 }
 
 .product-close-btn svg {
@@ -1108,14 +1115,7 @@ body[data-theme="dark"] .card {
     }
 
     .product-carousel__container {
-        max-height: 50svh;
-        max-height: 50vh; /* fallback for older WebKit */
-    }
-
-    @supports (height: 1svh) {
-        .product-carousel__container {
-            max-height: 50svh;
-        }
+        max-height: none;
     }
 
     .product-thumbnail-strip {
