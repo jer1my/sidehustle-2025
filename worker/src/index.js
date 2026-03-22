@@ -8,9 +8,9 @@
 // Server-side price map (source of truth — must match shared-config.json)
 const PRICE_MAP = {
 	'digital': 5000,
-	'print': 7500,
-	'framed-square': 17500,
-	'framed-rect': 22500,
+	'print': 8500,
+	'framed-square': 19500,
+	'framed-rect': 24500,
 };
 
 // Stripe API base URL
@@ -56,29 +56,26 @@ async function createCheckoutSession(cartItems, env) {
 	body['success_url'] = 'https://www.sidehustle.llc/checkout-success.html?paid=true';
 	body['cancel_url'] = 'https://www.sidehustle.llc/cart.html';
 
-	// Shipping address collection
-	body['shipping_address_collection[allowed_countries][0]'] = 'US';
+	// Determine what's in the cart for country restrictions
+	const hasFramed = cartItems.some(i => i.optionId.startsWith('framed'));
 
-	// Shipping options
-	// Standard shipping
+	// Shipping country restrictions
+	// Framed items: US only (fragile)
+	// Digital + prints: US + international
+	if (hasFramed) {
+		body['shipping_address_collection[allowed_countries][0]'] = 'US';
+	} else {
+		const countries = ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'JP', 'NL', 'SE', 'NO', 'DK', 'FI', 'IE', 'NZ', 'IT', 'ES', 'PT', 'BE', 'AT', 'CH'];
+		countries.forEach((c, i) => {
+			body[`shipping_address_collection[allowed_countries][${i}]`] = c;
+		});
+	}
+
+	// Free shipping (baked into prices)
 	body['shipping_options[0][shipping_rate_data][type]'] = 'fixed_amount';
-	body['shipping_options[0][shipping_rate_data][fixed_amount][amount]'] = '800';
+	body['shipping_options[0][shipping_rate_data][fixed_amount][amount]'] = '0';
 	body['shipping_options[0][shipping_rate_data][fixed_amount][currency]'] = 'usd';
-	body['shipping_options[0][shipping_rate_data][display_name]'] = 'Standard Shipping';
-	body['shipping_options[0][shipping_rate_data][delivery_estimate][minimum][unit]'] = 'business_day';
-	body['shipping_options[0][shipping_rate_data][delivery_estimate][minimum][value]'] = '5';
-	body['shipping_options[0][shipping_rate_data][delivery_estimate][maximum][unit]'] = 'business_day';
-	body['shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]'] = '10';
-
-	// Express shipping
-	body['shipping_options[1][shipping_rate_data][type]'] = 'fixed_amount';
-	body['shipping_options[1][shipping_rate_data][fixed_amount][amount]'] = '1500';
-	body['shipping_options[1][shipping_rate_data][fixed_amount][currency]'] = 'usd';
-	body['shipping_options[1][shipping_rate_data][display_name]'] = 'Express Shipping';
-	body['shipping_options[1][shipping_rate_data][delivery_estimate][minimum][unit]'] = 'business_day';
-	body['shipping_options[1][shipping_rate_data][delivery_estimate][minimum][value]'] = '2';
-	body['shipping_options[1][shipping_rate_data][delivery_estimate][maximum][unit]'] = 'business_day';
-	body['shipping_options[1][shipping_rate_data][delivery_estimate][maximum][value]'] = '3';
+	body['shipping_options[0][shipping_rate_data][display_name]'] = 'Free Shipping';
 
 	// Tax: disabled until Stripe Tax registration is complete
 	// To enable later: body['automatic_tax[enabled]'] = 'true';
