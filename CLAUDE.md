@@ -161,9 +161,11 @@ npm run build:all   # Run build + build:blog together
 
 **All pages must use `--container-max-width` (1200px) as their max-width.** Do not hardcode narrower widths on page containers. Every page (shop, cart, product detail, etc.) should feel the same width. The single source of truth is `--container-max-width` in `_variables.css`.
 
+**`overflow-x: hidden` must be on `html`, NOT `body`.** On iOS WebKit (Chrome and Safari), `overflow-x: hidden` on `body` breaks `position: fixed` elements during address bar animation. This was the root cause of the close button scrolling off screen. The rule lives in `_base.css`.
+
 **When making changes:**
 1. Test in both light and dark modes
-2. Test on mobile, tablet, and desktop
+2. Test on mobile, tablet, and desktop (user tests on **Chrome for iOS** — dev tools mobile emulation may not reproduce iOS-specific bugs)
 3. Use existing CSS variables and utility classes
 4. Refer to [docs/design-system.md](docs/design-system.md) for styling details
 
@@ -283,11 +285,13 @@ The carousel supports up to 12 slides (main + 11 alts). If a `-light` variant ex
   "description": "Short description for cards.",
   "longDescription": "Longer description for the detail page.",
   "featured": true,
-  "aiAssisted": true
+  "aiAssisted": true,
+  "tools": "Pen & ink on toned paper"
 }
 ```
 
 - `aiAssisted` (optional, default `false`) — when `true`, displays a pill-shaped badge ("AI Assisted") in the accent color on the product card (upper-right corner) and inline next to the category label on the detail page. Use this to transparently label any work that utilized AI in its creation.
+- `tools` (optional, free-text string) — describes the medium, materials, software, or gear used to create the piece. Displayed in italic secondary text between the category label and description on the detail page. Works across all types: traditional art ("Toned paper, Microns, & White Jelly Roles"), digital ("Midjourney & Photoshop"), photography ("Canon EOS R5 · 85mm f/1.4"). Omit or leave empty to hide.
 
 **Build System:**
 - `gallery-data.js` and `product/*.html` are auto-generated — **DO NOT EDIT** them directly
@@ -338,6 +342,7 @@ The product detail page (`product/{slug}.html`) features:
 - Theme toggle hint below the frame selector reminds users they can preview the other frame color
 - All carousel images (slides + thumbnails) crossfade to the theme-appropriate variants
 - Carousel auto-navigates to the matching frame slide when a frame color is selected
+- **Mobile:** Smooth-scrolls to carousel on every frame color switch so user sees the change
 
 **Theme Preview Toggle:**
 - All purchase option types (digital, print, framed) include a light/dark mode toggle so users can preview the artwork in either theme
@@ -363,8 +368,15 @@ The product detail page (`product/{slug}.html`) features:
   - **"Checkout"** button (bold) appears below as `btn-accent` (primary), links to cart
 - State persists on page load via `isInCart()` check against localStorage
 
+**Close Button:**
+- Lives inside a `.product-close-overlay` wrapper div (zero-size, `position: fixed`, `pointer-events: none`)
+- Button itself is `position: absolute` inside the overlay with `pointer-events: auto`
+- **Why the overlay pattern:** On iOS Chrome, `position: fixed` elements break during address bar collapse animation when scrolling down. Wrapping in a fixed overlay container avoids this. Do NOT move the button out of the overlay or make it directly `position: fixed`.
+- On scroll (>20px): transitions to accent-colored circle with inverted X color (`gallery-detail.js` adds `product-close-btn--scrolled` class)
+- JS listener uses passive scroll event with a boolean gate to avoid redundant class toggles
+
 **Key files:**
-- `assets/js/gallery/gallery-detail.js` — Carousel logic, purchase options, cart UX
+- `assets/js/gallery/gallery-detail.js` — Carousel logic, purchase options, cart UX, close button scroll
 - `assets/js/gallery/gallery-data.js` — Item data, purchase options, image path helpers
 - `assets/js/cart/cart.js` — Cart state management (localStorage)
 
@@ -533,6 +545,13 @@ Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge
 - Submit `https://www.sidehustle.llc/sitemap.xml` to Google Search Console
 
 ## Recent Changes
+- **Tools field:** Added `tools` (optional free-text string) to `item.json` for describing medium, materials, software, or gear. Displayed in italic secondary text (`.product-tools`) between category and description on detail page. Build passes it through to `gallery-data.js`.
+- **Product cards — details below image:** Card overlay removed. Title and category always visible below the image in normal document flow. "View Details" CTA hidden (`display: none`). On mobile (`hover: none`), overlay is fully hidden. Hero scroller cards use `overflow: visible` on `.gallery-frame.product-card` with details absolutely positioned below via `top: 100%`.
+- **Close button overlay pattern:** Close button wrapped in `.product-close-overlay` (fixed, zero-size, pointer-events none) to survive iOS Chrome address bar animation. Button is `position: absolute` inside with `pointer-events: auto`. Transitions to accent circle on scroll via JS class toggle.
+- **Mobile carousel fixes:** Thumbnail items use explicit `width: 60px; height: 80px` with `aspect-ratio: unset` on mobile to prevent iOS Safari/Chrome collapsing them to zero. Thumbnail strip has `min-height: 70px` and `overflow: visible`. Carousel container `max-height` removed on mobile so it fills full width.
+- **Frame color mobile scroll:** On mobile, switching frame color (black/white) smooth-scrolls to the carousel so user sees the change.
+- **iOS fixed positioning fix:** `overflow-x: hidden` moved from `body` to `html` in `_base.css` — prevents iOS WebKit from breaking `position: fixed` during address bar collapse.
+- **Hero overflow fix:** `.hero-horizontal-container` uses `overflow-x: hidden; overflow-y: visible` so card details below frames aren't clipped.
 - **SEO foundation:** Added `robots.txt`, auto-generated `sitemap.xml` (`npm run build:sitemap`, part of `build:all`), canonical tags on all pages, `noindex` on cart/checkout, Organization JSON-LD on homepage, Product JSON-LD on product pages, BlogPosting JSON-LD on blog posts. Submit sitemap to Google Search Console.
 - **Blog images separated from content:** Blog images now live in `assets/images/blog/{slug}/` (mirrors gallery structure). `assets/content/blog/{slug}/` holds only `post.json` and `content.html`. `npm run convert` and the build script both point to the new location.
 - **Purchase option filtering:** `framed-square` card is hidden when no square images exist for an item; `framed-rect` hidden when no frame orientations available. Detection is based on filenames containing `square`/`portrait`/`landscape` keywords — no separate `main-square.png` files required.
