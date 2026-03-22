@@ -841,10 +841,6 @@ body[data-theme="dark"] .card {
     transition: background-color 0.3s ease, color 0.3s ease;
     z-index: 9999;
     text-decoration: none;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
 }
 
 .product-close-btn:hover {

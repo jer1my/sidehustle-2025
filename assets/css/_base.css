@@ -10,6 +10,7 @@
 html {
     scroll-behavior: auto; /* Instant scroll for cross-page hash navigation */
     scroll-padding-top: var(--scroll-offset);
+    overflow-x: hidden;
 }
 
 body {
@@ -23,7 +24,6 @@ body {
     text-rendering: optimizeLegibility;
     font-size: var(--font-size-base);
     transition: background-color var(--transition-base), color var(--transition-base);
-    overflow-x: hidden;
     opacity: 0;
 }
 
