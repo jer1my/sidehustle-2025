@@ -64,12 +64,14 @@
         })();
     </script>
 
-    <!-- Close Button (outside main to avoid iOS stacking context issues) -->
-    <a href="../shop-all.html" class="product-close-btn" aria-label="Close and return to gallery">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </a>
+    <!-- Fixed overlay for close button (stable fixed container for iOS) -->
+    <div class="product-close-overlay">
+        <a href="../shop-all.html" class="product-close-btn" aria-label="Close and return to gallery">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </div>
 
     <!-- Fullpage Product Detail -->
     <main class="product-takeover">
