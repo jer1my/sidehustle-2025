@@ -32,8 +32,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    overflow-x: hidden;
-    overflow-y: visible;
+    overflow: hidden;
     display: flex;
     align-items: center;
 }
@@ -266,6 +265,8 @@ a.gallery-frame {
     /* Adjust horizontal container to account for mobile browser menu */
     .hero-horizontal-container {
         transform: translateY(var(--hero-mobile-offset)); /* Shift up to account for mobile browser menu */
+        overflow-x: hidden;
+        overflow-y: visible;
     }
 
     /* Gallery adjustments for mobile - CSS variables auto-adjust via media query in _variables.css */
