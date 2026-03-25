@@ -20,7 +20,7 @@ Project documentation for AI assistants (like Claude Code) to understand and mai
 ## Site Architecture & Page History
 
 **Current Homepage:**
-The index page features a horizontal scroll hero gallery (6 slots, fills with placeholders if fewer items exist) with about and contact sections below. A "Shop All" button sits right-aligned under the hero description text. The scroll arrow is `position: fixed` with `bottom: 5svh` for consistent placement across devices, and hides when scrolling past the hero. On mobile, the hero description is truncated to the first sentence only ("I work across digital art, traditional mediums, and photography.") — the rest is wrapped in `.hero-description-desktop` and hidden below 768px.
+The index page features a horizontal scroll hero gallery (6 slots, fills with placeholders if fewer items exist) with about and contact sections below. A "Shop All" button sits right-aligned under the hero description text. The scroll arrow is `position: absolute; bottom: 24px` inside `.hero` (direct child, not inside `.hero-horizontal-container`). JS adds `.scroll-arrow--hidden` (visibility: hidden + kills bounce animation) when scrolling past 20% of hero height to prevent WebKit compositing ghost artifacts. On mobile, the hero description is truncated to the first sentence only ("I work across digital art, traditional mediums, and photography.") — the rest is wrapped in `.hero-description-desktop` and hidden below 768px.
 
 **Previous Split-Screen Homepage:**
 The original design featured a split-screen landing page where users could swipe/click left for "Art & Photography" (`art.html`) or right for "Digital Assets" (`digital.html`). Each side had separate landing pages with their own product galleries.
@@ -552,7 +552,8 @@ Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge
 
 ## Recent Changes
 - **Mobile nav breakpoint:** Hamburger menu now activates at `max-width: 1024px` (was 768px) so tablets get mobile nav
-- **Scroll arrow viewport positioning:** Arrow is now `position: fixed` with `bottom: 5svh` for consistent placement across devices. Hides when scrolling past 20% of hero height (same time back-to-top appears). Uses `scroll-arrow--hidden` class toggled by `navigation.js`
+- **Scroll arrow positioning:** Arrow is `position: absolute; bottom: 24px` inside `.hero` (direct child, not inside `.hero-horizontal-container`). `.scroll-arrow--hidden` class toggled by `navigation.js` at 20% hero scroll — uses `visibility: hidden` and `animation: none !important` to prevent WebKit compositing ghost artifacts on iOS Chrome/Safari
+- **Cache control (.htaccess):** HTML files served with `no-cache, must-revalidate` so users always get fresh content. Static assets (CSS/JS/images) cached for 1 year with `immutable` — safe because `?v=` cache busting handles versioning
 - **Shop All button on homepage:** `btn-accent` button right-aligned under hero description text inside `.hero-content`. Uses `.hero-shop-btn.button` selector for specificity over `.button { margin-right: 16px }` in `_components.css`
 - **Mobile hero text truncation:** Hero description shortened on mobile — only first sentence shown. Extended text wrapped in `.hero-description-desktop` span, hidden below 768px
 - **Sticky product images column:** `.product-images-column` uses `position: sticky; top: 64px; align-self: start` on desktop so carousel pins while product info scrolls. Reset to `position: static` on mobile
