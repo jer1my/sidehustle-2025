@@ -526,10 +526,6 @@ body[data-theme="dark"] .grid-toggle.active {
         padding: 0 var(--container-padding-mobile);
     }
 
-    .scroll-arrow {
-        bottom: 120px;
-    }
-
     .projects-grid {
         grid-template-columns: 1fr;
         gap: 24px;
