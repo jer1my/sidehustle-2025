@@ -167,8 +167,13 @@ body[data-theme="dark"] .coming-soon-badge {
 
 .scroll-arrow--hidden {
     opacity: 0 !important;
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+}
+
+/* Kill the infinite bounce animation when hidden to prevent compositing ghosts */
+.scroll-arrow--hidden svg .arrow-group {
+    animation: none !important;
 }
 
 .scroll-arrow svg .arrow-group {
