@@ -154,9 +154,9 @@ body[data-theme="dark"] .coming-soon-badge {
     animation: fadeInUp 0.6s ease-out 0.75s forwards;
 }
 
-/* Scroll arrow centered near bottom of visible viewport */
+/* Scroll arrow centered near bottom of hero */
 .scroll-arrow {
-    position: fixed;
+    position: absolute;
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%) translateY(30px);
