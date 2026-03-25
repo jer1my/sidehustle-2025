@@ -49,7 +49,7 @@
     <!-- Set background before CSS loads to prevent white flash on hard refresh -->
     <script>document.documentElement.style.backgroundColor=localStorage.getItem('theme')==='light'?'#fafafa':'#171717'</script>
 
-    <link rel="stylesheet" href="assets/css/main.css?v=1774407432">
+    <link rel="stylesheet" href="assets/css/main.css?v=1774408950">
 
     <!-- Critical inline styles to prevent flash -->
     <style>
@@ -108,7 +108,7 @@
 
     <!-- Navigation Component Placeholder -->
     <div id="nav-placeholder"></div>
-    <script src="assets/js/components/navigation-component.js?v=1774407432"></script>
+    <script src="assets/js/components/navigation-component.js?v=1774408950"></script>
 
     <!-- Hero Scroll Container (Tall container for scroll-driven animation) -->
     <div class="hero-scroll-container">
@@ -125,8 +125,8 @@
                             <span class="coming-soon-badge">More on the way</span>
                         </h1>
                         <h2 class="hero-subtitle">~Art & Photography~</h2>
-                        <p class="hero-description">I work across digital art, traditional mediums, and photography. Some pieces incorporate AI-generated elements as part of the creative process. All AI-assisted work is clearly labeled, if that matters.</p>
-                        <a href="shop-all.html" class="btn-accent button mt-8" style="align-self: flex-end;">Shop All</a>
+                        <p class="hero-description">I work across digital art, traditional mediums, and photography. Some pieces incorporate AI-generated elements as part of the creative process.<span class="hero-description-desktop"> All AI-assisted work is clearly labeled, if that matters.</span></p>
+                        <a href="shop-all.html" class="btn-accent button hero-shop-btn-desktop">Shop All</a>
                     </div>
 
                     <!-- Gallery Frames -->
@@ -139,15 +139,28 @@
                 </div>
             </div>
 
-            <!-- Scroll Arrow -->
-            <a href="#about" class="btn-arrow btn-arrow-lg scroll-arrow">
+            <!-- Scroll Arrow (desktop) -->
+            <a href="#about" class="btn-arrow btn-arrow-lg scroll-arrow scroll-arrow-desktop">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g class="arrow-group">
                         <path d="M12 6L12 18M8 14L12 18L16 14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </g>
                 </svg>
             </a>
+
         </section>
+    </div>
+
+    <!-- Mobile bottom bar: scroll arrow + Shop All button, vertically centered -->
+    <div class="hero-bottom-bar">
+        <a href="#about" class="btn-arrow btn-arrow-lg scroll-arrow scroll-arrow-mobile">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g class="arrow-group">
+                    <path d="M12 6L12 18M8 14L12 18L16 14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+            </svg>
+        </a>
+        <a href="shop-all.html" class="btn-accent button hero-shop-btn-mobile">Shop All</a>
     </div>
 
     <!-- About Section -->
@@ -221,32 +234,32 @@
 
     <!-- Scripts -->
     <!-- Core modules -->
-    <script src="assets/js/core/config.js?v=1774407432"></script>
-    <script src="assets/js/core/data-loader.js?v=1774407432"></script>
-    <script src="assets/js/core/theme-system.js?v=1774407432"></script>
+    <script src="assets/js/core/config.js?v=1774408950"></script>
+    <script src="assets/js/core/data-loader.js?v=1774408950"></script>
+    <script src="assets/js/core/theme-system.js?v=1774408950"></script>
 
     <!-- Utilities -->
-    <script src="assets/js/utils/helpers.js?v=1774407432"></script>
-    <script src="assets/js/utils/animations.js?v=1774407432"></script>
-    <script src="assets/js/utils/image-preloader.js?v=1774407432"></script>
+    <script src="assets/js/utils/helpers.js?v=1774408950"></script>
+    <script src="assets/js/utils/animations.js?v=1774408950"></script>
+    <script src="assets/js/utils/image-preloader.js?v=1774408950"></script>
 
     <!-- Components -->
-    <script src="assets/js/components/navigation.js?v=1774407432"></script>
-    <script src="assets/js/components/mobile-menu.js?v=1774407432"></script>
-    <script src="assets/js/components/logo-animation.js?v=1774407432"></script>
-    <script src="assets/js/components/carousel-base.js?v=1774407432"></script>
-    <script src="assets/js/components/carousel-about.js?v=1774407432"></script>
+    <script src="assets/js/components/navigation.js?v=1774408950"></script>
+    <script src="assets/js/components/mobile-menu.js?v=1774408950"></script>
+    <script src="assets/js/components/logo-animation.js?v=1774408950"></script>
+    <script src="assets/js/components/carousel-base.js?v=1774408950"></script>
+    <script src="assets/js/components/carousel-about.js?v=1774408950"></script>
 
     <!-- Particle system (hero background) -->
-    <script src="assets/js/particle-system.js?v=1774407432"></script>
+    <script src="assets/js/particle-system.js?v=1774408950"></script>
 
     <!-- Hero gallery horizontal scroll -->
-    <script src="assets/js/hero-gallery-scroll.js?v=1774407432"></script>
+    <script src="assets/js/hero-gallery-scroll.js?v=1774408950"></script>
 
     <!-- Hero gallery dynamic content (loads latest items from gallery data) -->
-    <script type="module" src="assets/js/gallery/hero-gallery.js?v=1774407432"></script>
+    <script type="module" src="assets/js/gallery/hero-gallery.js?v=1774408950"></script>
 
     <!-- Main initialization -->
-    <script src="assets/js/main.js?v=1774407432"></script>
+    <script src="assets/js/main.js?v=1774408950"></script>
 </body>
 </html>

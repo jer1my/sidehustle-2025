@@ -139,20 +139,26 @@ body[data-theme="dark"] .coming-soon-badge {
 .hero-description {
     font-size: 18px;
     max-width: min(800px, 50vw); /* Responsive width - never exceeds 800px but scales down on smaller screens */
-    margin: 0 auto 48px;
+    margin: 0 0 48px auto; /* Right-align within hero-content */
     opacity: 0;
     transform: translateY(30px);
     animation: fadeInUp 0.6s ease-out 0.45s forwards;
 }
 
-.scroll-arrow {
-    /* Positioning */
+/* Desktop: Shop All button inside hero-content, right-aligned under text */
+.hero-shop-btn-desktop {
+    align-self: flex-end;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.6s ease-out 0.75s forwards;
+}
+
+/* Desktop: scroll arrow centered in hero */
+.scroll-arrow-desktop {
     position: absolute;
     bottom: 48px;
     left: 50%;
     transform: translateX(-50%) translateY(30px);
-
-    /* Animation */
     opacity: 0;
     animation: fadeInUpCentered 0.6s ease-out 0.6s forwards;
 }
@@ -160,6 +166,62 @@ body[data-theme="dark"] .coming-soon-badge {
 .scroll-arrow svg .arrow-group {
     transform: translateY(-40px);
     animation: arrowSlideDown 0.6s ease-out 1.05s forwards, arrowBounce 2s infinite 1.8s;
+}
+
+/* Mobile bottom bar: arrow centered, Shop All to the right */
+.hero-bottom-bar {
+    position: fixed;
+    bottom: 32px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.6s ease-out 0.6s forwards;
+    transition: opacity 0.3s ease;
+}
+
+.hero-bottom-bar.hidden {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+.hero-bottom-bar > * {
+    pointer-events: auto;
+}
+
+/* Arrow stays centered in the bar */
+.scroll-arrow-mobile {
+    position: static;
+    transform: none;
+    opacity: 1;
+    animation: none;
+}
+
+/* Shop All sits to the far right, vertically centered with the arrow */
+.hero-shop-btn-mobile {
+    position: absolute;
+    right: var(--container-padding-mobile, 16px);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@media (max-width: 768px) {
+    .hero-shop-btn-desktop.button {
+        display: none;
+    }
+
+    a.scroll-arrow-desktop {
+        display: none;
+    }
+
+    .hero-bottom-bar {
+        display: flex;
+    }
 }
 
 /* Back to Top Button */
@@ -279,6 +341,10 @@ a.gallery-frame {
     .hero-description {
         max-width: 100%;
         min-width: auto;
+    }
+
+    .hero-description-desktop {
+        display: none;
     }
 }
 
