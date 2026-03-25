@@ -95,25 +95,6 @@
         }
 
         scrollTrack.style.transform = `translateX(${translateX}px)`;
-
-        // Fade out the mobile bottom bar as scroll nears the end of the hero
-        const bottomBar = document.querySelector('.hero-bottom-bar');
-        if (bottomBar && window.innerWidth <= 768) {
-            // Also hide if scrolled past the hero container entirely
-            const pastHero = currentScroll > scrollContainerTop + scrollContainerHeight;
-
-            if (pastHero || progress >= 0.9) {
-                bottomBar.style.setProperty('opacity', '0', 'important');
-                bottomBar.style.pointerEvents = 'none';
-            } else if (progress > 0.7) {
-                const fade = 1 - ((progress - 0.7) / 0.2);
-                bottomBar.style.setProperty('opacity', String(fade), 'important');
-                bottomBar.style.pointerEvents = 'none';
-            } else {
-                bottomBar.style.removeProperty('opacity');
-                bottomBar.style.pointerEvents = '';
-            }
-        }
     }
 
     // Listen to scroll events with requestAnimationFrame for smooth performance

@@ -168,7 +168,6 @@ function scrollToTop() {
 function toggleBackToTop() {
     const backToTopButton = document.querySelector('.back-to-top');
     const backToProjectsButton = document.querySelector('.back-to-projects');
-    const heroBottomBar = document.querySelector('.hero-bottom-bar');
     const heroSection = document.querySelector('.hero');
     const scrollPosition = window.scrollY;
 
@@ -181,11 +180,8 @@ function toggleBackToTop() {
 
             if (scrollPosition > heroTwentyPercent) {
                 backToTopButton.classList.add('visible');
-                // On desktop, snap-hide the bottom bar; on mobile, hero scroll JS handles the fade
-                if (heroBottomBar && window.innerWidth > 768) heroBottomBar.classList.add('hidden');
             } else {
                 backToTopButton.classList.remove('visible');
-                if (heroBottomBar && window.innerWidth > 768) heroBottomBar.classList.remove('hidden');
             }
         } else {
             // Project pages and style guide: show after 200px scroll
