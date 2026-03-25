@@ -118,8 +118,13 @@ function renderProductDetail(item) {
     const subCategory = category?.subCategories.find(s => s.id === item.subCategory);
     const categoryLabel = subCategory ? `${subCategory.name} ${category.name}` : item.subCategory;
 
-    // Get description
-    const description = getLongDescription(item.id) || item.description || '';
+    // Get description — split on double newlines into separate paragraphs
+    const descriptionRaw = getLongDescription(item.id) || item.description || '';
+    const description = descriptionRaw
+        .split(/\n\s*\n/)
+        .map(p => p.trim())
+        .filter(Boolean)
+        .join('</p><p class="product-description">');
 
     // Get all image paths (theme-aware)
     const images = getAllImagePathsForTheme(item.slug, getCurrentTheme(), IMAGE_BASE_PATH);
