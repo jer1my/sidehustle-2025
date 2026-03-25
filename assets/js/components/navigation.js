@@ -168,7 +168,6 @@ function scrollToTop() {
 function toggleBackToTop() {
     const backToTopButton = document.querySelector('.back-to-top');
     const backToProjectsButton = document.querySelector('.back-to-projects');
-    const scrollArrow = document.querySelector('.scroll-arrow');
     const heroSection = document.querySelector('.hero');
     const scrollPosition = window.scrollY;
 
@@ -181,10 +180,8 @@ function toggleBackToTop() {
 
             if (scrollPosition > heroTwentyPercent) {
                 backToTopButton.classList.add('visible');
-                if (scrollArrow) scrollArrow.classList.add('scroll-arrow--hidden');
             } else {
                 backToTopButton.classList.remove('visible');
-                if (scrollArrow) scrollArrow.classList.remove('scroll-arrow--hidden');
             }
         } else {
             // Project pages and style guide: show after 200px scroll
