@@ -20,7 +20,7 @@ Project documentation for AI assistants (like Claude Code) to understand and mai
 ## Site Architecture & Page History
 
 **Current Homepage:**
-The index page features a horizontal scroll hero gallery (6 slots, fills with placeholders if fewer items exist) with about and contact sections below. The Info/products section was removed — scroll arrow points directly to #about.
+The index page features a horizontal scroll hero gallery (6 slots, fills with placeholders if fewer items exist) with about and contact sections below. A "Shop All" button sits right-aligned under the hero description text. The scroll arrow is `position: fixed` with `bottom: 5svh` for consistent placement across devices, and hides when scrolling past the hero. On mobile, the hero description is truncated to the first sentence only ("I work across digital art, traditional mediums, and photography.") — the rest is wrapped in `.hero-description-desktop` and hidden below 768px.
 
 **Previous Split-Screen Homepage:**
 The original design featured a split-screen landing page where users could swipe/click left for "Art & Photography" (`art.html`) or right for "Digital Assets" (`digital.html`). Each side had separate landing pages with their own product galleries.
@@ -74,6 +74,9 @@ The component auto-detects the current page and:
 
 **Nav pointer-events fix:**
 The `.nav` element uses `pointer-events: none` with `pointer-events: auto` on `.nav-container`. This prevents the nav's transparent gradient tail from blocking clicks on content below it.
+
+**Mobile nav breakpoint:**
+The hamburger menu activates at `max-width: 1024px` (not 768px), so tablets and smaller all get the mobile navigation.
 
 ## File Organization
 
@@ -283,15 +286,16 @@ The carousel supports up to 12 slides (main + 11 alts). If a `-light` variant ex
   "subCategory": "digital",
   "dateCreated": "2025-03-15",
   "description": "Short description for cards.",
-  "longDescription": "Longer description for the detail page.",
+  "longDescription": "First paragraph.\n\nSecond paragraph.",
   "featured": true,
   "aiAssisted": true,
   "tools": "Pen & ink on toned paper"
 }
 ```
 
+- `longDescription` (optional) — longer text for the detail page. Supports paragraph breaks: double newlines (`\n\n`) in the JSON string are rendered as separate `<p>` tags on the detail page.
 - `aiAssisted` (optional, default `false`) — when `true`, displays a pill-shaped badge ("AI Assisted") in the accent color on the product card (upper-right corner) and inline next to the category label on the detail page. Use this to transparently label any work that utilized AI in its creation.
-- `tools` (optional, free-text string) — describes the medium, materials, software, or gear used to create the piece. Displayed in italic secondary text between the category label and description on the detail page. Works across all types: traditional art ("Toned paper, Microns, & White Jelly Roles"), digital ("Midjourney & Photoshop"), photography ("Canon EOS R5 · 85mm f/1.4"). Omit or leave empty to hide.
+- `tools` (optional, free-text string) — describes the medium, materials, software, or gear used to create the piece. Displayed in italic secondary text between the category label and description on the detail page. Works across all types: traditional art ("Toned paper, Microns, & White Jelly Roles"), digital ("Tools: Midjourney & Photoshop"), photography ("Tools: Sony a1 II & Sony FE 600mm f/4 G OSS"). Omit or leave empty to hide.
 
 **Build System:**
 - `gallery-data.js` and `product/*.html` are auto-generated — **DO NOT EDIT** them directly
@@ -327,6 +331,8 @@ The product detail page (`product/{slug}.html`) features:
 - Touch swipe support on mobile; auto-advance pauses on interaction (resumes after 8s)
 - Pauses when page is hidden (Visibility API)
 - Crossfade transition (0.25s) when theme changes — all slides and thumbnails swap simultaneously
+- **Images column is sticky on desktop** (`position: sticky`) so the carousel pins to the top while product info scrolls. Disabled on mobile (single column).
+- **No max-height constraint** — carousel fills the full column width, aspect ratio maintained by `aspect-ratio: 3/4`
 
 **Carousel Arrow Styling (shared across product detail and blog):**
 - Half-moon positioned — arrow circle center aligns with the image edge, half overlapping the image and half outside. Uses `position: absolute` with negative offset so no layout shift occurs
@@ -545,6 +551,15 @@ Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge
 - Submit `https://www.sidehustle.llc/sitemap.xml` to Google Search Console
 
 ## Recent Changes
+- **Mobile nav breakpoint:** Hamburger menu now activates at `max-width: 1024px` (was 768px) so tablets get mobile nav
+- **Scroll arrow viewport positioning:** Arrow is now `position: fixed` with `bottom: 5svh` for consistent placement across devices. Hides when scrolling past 20% of hero height (same time back-to-top appears). Uses `scroll-arrow--hidden` class toggled by `navigation.js`
+- **Shop All button on homepage:** `btn-accent` button right-aligned under hero description text inside `.hero-content`. Uses `.hero-shop-btn.button` selector for specificity over `.button { margin-right: 16px }` in `_components.css`
+- **Mobile hero text truncation:** Hero description shortened on mobile — only first sentence shown. Extended text wrapped in `.hero-description-desktop` span, hidden below 768px
+- **Sticky product images column:** `.product-images-column` uses `position: sticky; top: 64px; align-self: start` on desktop so carousel pins while product info scrolls. Reset to `position: static` on mobile
+- **Carousel max-height removed:** `--product-image-max-height: 70vh` constraint removed from `.product-carousel__container` so images fill full column width
+- **Detail page paragraph breaks:** `longDescription` now splits on double newlines (`\n\n`) into separate `<p class="product-description">` tags via `gallery-detail.js`
+- **Who's Looking at Hoo:** New wildlife photography piece (juvenile barn owl, Sony a1 II & 600mm f/4)
+- **Tools field prefix:** Existing items updated to include "Tools:" prefix in the `tools` field value
 - **Tools field:** Added `tools` (optional free-text string) to `item.json` for describing medium, materials, software, or gear. Displayed in italic secondary text (`.product-tools`) between category and description on detail page. Build passes it through to `gallery-data.js`.
 - **Product cards — details below image:** Card overlay removed. Title and category always visible below the image in normal document flow. "View Details" CTA hidden (`display: none`). On mobile (`hover: none`), overlay is fully hidden. Hero scroller cards use `overflow: visible` on `.gallery-frame.product-card` with details absolutely positioned below via `top: 100%`.
 - **Close button overlay pattern:** Close button wrapped in `.product-close-overlay` (fixed, zero-size, pointer-events none) to survive iOS Chrome address bar animation. Button is `position: absolute` inside with `pointer-events: auto`. Transitions to accent circle on scroll via JS class toggle.
