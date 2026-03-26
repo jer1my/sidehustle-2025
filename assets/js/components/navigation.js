@@ -265,9 +265,8 @@ function initNavigationActiveState() {
             link.classList.remove('active');
         });
 
-        // Special handling for Home link when at top of page
-        // Check if we're at the very top or in the hero section
-        if (window.scrollY <= 50) {
+        // Special handling for Home link when at top of page or in hero section
+        if (window.scrollY <= 50 || currentSection === 'hero') {
             const homeLinks = document.querySelectorAll('a[href="#"], a[href="#top"], a[href$="#top"]');
             homeLinks.forEach(link => {
                 link.classList.add('active');
