@@ -1390,10 +1390,11 @@ body[data-theme="dark"] .card {
     color: var(--text-primary);
 }
 
-.purchase-options__tax-note {
-    font-size: var(--font-size-xs);
-    color: var(--text-tertiary);
-    margin-top: var(--space-1);
+.purchase-options__includes-note {
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+    margin: var(--space-1) 0 var(--space-4) 0;
+    font-style: italic;
 }
 
 /* Add to Cart Button */

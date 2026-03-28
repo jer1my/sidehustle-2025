@@ -461,6 +461,7 @@ function renderPurchaseOptions(slug) {
     return `
         <div class="purchase-options">
             <h3>Purchase Options</h3>
+            <p class="purchase-options__includes-note">Price includes tax, shipping &amp; handling</p>
 
             <div class="purchase-options__types">
                 ${typeCards}
@@ -486,7 +487,6 @@ function renderPurchaseOptions(slug) {
             <div class="purchase-options__total">
                 <div>
                     <div class="purchase-options__total-label">Total</div>
-                    <div class="purchase-options__tax-note">+ tax, shipping &amp; handling</div>
                 </div>
                 <div class="purchase-options__total-price">${formatPrice(defaultOption.price)}</div>
             </div>
