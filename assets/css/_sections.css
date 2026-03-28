@@ -569,6 +569,11 @@ body[data-theme="dark"] .contact-button:hover {
     padding: 120px 0 80px;
 }
 
+.header .hero-description {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .section {
     margin-bottom: 80px;
     position: relative;
