@@ -3,7 +3,10 @@
 /**
  * Blog Build Script
  *
- * Scans each blog post folder's post.json to generate:
+ * Scans each blog post folder (assets/content/blog/{slug}/) which contains
+ * post.json (metadata + content), images, and all related assets in one place.
+ *
+ * Generates:
  *   1. assets/js/blog/blog-data.js (post data + helper functions)
  *   2. blog/[slug].html pages from blog/_template.html (with inlined content)
  *
@@ -15,7 +18,6 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const BLOG_DIR = path.join(ROOT, 'assets', 'content', 'blog');
-const BLOG_IMAGES_DIR = path.join(ROOT, 'assets', 'images', 'blog');
 const OUTPUT_JS = path.join(ROOT, 'assets', 'js', 'blog', 'blog-data.js');
 const TEMPLATE_PATH = path.join(ROOT, 'blog', '_template.html');
 const BLOG_OUTPUT_DIR = path.join(ROOT, 'blog');
@@ -127,7 +129,7 @@ function build() {
         }
 
         // Validate required fields
-        const required = ['id', 'title', 'slug', 'datePublished', 'category', 'excerpt'];
+        const required = ['id', 'title', 'slug', 'datePublished', 'category', 'excerpt', 'content'];
         const missing = required.filter(f => !post[f]);
         if (missing.length > 0) {
             errors.push(`${folder}/post.json: Missing fields: ${missing.join(', ')}`);
@@ -140,18 +142,9 @@ function build() {
             continue;
         }
 
-        // Verify content.html exists
-        const contentPath = path.join(BLOG_DIR, folder, 'content.html');
-        if (!fs.existsSync(contentPath)) {
-            errors.push(`${folder}: Missing content.html`);
-            continue;
-        }
-
-        // Detect images from assets/images/blog/{slug}/ (separate from content)
-        const imagesFolderPath = path.join(BLOG_IMAGES_DIR, folder);
-        post.images = fs.existsSync(imagesFolderPath)
-            ? detectImages(imagesFolderPath)
-            : { cover: null, coverLight: null, slides: [], slidesLight: [], hasLightVariants: false, thumb: null, thumbLight: null, thumbSlides: [], thumbSlidesLight: [] };
+        // Detect images from the same folder as post.json
+        const imagesFolderPath = path.join(BLOG_DIR, folder);
+        post.images = detectImages(imagesFolderPath);
 
         posts.push(post);
     }
@@ -198,7 +191,7 @@ function build() {
  * Static data for blog posts
  */
 
-const BLOG_IMAGE_BASE = 'assets/images/blog';
+const BLOG_IMAGE_BASE = 'assets/content/blog';
 
 // Blog Categories
 export const blogCategories = ${JSON.stringify(categories, null, 2)};
@@ -318,12 +311,11 @@ export function formatDate(dateString) {
 
     let pagesGenerated = 0;
     for (const post of posts) {
-        // Read the post content
-        const contentPath = path.join(BLOG_DIR, post.slug, 'content.html');
-        const content = fs.readFileSync(contentPath, 'utf-8');
+        // Get the post content from the JSON field
+        const content = post.content;
 
         const ogImage = post.images.cover
-            ? `https://www.sidehustle.llc/assets/images/blog/${post.slug}/${post.images.cover}`
+            ? `https://www.sidehustle.llc/assets/content/blog/${post.slug}/${post.images.cover}`
             : 'https://www.sidehustle.llc/assets/images/og-preview.jpg';
 
         const jsonLd = JSON.stringify({

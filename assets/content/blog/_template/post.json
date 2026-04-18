@@ -6,5 +6,6 @@
   "category": "process",
   "excerpt": "A brief summary that appears on the blog listing page.",
   "order": 1,
-  "relatedItem": null
+  "relatedItem": null,
+  "content": "<p>Write your post content here...</p>"
 }

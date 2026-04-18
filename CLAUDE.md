@@ -109,8 +109,7 @@ assets/js/
   components/
     navigation-component.js  # Single source of truth for navigation
 
-assets/content/blog/         # Blog post content (folder per post) — text only
-assets/images/blog/          # Blog images (folder per post, mirrors gallery structure)
+assets/content/blog/         # Blog posts (folder per post) — post.json, images, and thumbnails all together
 assets/images/gallery/       # Gallery images (folder per item)
 
 build/
@@ -413,20 +412,15 @@ The cart page (`cart.html`) shows all items added to the cart with option-specif
 
 ## Blog System
 
-The blog follows the same folder-based, template-driven pattern as the gallery. Each post is a folder with metadata JSON + content HTML.
+The blog follows the same folder-based, template-driven pattern as the gallery. Each post is a self-contained folder with metadata JSON (including inline content) and images all together.
 
 **Folder Structure:**
 ```
 assets/content/blog/
   _template/              # Example post for reference (skipped by build)
     post.json
-    content.html
-  {slug}/                 # One folder per blog post — TEXT ONLY
-    post.json             # Post metadata
-    content.html          # Post body (raw HTML, no page wrapper)
-
-assets/images/blog/
-  {slug}/                 # One folder per blog post — IMAGES ONLY (mirrors gallery)
+  {slug}/                 # One folder per blog post — everything in one place
+    post.json             # Post metadata + content (HTML in "content" field)
     cover.png             # Featured image (optional, SOURCE)
     cover-light.png       # Light theme variant (optional SOURCE)
     img-1.png             # Additional carousel image (optional SOURCE)
@@ -444,10 +438,12 @@ assets/images/blog/
   "category": "process",
   "excerpt": "Summary for listing page.",
   "relatedItem": "hairy-styles",
-  "coverPosition": "center 25%"
+  "coverPosition": "center 25%",
+  "content": "<p>Article body as an HTML string.</p><h2>Section</h2><p>More content...</p>"
 }
 ```
 
+- `content` — HTML string of the post body (h2/h3 for sections, no h1). Inlined into the generated page at build time (no runtime fetch, SEO-friendly). Replaces the former separate `content.html` file
 - `relatedItem` (optional) — slug of a gallery item. When images exist, shows a full-width "View in Shop" button below the carousel. When no images, shows a related card in the content column
 - `category` — for filtering (e.g., "process", "inspiration", "technique")
 - `coverPosition` (optional, default `"center"`) — controls `background-position` of the cover image on the blog listing card. Use this to frame the important part of the image within the card's 16:9 crop. Values:
@@ -457,21 +453,18 @@ assets/images/blog/
   - `"center 75%"` — shows lower portion
   - `"center 100%"` — shows the very bottom
   - Any valid CSS `background-position` value works (e.g., `"left top"`, `"right center"`)
-- `content.html` — raw HTML body content, inlined into the generated page at build time (no fetch, SEO-friendly)
 
 **Build System:**
 - `blog-data.js` and `blog/*.html` are auto-generated — **DO NOT EDIT** them directly
 - Build script: `build/build-blog.js` (run via `npm run build:blog`)
-- Content is inlined at build time (no runtime fetch)
+- Content is inlined at build time from the `content` field in `post.json` (no runtime fetch)
 
 **Adding a new blog post:**
-1. Create content folder: `assets/content/blog/{slug}/`
-2. Add `post.json` with metadata
-3. Add `content.html` with article body (h2/h3 for sections, no h1)
-4. Optionally create image folder: `assets/images/blog/{slug}/`
-5. Drop `cover.png` and any `img-*.png` into the image folder
-6. Run `npm run convert` (if images added)
-7. Run `npm run build:blog`
+1. Create folder: `assets/content/blog/{slug}/`
+2. Add `post.json` with metadata and `content` field (HTML body, h2/h3 for sections, no h1)
+3. Optionally drop `cover.png` and any `img-*.png` into the same folder
+4. Run `npm run convert` (if images added)
+5. Run `npm run build:blog`
 
 **Blog post page layout:**
 - Full-width header (title, category pill, date) at top
@@ -569,7 +562,7 @@ Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge
 - **iOS fixed positioning fix:** `overflow-x: hidden` moved from `body` to `html` in `_base.css` — prevents iOS WebKit from breaking `position: fixed` during address bar collapse.
 - **Hero overflow fix:** `.hero-horizontal-container` uses `overflow-x: hidden; overflow-y: visible` so card details below frames aren't clipped.
 - **SEO foundation:** Added `robots.txt`, auto-generated `sitemap.xml` (`npm run build:sitemap`, part of `build:all`), canonical tags on all pages, `noindex` on cart/checkout, Organization JSON-LD on homepage, Product JSON-LD on product pages, BlogPosting JSON-LD on blog posts. Submit sitemap to Google Search Console.
-- **Blog images separated from content:** Blog images now live in `assets/images/blog/{slug}/` (mirrors gallery structure). `assets/content/blog/{slug}/` holds only `post.json` and `content.html`. `npm run convert` and the build script both point to the new location.
+- **Blog unified folder structure:** Blog images moved back into `assets/content/blog/{slug}/` alongside `post.json`. Content HTML now stored in the `content` field of `post.json` instead of a separate `content.html` file. Single folder per post for simpler workflow.
 - **Purchase option filtering:** `framed-square` card is hidden when no square images exist for an item; `framed-rect` hidden when no frame orientations available. Detection is based on filenames containing `square`/`portrait`/`landscape` keywords — no separate `main-square.png` files required.
 - **Same-day gallery sort order:** Build script captures `item.json` mtime as `dateAdded` and stores it in `gallery-data.js`. Gallery grid uses it as a tiebreaker when two items share the same `dateCreated` date, preserving the order items were added even within a single day.
 - **Theme preview on all purchase options:** Digital/print options now include a light/dark mode toggle ("Preview in light/dark mode") alongside the aspect ratio pills, matching the existing frame color theme hint
@@ -596,7 +589,7 @@ Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge
 - **Removed placeholder gallery items:** All 10 placeholder items deleted; only real artwork (hairy-styles) remains
 - **Hairy Styles recategorized:** Changed from photography → art (type: "art", subCategory: "digital")
 - **Checkout button:** "Go to Cart" renamed to bold "Checkout" on product detail page after adding to cart
-- **Convert script:** Scans `assets/images/gallery/` and `assets/images/blog/` for PNGs to convert
+- **Convert script:** Scans `assets/images/gallery/` and `assets/content/blog/` for PNGs to convert
 - **WebP image format:** Gallery images served as WebP (~90% filesize reduction). Source PNGs preserved
 - **Pre-rendered thumbnails:** 300×400px Lanczos3 thumbnails for shop grid, carousel strip, and cart. Blog carousel thumbnails capped at 80px height
 - **Build pipeline:** `npm run convert` → `npm run build` → `npm run build:blog`. All three needed for full rebuild
