@@ -191,7 +191,11 @@ The site uses a page transition system where `body` starts with `opacity: 0` and
 <script src="assets/js/main.js?v=TIMESTAMP"></script>
 ```
 
-**IMPORTANT:** All `<script src>` and `<link rel="stylesheet" href>` tags for local assets MUST include a `?v=TIMESTAMP` query parameter for cache busting. The `/deploy` command automatically updates these values across all root HTML files. For product pages, use `?v={{CACHE_VERSION}}` in the template — the build script replaces it with `Date.now()`.
+**IMPORTANT:** All `<script src>` and `<link rel="stylesheet" href>` tags for local assets MUST include a `?v=TIMESTAMP` query parameter for cache busting. The `/deploy` command automatically updates these values across all root HTML files and ES module `import` statements in JS files. For product pages, use `?v={{CACHE_VERSION}}` in the template — the build script replaces it with `Date.now()`.
+
+**ES module imports also need `?v=` cache busting.** Files like `gallery-detail.js` import from `./gallery-data.js?v=TIMESTAMP`. Without the version param, browsers serve stale data from immutable cache even after new items are added. The `/deploy` command updates these automatically.
+
+**Critical mobile CSS must be inlined in HTML.** External CSS loaded via `@import` in `main.css` is unreliable on mobile browsers due to aggressive caching that ignores server headers. Any mobile-critical layout overrides (like single-column grid on blog.html) should be placed in the page's inline `<style>` block, not solely in external CSS partials. HTML files are always served fresh (`no-cache`), so inline styles take effect immediately.
 
 **For subpages (in subdirectories like `product/` or `blog/`):** Add `../` prefix to all script and asset paths.
 
@@ -546,7 +550,7 @@ Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge
 ## Recent Changes
 - **Mobile nav breakpoint:** Hamburger menu now activates at `max-width: 1024px` (was 768px) so tablets get mobile nav
 - **Scroll arrow positioning:** Arrow is `position: absolute; bottom: 24px` inside `.hero` (direct child, not inside `.hero-horizontal-container`). `.scroll-arrow--hidden` class toggled by `navigation.js` at 20% hero scroll — uses `visibility: hidden` and `animation: none !important` to prevent WebKit compositing ghost artifacts on iOS Chrome/Safari
-- **Cache control (.htaccess):** HTML files served with `no-cache, must-revalidate` so users always get fresh content. Static assets (CSS/JS/images) cached for 1 year with `immutable` — safe because `?v=` cache busting handles versioning
+- **Cache control (.htaccess):** HTML files served with `no-cache, must-revalidate` so users always get fresh content. Static assets (JS/images) cached for 1 year with `immutable` — `?v=` cache busting handles versioning. CSS files and auto-generated data files (`gallery-data.js`, `blog-data.js`) are excluded from immutable caching (`no-cache`) because `@import` and ES module `import` paths can't reliably carry `?v=` params on mobile browsers
 - **Shop All button on homepage:** `btn-accent` button right-aligned under hero description text inside `.hero-content`. Uses `.hero-shop-btn.button` selector for specificity over `.button { margin-right: 16px }` in `_components.css`
 - **Mobile hero text truncation:** Hero description shortened on mobile — only first sentence shown. Extended text wrapped in `.hero-description-desktop` span, hidden below 768px
 - **Sticky product images column:** `.product-images-column` uses `position: sticky; top: 64px; align-self: start` on desktop so carousel pins while product info scrolls. Reset to `position: static` on mobile
@@ -593,6 +597,9 @@ Items with `"aiAssisted": true` in their `item.json` display a pill-shaped badge
 - **WebP image format:** Gallery images served as WebP (~90% filesize reduction). Source PNGs preserved
 - **Pre-rendered thumbnails:** 300×400px Lanczos3 thumbnails for shop grid, carousel strip, and cart. Blog carousel thumbnails capped at 80px height
 - **Build pipeline:** `npm run convert` → `npm run build` → `npm run build:blog`. All three needed for full rebuild
-- **Cache busting:** `?v=TIMESTAMP` on all assets, auto-updated by `/deploy`
+- **Cache busting:** `?v=TIMESTAMP` on all HTML asset refs and JS module `import` statements, auto-updated by `/deploy`
+- **ES module import cache busting:** All `import from './gallery-data.js?v=TIMESTAMP'` paths in gallery and blog JS modules include version params. Without these, mobile browsers serve stale data files from immutable cache after new items are added
+- **Mobile blog grid:** Blog listing uses single-column layout on phones (<640px). Override is inlined in `blog.html` `<style>` block (not external CSS) because mobile browsers aggressively cache CSS `@import` partials. Shop grid intentionally stays 2-column on mobile
+- **CSS no-cache headers:** All `.css` files served with `no-cache, must-revalidate` via `.htaccess` because CSS `@import` partials can't carry `?v=` cache busters reliably on mobile
 - **Light/dark image variants:** `-light` suffix images for theme-aware display
 - **`themechange` event:** Custom event dispatched on theme toggle, used by all image components
