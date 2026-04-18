@@ -1,3 +1,7 @@
+# Ensure JavaScript files are served with correct MIME type
+# Required for ES modules (type="module") which strictly enforce MIME checking
+AddType application/javascript .js .mjs
+
 # Prevent caching of HTML files — always check for updates
 <FilesMatch "\.(html)$">
     Header set Cache-Control "no-cache, must-revalidate"
