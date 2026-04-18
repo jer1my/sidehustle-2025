@@ -8,7 +8,7 @@ Please follow these steps:
 
    Use this bash command:
    ```bash
-   TIMESTAMP=$(date +%s) && for f in index.html shop-all.html cart.html checkout-success.html lab.html art.html digital.html blog.html; do sed -i '' -E "s|(\\.js)\?v=[0-9]+\"|\1?v=$TIMESTAMP\"|g" "$f" && sed -i '' -E "s|(\\.css)\?v=[0-9]+\"|\1?v=$TIMESTAMP\"|g" "$f"; done && for f in assets/js/gallery/gallery-detail.js assets/js/gallery/gallery-grid.js assets/js/gallery/hero-gallery.js assets/js/gallery/product-card.js assets/js/blog/blog-detail.js assets/js/blog/blog-grid.js assets/js/blog/blog-card.js; do sed -i '' -E "s|(\\.js)\?v=[0-9]+'|\1?v=$TIMESTAMP'|g" "$f"; done && sed -i '' -E "s|(\\.css)\?v=[0-9]+'|\1?v=$TIMESTAMP'|g" assets/css/main.css && npm run build:all && echo "Cache version updated to: $TIMESTAMP"
+   TIMESTAMP=$(date +%s) && for f in index.html shop-all.html cart.html checkout-success.html lab.html art.html digital.html blog.html; do sed -i '' -E "s|(\\.js)\?v=[0-9]+\"|\1?v=$TIMESTAMP\"|g" "$f" && sed -i '' -E "s|(\\.css)\?v=[0-9]+\"|\1?v=$TIMESTAMP\"|g" "$f"; done && for f in assets/js/gallery/gallery-detail.js assets/js/gallery/gallery-grid.js assets/js/gallery/hero-gallery.js assets/js/gallery/product-card.js assets/js/blog/blog-detail.js assets/js/blog/blog-grid.js assets/js/blog/blog-card.js; do sed -i '' -E "s|(\\.js)\?v=[0-9]+'|\1?v=$TIMESTAMP'|g" "$f"; done && npm run build:all && echo "Cache version updated to: $TIMESTAMP"
    ```
 
 2. Review the current changes with git status and git diff

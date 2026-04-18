@@ -20,3 +20,10 @@ AddType application/javascript .js .mjs
     Header set Cache-Control "no-cache, must-revalidate"
     Header set Pragma "no-cache"
 </FilesMatch>
+
+# CSS partials loaded via @import can't carry ?v= cache busters reliably
+# across all mobile browsers, so prevent immutable caching on all CSS files.
+<FilesMatch "\.css$">
+    Header set Cache-Control "no-cache, must-revalidate"
+    Header set Pragma "no-cache"
+</FilesMatch>
