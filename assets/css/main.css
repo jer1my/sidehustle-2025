@@ -15,29 +15,29 @@
  */
 
 /* Foundation Layer */
-@import '_variables.css';
-@import '_base.css';
+@import '_variables.css?v=1776552725';
+@import '_base.css?v=1776552725';
 
 /* Typography & Layout */
-@import '_typography.css';
-@import '_grid.css';
+@import '_typography.css?v=1776552725';
+@import '_grid.css?v=1776552725';
 
 /* Navigation & Hero */
-@import '_navigation.css';
-@import '_hero.css';
+@import '_navigation.css?v=1776552725';
+@import '_hero.css?v=1776552725';
 
 /* Component Library */
-@import '_components.css';
-@import '_carousels.css';
+@import '_components.css?v=1776552725';
+@import '_carousels.css?v=1776552725';
 
 /* Page Sections */
-@import '_sections.css';
+@import '_sections.css?v=1776552725';
 
 /* Lab Page Controls */
-@import '_lab.css';
+@import '_lab.css?v=1776552725';
 
 /* Theme System */
-@import '_theme.css';
+@import '_theme.css?v=1776552725';
 
 /* Utilities & Overrides (must be last) */
-@import '_utilities.css';
+@import '_utilities.css?v=1776552725';
