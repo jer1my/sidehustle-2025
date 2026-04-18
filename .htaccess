@@ -12,3 +12,11 @@ AddType application/javascript .js .mjs
 <FilesMatch "\.(css|js|webp|png|jpg|jpeg|gif|svg|ico|woff2|woff)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
 </FilesMatch>
+
+# Auto-generated data files must not be cached immutably because ES module
+# import statements (e.g. import from './gallery-data.js') have no ?v= param.
+# Without this, browsers serve stale data after new items are added.
+<FilesMatch "(gallery-data|blog-data)\.js$">
+    Header set Cache-Control "no-cache, must-revalidate"
+    Header set Pragma "no-cache"
+</FilesMatch>
