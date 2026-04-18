@@ -4,8 +4,8 @@
  * Fills remaining slots with placeholder frames when fewer than 6 items exist.
  */
 
-import { galleryItems } from './gallery-data.js';
-import { createProductCard } from './product-card.js';
+import { galleryItems } from './gallery-data.js?v=1776552725';
+import { createProductCard } from './product-card.js?v=1776552725';
 
 // Configuration
 const HERO_GALLERY_COUNT = 6;
