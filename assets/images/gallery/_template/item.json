@@ -1,12 +1,14 @@
 {
-  "id": "gal-XXX",
-  "title": "Your Title Here",
-  "slug": "_template",
-  "type": "photography",
-  "subCategory": "landscape",
-  "dateCreated": "2025-01-01",
-  "description": "Short description for cards and grid view.",
-  "longDescription": "Longer, more detailed description for the product detail page.",
-  "order": 1,
-  "featured": false
+  "id": "gal-00008",
+  "title": "Gossamer",
+  "slug": "gossamer",
+  "type": "photograph",
+  "subCategory": "macro",
+  "dateCreated": "2020-07-18",
+  "description": "Up close, the gray hairstreak butterfly is anything but plain.",
+  "longDescription": "I was out on a macro hike at Roxborough State Park when this little one appeared on a leaf along the trail. A gray hairstreak, also known as the gossamer-winged butterfly, one of the most widely distributed butterflies in North America and somehow a species I had never encountered before.\n\nIt held still just long enough. Two frames. One came out. This is it.\n\nUp close, the gray hairstreak is anything but plain. That burst of teal and orange tucked into the base of the wing looks like something that shouldn't belong there, like nature got carried away with the details on a creature most people walk right past.\n\nI photograph wildlife the way I believe it should be done. No bait, no calls, no disturbance. Just a macro lens, a quiet trail, and a little luck.\n\nNo butterflies were bothered in the making of this photograph.",
+  "order": 2,
+  "featured": true,
+  "aiAssisted": false,
+  "tools": "Tools: Sony a7rIV & Sony FE 90mm f2.8 G OSS"
 }
