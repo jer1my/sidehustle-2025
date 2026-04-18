@@ -63,6 +63,13 @@
         body:not([data-theme="dark"]) .logo .logo-svg {
             background-image: url('assets/icons/logo-sh-light-mode.svg') !important;
         }
+
+        /* Mobile: single column blog grid */
+        @media (max-width: 639px) {
+            .gallery-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 
     <noscript>
