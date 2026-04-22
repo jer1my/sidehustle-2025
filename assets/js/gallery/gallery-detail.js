@@ -15,9 +15,9 @@ import {
     getAvailableAspectRatios,
     getAspectRatioImagePath,
     getThumbSlidePathsForTheme
-} from './gallery-data.js?v=1776552725';
+} from './gallery-data.js?v=1776895644';
 
-import { addItem, isInCart } from '../cart/cart.js?v=1776552725';
+import { addItem, isInCart } from '../cart/cart.js?v=1776895644';
 
 // Base path for images (relative to product/ directory)
 const IMAGE_BASE_PATH = '../assets/images/gallery';
