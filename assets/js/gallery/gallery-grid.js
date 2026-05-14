@@ -3,8 +3,8 @@
  * Renders and manages the gallery grid with filtering and sorting
  */
 
-import { galleryItems, categories, getSubCategories, getMainImagePath } from './gallery-data.js?v=1776895644';
-import { createProductCard } from './product-card.js?v=1776895644';
+import { galleryItems, categories, getSubCategories, getMainImagePath } from './gallery-data.js?v=1778733359';
+import { createProductCard } from './product-card.js?v=1778733359';
 
 // State
 let currentFilter = {

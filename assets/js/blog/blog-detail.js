@@ -9,7 +9,7 @@ import {
     formatDate,
     getSlidePathsForTheme,
     getThumbSlidePathsForTheme
-} from './blog-data.js?v=1776895644';
+} from './blog-data.js?v=1778733359';
 
 const IMAGE_BASE_PATH = '../assets/content/blog';
 
