@@ -3,7 +3,7 @@
  * Creates blog post cards for the listing page.
  */
 
-import { getThumbCoverPath, formatDate } from './blog-data.js?v=1776895644';
+import { getThumbCoverPath, formatDate } from './blog-data.js?v=1778733359';
 
 function getCurrentTheme() {
     return document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';

@@ -4,7 +4,7 @@
  * Image-only card with hover overlay showing name, type, category, and CTA.
  */
 
-import { getMainImagePath, getMainImagePathForTheme, getThumbImagePathForTheme, categories } from './gallery-data.js?v=1776895644';
+import { getMainImagePath, getMainImagePathForTheme, getThumbImagePathForTheme, categories } from './gallery-data.js?v=1778733359';
 
 function getCurrentTheme() {
     return document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
