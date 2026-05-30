@@ -9,7 +9,7 @@ import {
     formatDate,
     getSlidePathsForTheme,
     getThumbSlidePathsForTheme
-} from './blog-data.js?v=1778739759';
+} from './blog-data.js?v=1780111937';
 
 const IMAGE_BASE_PATH = '../assets/content/blog';
 
@@ -50,17 +50,24 @@ function init() {
         const prevArrowSVG = `<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
         const nextArrowSVG = `<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
 
+        const captions = post.imageCaptions || [];
+        const hasAnyCaption = captions.some(c => c && c.trim());
+        const escapeAttr = s => String(s).replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
         carouselContainer.innerHTML = `
             <div class="product-carousel">
                 <div class="product-carousel__container">
                     <div class="product-carousel__track">
-                        ${allSlides.map(src => `
-                            <div class="product-carousel__slide">
+                        ${allSlides.map((src, i) => {
+                            const cap = captions[i] || '';
+                            return `
+                            <div class="product-carousel__slide"${cap ? ` data-caption="${escapeAttr(cap)}"` : ''}>
                                 <div class="product-carousel__slide-bg" style="background-image: url('${src}');"></div>
-                            </div>
-                        `).join('')}
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>
+                ${hasAnyCaption ? `<div class="product-carousel__hover-caption" id="carousel-hover-caption" aria-live="polite"></div>` : ''}
                 ${allSlides.length > 1 ? `<button class="product-carousel__arrow product-carousel__arrow--prev" aria-label="Previous image">${prevArrowSVG}</button>
                 <button class="product-carousel__arrow product-carousel__arrow--next" aria-label="Next image">${nextArrowSVG}</button>` : ''}
             </div>
@@ -69,11 +76,14 @@ function init() {
                 <button class="product-thumbnail-strip__arrow product-thumbnail-strip__arrow--prev" aria-label="Previous thumbnails">${prevArrowSVG}</button>
                 <div class="product-thumbnail-strip__viewport">
                     <div class="product-thumbnail-strip__track">
-                        ${allThumbs.map((src, i) => `
-                            <div class="product-thumbnail-strip__item${i === 0 ? ' product-thumbnail-strip__item--active' : ''}" data-slide="${i}">
+                        ${allThumbs.map((src, i) => {
+                            const cap = captions[i] || '';
+                            const capAttrs = cap ? ` data-caption="${escapeAttr(cap)}" aria-label="${escapeAttr(cap)}"` : '';
+                            return `
+                            <div class="product-thumbnail-strip__item${i === 0 ? ' product-thumbnail-strip__item--active' : ''}" data-slide="${i}"${capAttrs}>
                                 <div class="product-thumbnail-strip__bg" style="background-image: url('${src}');"></div>
-                            </div>
-                        `).join('')}
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>
                 <button class="product-thumbnail-strip__arrow product-thumbnail-strip__arrow--next" aria-label="Next thumbnails">${nextArrowSVG}</button>
@@ -147,6 +157,9 @@ function initCarousel() {
     const thumbViewport = document.querySelector('.product-thumbnail-strip__viewport');
     const thumbPrevBtn = document.querySelector('.product-thumbnail-strip__arrow--prev');
     const thumbNextBtn = document.querySelector('.product-thumbnail-strip__arrow--next');
+    const shopBtn = document.querySelector('.blog-article__shop-btn');
+    const hoverCaption = document.getElementById('carousel-hover-caption');
+    const slides = document.querySelectorAll('.product-carousel__slide');
 
     if (!track || !container) return;
 
@@ -179,6 +192,23 @@ function initCarousel() {
             t.classList.toggle('product-thumbnail-strip__item--active', i === currentSlide);
         });
         centerThumbOnActive();
+        updateShopButton();
+        updateHoverCaption();
+    }
+
+    // Shop button is only active on the first slide (the print-available image)
+    function updateShopButton() {
+        if (!shopBtn) return;
+        shopBtn.classList.toggle('blog-article__shop-btn--disabled', currentSlide !== 0);
+    }
+
+    // Sync the main carousel hover caption to whichever slide is currently shown
+    function updateHoverCaption() {
+        if (!hoverCaption) return;
+        const slide = slides[currentSlide];
+        const cap = slide?.dataset.caption || '';
+        hoverCaption.textContent = cap;
+        hoverCaption.classList.toggle('product-carousel__hover-caption--visible', !!cap);
     }
 
     function centerThumbOnActive() {
@@ -196,7 +226,7 @@ function initCarousel() {
 
     function startAutoAdvance() {
         stopAutoAdvance();
-        autoAdvanceTimer = setInterval(nextSlide, 4500);
+        autoAdvanceTimer = setInterval(nextSlide, 9000);
     }
 
     function stopAutoAdvance() {
@@ -245,6 +275,7 @@ function initCarousel() {
     });
 
     sizeThumbItems();
+    updateHoverCaption();
     let resizeTimer = null;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
