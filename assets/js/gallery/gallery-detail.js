@@ -15,9 +15,9 @@ import {
     getAvailableAspectRatios,
     getAspectRatioImagePath,
     getThumbSlidePathsForTheme
-} from './gallery-data.js?v=1778739759';
+} from './gallery-data.js?v=1780111937';
 
-import { addItem, isInCart } from '../cart/cart.js?v=1778739759';
+import { addItem, isInCart } from '../cart/cart.js?v=1780111937';
 
 // Base path for images (relative to product/ directory)
 const IMAGE_BASE_PATH = '../assets/images/gallery';
@@ -175,6 +175,8 @@ function renderProductDetail(item) {
                 ${item.tools ? `<p class="product-tools">${item.tools}</p>` : ''}
 
                 ${description ? `<p class="product-description">${description}</p>` : ''}
+
+                ${item.relatedPost ? `<p class="product-related-post"><a href="../blog/${item.relatedPost}.html" class="accent-link-arrow">Read the story →</a></p>` : ''}
 
                 ${renderPurchaseOptions(item.slug)}
             </div>

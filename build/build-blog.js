@@ -179,6 +179,7 @@ function build() {
         excerpt: post.excerpt,
         relatedItem: post.relatedItem || null,
         coverPosition: post.coverPosition || 'center',
+        imageCaptions: post.imageCaptions || [],
         images: post.images
     }));
 

@@ -1193,6 +1193,12 @@ body[data-theme="dark"] .card {
     margin-bottom: var(--space-8);
 }
 
+.product-related-post {
+    margin-top: calc(var(--space-8) * -1 + var(--space-2));
+    margin-bottom: var(--space-8);
+    font-size: var(--typo-body-size);
+}
+
 /* Purchase Options */
 .purchase-options {
     margin-bottom: var(--space-8);
@@ -2296,15 +2302,94 @@ body[data-theme="dark"] .card {
 .blog-article__images--active {
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
+    gap: var(--space-2);
     min-width: 0;
     position: sticky;
     top: 130px;
 }
 
-/* Constrain thumbnail strip height within blog carousel */
+/* Blog thumbnails: scale naturally with column width, 3:4 aspect from base class */
+
+/* The actual gap container — carousel + thumb strip + shop button are siblings here */
+.blog-article__images #blog-carousel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+/* ---- Image caption tooltips (blog carousel + thumbs) ---- */
+
+/* Override viewport overflow so thumb tooltips can render above without clipping.
+   Safe for blog because ≤ VISIBLE_THUMBS slides means the track never shifts. */
+.blog-article__images .product-thumbnail-strip__viewport {
+    overflow: visible;
+}
+
 .blog-article__images .product-thumbnail-strip__item {
-    max-height: 80px;
+    position: relative;
+}
+
+.blog-article__images .product-thumbnail-strip__item[data-caption]:hover::after {
+    content: attr(data-caption);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    z-index: 100;
+    pointer-events: none;
+}
+
+body[data-theme="dark"] .blog-article__images .product-thumbnail-strip__item[data-caption]:hover::after {
+    background: #000000;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* Main carousel hover caption — sits inside .product-carousel, outside __container */
+.product-carousel__hover-caption {
+    position: absolute;
+    top: var(--space-3);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    max-width: calc(100% - var(--space-6));
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body[data-theme="dark"] .product-carousel__hover-caption {
+    background: #000000;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+
+.product-carousel:hover .product-carousel__hover-caption--visible {
+    opacity: 1;
 }
 
 .blog-article__shop-btn {
@@ -2313,6 +2398,22 @@ body[data-theme="dark"] .card {
     text-align: center;
     text-decoration: none;
     margin-top: var(--space-4);
+    transition: opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.blog-article__shop-btn--disabled,
+.blog-article__shop-btn--disabled:hover {
+    background: var(--color-neutral-200);
+    color: var(--color-neutral-500);
+    border-color: transparent;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+body[data-theme="dark"] .blog-article__shop-btn--disabled,
+body[data-theme="dark"] .blog-article__shop-btn--disabled:hover {
+    background: var(--color-neutral-800);
+    color: var(--color-neutral-600);
 }
 
 /* When carousel is active, switch to two-column */

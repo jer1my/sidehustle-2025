@@ -212,6 +212,7 @@ function build() {
         featured: item.featured || false,
         aiAssisted: item.aiAssisted || false,
         tools: item.tools || null,
+        relatedPost: item.relatedPost || null,
         images: item.images
     }));
 
