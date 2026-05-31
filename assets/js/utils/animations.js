@@ -123,6 +123,23 @@ function smoothScrollTo(targetY, duration = 2000) {
 // Page Transitions
 // ==========================================
 
+// Fix for browser back/forward button: when a page is restored from bfcache
+// (back-forward cache), DOMContentLoaded does not fire, so the body keeps
+// whatever class it had when navigation started — including page-transition-out
+// (opacity: 0), which leaves the user staring at a blank page until they refresh.
+// pageshow fires on both initial load and bfcache restore. event.persisted is
+// true only on bfcache restore, but resetting state on every pageshow is safe
+// and covers both paths.
+window.addEventListener('pageshow', function(event) {
+    document.body.classList.remove('page-transition-out');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (event.persisted) {
+        document.body.classList.add('page-transition-in');
+    } else if (!prefersReducedMotion && !document.body.classList.contains('page-transition-in')) {
+        document.body.classList.add('page-transition-in');
+    }
+});
+
 function initPageTransitions() {
     // Check if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
