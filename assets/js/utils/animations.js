@@ -125,19 +125,24 @@ function smoothScrollTo(targetY, duration = 2000) {
 
 // Fix for browser back/forward button: when a page is restored from bfcache
 // (back-forward cache), DOMContentLoaded does not fire, so the body keeps
-// whatever class it had when navigation started — including page-transition-out
-// (opacity: 0), which leaves the user staring at a blank page until they refresh.
-// pageshow fires on both initial load and bfcache restore. event.persisted is
-// true only on bfcache restore, but resetting state on every pageshow is safe
-// and covers both paths.
+// whatever classes it had when navigation started — typically both
+// page-transition-in (from the original load) AND page-transition-out (added
+// just before navigating away). With both present, simply removing -out leaves
+// opacity wherever fadeOut snapshotted it, and re-adding -in is a no-op because
+// the class is already there — the CSS animation never re-runs, so the page
+// appears with no transition.
+//
+// To fix: on bfcache restore, drop both classes, force reflow, then re-add -in
+// so fadeIn runs from 0 to 1 and the back navigation looks like every other
+// page transition. Skip for prefers-reduced-motion.
 window.addEventListener('pageshow', function(event) {
-    document.body.classList.remove('page-transition-out');
+    if (!event.persisted) return; // Fresh load — DOMContentLoaded handles it
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (event.persisted) {
-        document.body.classList.add('page-transition-in');
-    } else if (!prefersReducedMotion && !document.body.classList.contains('page-transition-in')) {
-        document.body.classList.add('page-transition-in');
-    }
+    document.body.classList.remove('page-transition-out');
+    if (prefersReducedMotion) return;
+    document.body.classList.remove('page-transition-in');
+    void document.body.offsetWidth; // Force reflow to restart the CSS animation
+    document.body.classList.add('page-transition-in');
 });
 
 function initPageTransitions() {
