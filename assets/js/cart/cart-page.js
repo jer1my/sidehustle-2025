@@ -302,11 +302,60 @@ async function handleCheckout() {
         // Redirect to Stripe Checkout
         window.location.href = data.url;
     } catch (err) {
+        // Log the real error for debugging — users see a friendly fallback instead
+        console.error('Checkout error:', err);
         btn.disabled = false;
         btn.textContent = 'Proceed to Checkout';
-        errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+        errorEl.innerHTML = buildCheckoutFallbackHTML(cart);
         errorEl.style.display = 'block';
     }
+}
+
+/**
+ * Build the order details that go in the email body.
+ */
+function buildOrderEmailBody(cart) {
+    const lines = ['Hi Jerimy,', '', 'I tried to check out on sidehustle.llc but the payment step had trouble going through. I would like to purchase the following:', ''];
+
+    cart.forEach((item, i) => {
+        let opts = item.optionLabel;
+        if (item.subOptionLabel) opts += ` - ${item.subOptionLabel}`;
+        if (item.sizeNote) opts += ` (${item.sizeNote})`;
+        if (item.frameColorLabel) opts += ` - ${item.frameColorLabel}`;
+
+        lines.push(`${i + 1}. ${item.title}`);
+        lines.push(`   ${opts}`);
+        lines.push(`   Quantity: ${item.quantity}`);
+        lines.push(`   ${formatPrice(item.price)} each (${formatPrice(getItemSubtotal(item))})`);
+        lines.push('');
+    });
+
+    lines.push(`Subtotal: ${formatPrice(getCartTotal())}`);
+    lines.push('');
+    lines.push('Please let me know how you would like to handle payment (Venmo, Zelle, or PayPal works for me).');
+    lines.push('');
+    lines.push('Thanks!');
+
+    return lines.join('\n');
+}
+
+/**
+ * Render the failure fallback: a calm note and a mailto button so users
+ * never hit a dead end if Stripe / the worker / the network is unavailable.
+ */
+function buildCheckoutFallbackHTML(cart) {
+    const subject = encodeURIComponent('Side Hustle order');
+    const body = encodeURIComponent(buildOrderEmailBody(cart));
+    const mailto = `mailto:sidehustle.purchases@gmail.com?subject=${subject}&body=${body}`;
+
+    return `
+        <div class="cart-checkout-fallback">
+            <p class="cart-checkout-fallback__heading">Checkout didn't go through.</p>
+            <p class="cart-checkout-fallback__body">Sorry about that. Email your order directly and I'll get back to you with payment instructions.</p>
+            <a href="${mailto}" class="btn-accent button cart-checkout-fallback__btn">Email Your Order</a>
+            <p class="cart-checkout-fallback__note">Payment can be arranged through Venmo, Zelle, or PayPal.</p>
+        </div>
+    `;
 }
 
 /**
