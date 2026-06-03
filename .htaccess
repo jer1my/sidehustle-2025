@@ -1,3 +1,12 @@
+# Force www and HTTPS — the Cloudflare Worker only accepts requests from
+# https://www.sidehustle.llc, so anyone landing on the bare domain hits a
+# CORS rejection at checkout. Redirecting at the host level also collapses
+# duplicate-content URLs for SEO.
+RewriteEngine On
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^sidehustle\.llc$ [NC]
+RewriteRule ^(.*)$ https://www.sidehustle.llc/$1 [R=301,L]
+
 # Ensure JavaScript files are served with correct MIME type
 # Required for ES modules (type="module") which strictly enforce MIME checking
 AddType application/javascript .js .mjs
